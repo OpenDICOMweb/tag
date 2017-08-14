@@ -1,0 +1,39 @@
+name: tag
+description: The Tag class and friends
+version: 0.6.0
+author: Jim Philbin <mailto:jfphilbin@gmail.com>
+
+homepage: https://github.com/OpenDICOMweb/io
+
+environment:
+  sdk: '>=1.24.2 <2.0.0'
+
+dependencies:
+  args: any
+  path: any
+  common:
+    path: C:/odw/sdk/common
+    version: ^0.5.6
+  date_time:
+    path: C:/odw/sdk/date_time
+    version: ^0.6.0
+  issues:
+    path: C:/odw/sdk/issues
+    version: ^0.6.0
+  string:
+    path: C:/odw/sdk/string
+    version: ^0.6.0
+  system:
+    path: C:/odw/sdk/system
+  uid:
+    path: C:/odw/sdk/uid
+    version: ^0.6.0
+  uuid:
+    path: C:/odw/sdk/uuid
+    version: ^0.6.0
+
+dev_dependencies:
+  test: ^0.12.0
+  test_tools:
+    path: C:/odw/sdk/test_tools
+    version: ^0.5.6
