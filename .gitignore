@@ -108,3 +108,16 @@ test/dicom/
 test/entity/
 web/
 !/copyright_notice.txt.lnk
+/.idea/
+.idea/dictionaries/
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/libraries/
+.idea/markdown-navigator.xml
+.idea/markdown-navigator/
+.idea/misc.xml
+.idea/modules.xml
+.idea/tag.iml
+example/
+test/
+/.idea/vcs.xml
