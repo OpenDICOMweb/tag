@@ -6,6 +6,7 @@
 
 import 'dart:typed_data';
 
+import 'package:string/string.dart';
 import 'package:system/system.dart';
 import 'package:tag/tag.dart';
 
@@ -40,12 +41,6 @@ class InvalidTagKeyError extends Error {
     if (key is int) return Tag.toDcm(key);
     return key;
   }
-}
-
-Null invalidTagKeyError(key, [VR vr, String creator]) {
-  log.error(InvalidTagKeyError._msg(key, vr, creator));
-  if (throwOnError) throw new InvalidTagKeyError(vr);
-  return null;
 }
 
 //Flush when replaced with InvalidTagKeyError
@@ -187,5 +182,24 @@ class InvalidValuesError<V> extends Error {
 Null invalidValuesError<V>(Tag tag, List<V> values) {
   if (log != null) log.error(InvalidValuesError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesError(tag, values);
+  return null;
+}
+
+/// An invalid DICOM Group number [Error].
+/// Note: Don't use this directly, use [invalidGroupError] instead.
+class InvalidGroupError extends Error {
+  int group;
+
+  InvalidGroupError(this.group);
+
+  @override
+  String toString() => _msg(group);
+
+  static String _msg(int group) => 'Invalid DICOM Group: ${toHex16(group)}';
+}
+
+Null invalidGroupError(int group) {
+  if (log != null) log.error(InvalidGroupError._msg(group));
+  if (throwOnError) throw new InvalidGroupError(group);
   return null;
 }

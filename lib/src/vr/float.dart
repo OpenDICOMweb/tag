@@ -4,8 +4,8 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:issues/issues.dart';
-import 'package:tag/src/constants.dart';
+import 'package:string/string.dart';
+import 'package:system/system.dart';
 
 import 'vr.dart';
 

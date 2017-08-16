@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:tag/src/constants.dart';
+import 'package:system/system.dart';
 
 /// A library of compile time constants for handling DICOM Directory data
 

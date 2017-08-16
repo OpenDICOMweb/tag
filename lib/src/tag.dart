@@ -9,11 +9,9 @@ import 'dart:typed_data';
 
 import 'package:common/common.dart';
 import 'package:system/system.dart';
-
-import 'package:tag/src/constants.dart';
-import 'package:tag/src/errors.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
+import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
 import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/private/pc_tag.dart';

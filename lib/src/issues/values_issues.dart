@@ -5,9 +5,8 @@
 // See the AUTHORS file for other contributors.
 
 
-import 'package:string/string.dart';
+import 'parse_issues.dart';
 import 'package:tag/src/tag.dart';
-
 
 class ValuesIssues<E> {
   final String name;

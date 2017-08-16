@@ -7,9 +7,9 @@
 import 'dart:typed_data';
 
 import 'package:common/number.dart';
-import 'package:issues/issues.dart';
+import 'package:string/string.dart';
+import 'package:system/system.dart';
 
-import 'package:tag/src/constants.dart';
 import 'vr.dart';
 
 // Maximum Value Field length for different [VRInt]s.

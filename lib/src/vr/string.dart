@@ -7,13 +7,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:common/ascii.dart';
 import 'package:date_time/date_time.dart';
-import 'package:issues/issues.dart';
 import 'package:string/string.dart';
+import 'package:system/system.dart';
 import 'package:uid/uid.dart';
 
-import '../constants.dart';
 import 'vr.dart';
 
 typedef bool Tester<String>(String value, int min, int max);
@@ -608,7 +606,7 @@ class VRUid extends VRString {
   String get padChar => '\u0000';
 
   @override
-  bool isValid(Object s) => (s is String) && isValidUidString(s);
+  bool isValid(Object s) => (s is String) && Uid.isValidString(s);
 
   /// Returns [true] if [uidString] starts with the DICOM UID root.
   bool hasDicomRoot(String uidString) => uidString.startsWith(Uid.dicomRoot);
