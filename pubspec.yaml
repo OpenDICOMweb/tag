@@ -1,6 +1,6 @@
 name: tag
 description: The Tag class and friends
-version: 0.6.0
+version: 0.6.1
 
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
@@ -15,12 +15,13 @@ dependencies:
     version: ^0.6.0
   string:
     path: C:/odw/sdk/string
-    version: ^0.6.0
+    version: ^0.6.1
   system:
     path: C:/odw/sdk/system
+    version: ^0.6.1
   uid:
     path: C:/odw/sdk/uid
-    version: ^0.6.0
+    version: ^0.6.1
 
 dev_dependencies:
   test: ^0.12.0
