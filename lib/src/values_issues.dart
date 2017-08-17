@@ -8,7 +8,6 @@
 import 'package:string/string.dart';
 import 'package:tag/src/tag.dart';
 
-
 class ValuesIssues<E> {
   final String name;
   final Tag tag;
