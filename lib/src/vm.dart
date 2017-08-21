@@ -43,6 +43,7 @@ class VM {
   // Special case optimization [k1] [width == 0]
   //                           name min max width
   static const VM k1 = const VM("1", 1, 1, 0);
+  // ignore constant_identifier_names
   static const VM k1_2 = const VM("1_2", 1, 2, 1);
   static const VM k1_3 = const VM("1-3", 1, 3, 1);
   static const VM k1_8 = const VM("1-8", 1, 8, 1);
