@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:common/number.dart';
+import 'package:number/number.dart';
 import 'package:tag/src/private/pc_tag_map.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
@@ -77,7 +77,7 @@ class PCTag extends PrivateTag {
   static PCTag maker(int code, VR vr, [dynamic name]) =>
       new PCTag(code, vr, name);
 
-  static const kUnknown =
+  static const PCTag kUnknown =
   const PCTag._(0x0, VR.kLO, 'Unknown Private Creator Tag');
 }
 
@@ -123,8 +123,8 @@ class PCTagUnknown extends PCTag {
  const PCTagUnknown(int code, VR actualVR, String name)
       : super._(code, actualVR, name);
 
- static const kUnknownCreator =
- const PCTagUnknown(0x00, VR.kLO, 'Unknown Creator');
+ static const PCTagUnknown kUnknownCreator =
+    const PCTagUnknown(0x00, VR.kLO, 'Unknown Creator');
 }
 
 class PCTagDefinition {

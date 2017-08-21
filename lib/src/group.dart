@@ -4,7 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:common/common.dart';
+import 'package:number/number.dart';
 
 /// Methods to use with a DICOM Group, a 16-bit integer.
 ///

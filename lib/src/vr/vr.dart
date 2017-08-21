@@ -307,12 +307,12 @@ class VRInvalid extends VR<int> {
       : super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
   @override
-  bool isValid(v) => false;
+  bool isValid(Object v) => false;
 
   @override
-  bool isValidType(v) => false;
+  bool isValidType(Object v) => false;
   @override
-  bool isValidValuesType(v) => false;
+  bool isValidValuesType(dynamic v) => false;
 
   static const VRUnknown kInvalid =
       const VRUnknown._(0, 0, "Invalid", 0, 0, 0, "Invalid VR");

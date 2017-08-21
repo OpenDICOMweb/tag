@@ -6,7 +6,6 @@
 
 import 'dart:typed_data';
 
-import 'package:string/string.dart';
 import 'package:system/system.dart';
 import 'package:tag/tag.dart';
 
@@ -32,7 +31,7 @@ class InvalidTagKeyError extends Error {
   @override
   String toString() => _msg(key, vr, creator);
 
-  static String _msg(key, VR vr, String creator) =>
+  static String _msg(key, [VR vr, String creator]) =>
       'InvalidTagKeyError: "$_value" $vr creator:"$creator"';
 
   static String _value(key) {
@@ -41,6 +40,12 @@ class InvalidTagKeyError extends Error {
     if (key is int) return Tag.toDcm(key);
     return key;
   }
+}
+
+Null invalidTagKeyError(dynamic key, [VR vr, String creator]) {
+  log.error(InvalidTagKeyError._msg(key, vr, creator));
+  if (throwOnError) throw new InvalidTagKeyError(key);
+  return null;
 }
 
 //Flush when replaced with InvalidTagKeyError
@@ -52,7 +57,7 @@ class InvalidTagCodeError extends Error {
   @override
   String toString() => _msg(code);
 
-  static _msg(int code) => 'InvalidTagCodeError: "${_value(code)}"';
+  static String _msg(int code) => 'InvalidTagCodeError: "${_value(code)}"';
 
   static String _value(code) => (code == null) ? 'null' : Tag.toDcm(code);
 }
@@ -72,7 +77,7 @@ class InvalidTagKeywordError extends Error {
   @override
   String toString() => _msg(keyword);
 
-  static _msg(String keyword) => 'InvalidTagKeywordError: "$keyword"';
+  static String _msg(String keyword) => 'InvalidTagKeywordError: "$keyword"';
 }
 
 Null tagKeywordError(String keyword) {
@@ -112,7 +117,7 @@ class InvalidValueFieldLengthError extends Error {
   @override
   String toString() => _msg(vfBytes, elementSize);
 
-  static _msg(Uint8List vfBytes, int elementSize) =>
+  static String _msg(Uint8List vfBytes, int elementSize) =>
       'InvalidValueFieldLengthError: lengthInBytes(${vfBytes.length}'
       'elementSize($elementSize)';
 }
@@ -195,7 +200,7 @@ class InvalidGroupError extends Error {
   @override
   String toString() => _msg(group);
 
-  static String _msg(int group) => 'Invalid DICOM Group: ${toHex16(group)}';
+  static String _msg(int group) => 'Invalid DICOM Group Error: ${hex16(group)}';
 }
 
 Null invalidGroupError(int group) {

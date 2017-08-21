@@ -4,7 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> - 
 // See the AUTHORS file for other contributors.
 
-import 'package:common/number.dart';
+import 'package:number/number.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
@@ -31,6 +31,7 @@ class PDTag extends PrivateTag {
   @override
   bool get isPrivateData => true;
 
+  @override
   VM get vm => VM.k1_n;
 
   static PDTag maker(int code, VR vr, [PCTag creator]) =>

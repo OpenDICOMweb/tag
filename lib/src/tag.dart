@@ -7,8 +7,8 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:common/common.dart';
-import 'package:system/system.dart';
+import 'package:base/base.dart';
+import 'package:string/string.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -45,7 +45,7 @@ abstract class Tag {
   const Tag();
 
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag fromCode(int code, vr, [dynamic creator]) {
+  static Tag fromCode(int code, VR vr, [dynamic creator]) {
     if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
     if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
     if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
@@ -83,7 +83,7 @@ abstract class Tag {
   String get dcm => '${Tag.toDcm(code)}';
 
   /// Returns a [String] for the [code] in hexadecimal format, i.e. '0xggggeeee.
-  String get hex => Int.hex(code, 8);
+  String get hex => hex32(code);
 
   /// Returns the [group] number for [this] [Tag].
   int get group => code >> 16;
@@ -224,10 +224,9 @@ abstract class Tag {
   /// conform to the DICOM Standard.
   bool get isValid => false;
 
-  /// Returns True if the [length], i.e. the number of values, is
-  /// valid for this [Tag].
+  /// Returns True if [vList].length, i.e. is valid for this [Tag].
   ///
-  /// Note: A [length] of zero is always valid.
+  /// _Note_: A length of zero is always valid.
   ///
   /// [min]: The minimum number of values.
   /// [max]: The maximum number of values. If -1 then max length of
@@ -235,16 +234,16 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool hasValidValues<V>(List<V> values, [bool throwOnError = false]) {
+  bool hasValidValues<V>(List<V> vList, [bool throwOnError = false]) {
     if (vr == VR.kUN) return true;
-    if (values == null) return false;
-    if (!isValidValuesType(values))
-      return invalidValuesTypeError(this, values);
-    if (isNotValidLength(values.length))
-      return invalidValuesLengthError(this, values);
-    for (int i = 0; i < values.length; i++)
-      if (isNotValidValue(values[i])) {
-        invalidValuesError(this, values);
+    if (vList == null) return false;
+    if (!isValidValuesType(vList))
+      return invalidValuesTypeError(this, vList);
+    if (isNotValidLength(vList.length))
+      return invalidValuesLengthError(this, vList);
+    for (int i = 0; i < vList.length; i++)
+      if (isNotValidValue(vList[i])) {
+        invalidValuesError(this, vList);
         return false;
       }
     return true;
@@ -383,8 +382,7 @@ abstract class Tag {
   static Tag lookup(dynamic key, [VR vr = VR.kUN, dynamic creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
-    if (throwOnError) throw new InvalidTagKeyError(key, vr, creator);
-    return null;
+    return invalidTagKeyError(key, vr, creator);
   }
 
   //TODO: redoc
@@ -399,8 +397,7 @@ abstract class Tag {
       throw 'Error: Unknown Private Tag Code${Tag.toDcm(code)}';
     } else {
       // This should never happen
-      if (throwOnError) throw 'Error: Unknown Tag Code${Tag.toDcm(code)}';
-      return null;
+      return invalidTagCodeError(code);
     }
   }
 
@@ -615,7 +612,7 @@ abstract class Tag {
   }
 
   /// Returns [code] in DICOM format '(gggg,eeee)'.
-  static String toHex(int code) => Int32.hex(code);
+  static String toHex(int code) => hex32(code);
 
   /// Returns [code] in DICOM format '(gggg,eeee)'.
   static String toDcm(int code) {

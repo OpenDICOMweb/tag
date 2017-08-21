@@ -5,7 +5,6 @@
 
 import 'dart:math' as math;
 
-import 'package:common/common.dart';
 import 'package:system/system.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
@@ -56,7 +55,7 @@ void validateTest() {
       expect(tagCS1.isValidLength(tagCS1.maxValues + 1), false);
       expect(tagCS1.isValidLength(tagCS1.maxValues), true);
       log.debug('tagCS: maxValues(${tagCS1.maxValues}, '
-          '${Int16.hex(tagCS1.maxValues)}');
+          '${hex16(tagCS1.maxValues)}');
       expect(tagCS1.isValidLength(tagCS1.maxValues - 1), true);
       expect(tagCS1.isValidLength(tagCS1.minValues - 1), false);
       expect(tagCS1.isValidLength(tagCS1.minValues), true);

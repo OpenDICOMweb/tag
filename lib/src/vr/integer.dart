@@ -6,7 +6,7 @@
 
 import 'dart:typed_data';
 
-import 'package:common/number.dart';
+import 'package:number/number.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 
@@ -45,8 +45,7 @@ typedef String IntIssuer(int value);
 /// [null].
 typedef int IntFixer(int value);
 
-/// Create an integer VR.
-//TODO: doc
+/// The class of all integer [VR]s.
 class VRInt extends VR<int> {
   /// The minimum length of a value.
   final int minValue;
@@ -95,11 +94,11 @@ class VRInt extends VR<int> {
   bool get isLengthAlwaysValid => vfLengthSize == 4;
 
 
-  /// Returns a [String] indicating the issue with value. If there are no
-  /// issues returns the empty string ("").
+  /// Returns a [ParseIssues] object indicating the the issues with [n].
+  /// If there are no issues returns the empty string ("").
   @override
   ParseIssues issues(int n) {
-    if (isNotValid(n)) {
+    if (!isValid(n)) {
       var msg = 'Invalid value: min($minValue) <= value($n) <= max($minValue)';
       return new ParseIssues("VRInt", '$n', 0, 0, [msg]);
     }

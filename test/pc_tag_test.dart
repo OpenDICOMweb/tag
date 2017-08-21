@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:common/logger.dart';
+import 'package:logger/logger.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 

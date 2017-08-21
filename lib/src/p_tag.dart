@@ -4,8 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:common/common.dart';
-
+import 'package:base/base.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
@@ -16606,7 +16605,7 @@ class PTagGroupLength extends PTag {
   // Group Length Tags
   PTagGroupLength(int code)
       : super._(
-            "kPublicGroupLength${Int.hex(code, 8, "")}",
+            "kPublicGroupLength${hex(code)}",
             code,
             "Public Group Length for ${Tag.toDcm(code)}",
             VR.kUL,
@@ -16634,7 +16633,7 @@ class PTagUnknown extends PTag {
   // Group Length Tags
   PTagUnknown(int code, VR vr)
       : super._(
-            "kUnknownPublicTag_${Int.hex(Group.fromTag(code), 4, "")}",
+            "kUnknownPublicTag_${hex16(Group.fromTag(code))}",
             code,
             "Unknown DICOM Tag ${Tag.toDcm(code)}",
             vr,

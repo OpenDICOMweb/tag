@@ -13,8 +13,7 @@ import 'vr.dart';
 const int kMaxOD = kUint32Max - 8;
 const int kMaxOF = kUint32Max - 4;
 
-/// Floating Point [VR]s.
-//TODO: doc
+/// The class of all Floating Point [VR]s.
 class VRFloat extends VR<double> {
   const VRFloat._(int index, int code, String id, int elementSize,
       int vfLengthFieldSize, int maxVFLength, String keyword)
@@ -50,7 +49,7 @@ class VRFloat extends VR<double> {
   @override
   ParseIssues issues(double n) => null;
 
-  //TODO: doc
+  /// Returns a new value for [n] is possible; otherwise, returns null.
   @override
   double fix(double n) => n;
 
