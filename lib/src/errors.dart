@@ -144,10 +144,10 @@ class InvalidValuesTypeError extends Error {
       'InvalidValuesTypeError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-bool invalidValuesTypeError(Tag tag, List values) {
+Null invalidValuesTypeError(Tag tag, List values) {
   log.error(InvalidValuesTypeError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesTypeError(tag, values);
-  return false;
+  return null;
 }
 
 class InvalidValuesLengthError extends Error {
@@ -165,10 +165,10 @@ class InvalidValuesLengthError extends Error {
       'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-bool invalidValuesLengthError(Tag tag, List values) {
+Null invalidValuesLengthError(Tag tag, List values) {
   log.error(InvalidValuesLengthError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesLengthError(tag, values);
-  return false;
+  return null;
 }
 
 class InvalidValuesError<V> extends Error {
