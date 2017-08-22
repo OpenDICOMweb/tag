@@ -236,10 +236,14 @@ abstract class Tag {
   bool hasValidValues<V>(List<V> vList, [bool throwOnError = false]) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
-    if (!isValidValuesType(vList))
-      return invalidValuesTypeError(this, vList);
-    if (isNotValidLength(vList.length))
-      return invalidValuesLengthError(this, vList);
+    if (!isValidValuesType(vList)) {
+      invalidValuesTypeError(this, vList);
+      return false;
+    }
+    if (isNotValidLength(vList.length)) {
+      invalidValuesLengthError(this, vList);
+      return false;
+    }
     for (int i = 0; i < vList.length; i++)
       if (isNotValidValue(vList[i])) {
         invalidValuesError(this, vList);
