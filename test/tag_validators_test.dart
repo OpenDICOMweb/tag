@@ -5,16 +5,14 @@
 
 import 'dart:math' as math;
 
-import 'package:system/system.dart';
+import 'package:system/server.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 import 'package:test_tools/random_string.dart' as rsg;
 
 void main() {
-  validateTest();
-}
+  Server.initialize(name: 'tag_validator', level: Level.debug);
 
-void validateTest() {
   Tag tagCS0 = PTag.kSpecificCharacterSet;
   Tag tagCS1 = PTag.kImageType;
   //   new Tag.public("Image​Type", 0x00080008, "Image Type", VR.kCS, VM.k2_n);
@@ -26,7 +24,7 @@ void validateTest() {
   //   "Number of Zero Fills", VR.kUS, VM.k1_2, false);
 
   group("Tag validators in tag", () {
-    System.throwOnError = false;
+    system.throwOnError = false;
 
     test("test for isvalidvalues", () {
       List<int> emptyListsInt = new List<int>();

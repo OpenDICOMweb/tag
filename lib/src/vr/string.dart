@@ -428,8 +428,10 @@ class VRDcmTime extends VRString {
   ParseIssues issues(String s, {int start = 0, int end}) =>
       Time.issues(s.trimRight(), start: start, end: end);
 
+/* Enhancement
   @override
   String fix(String s) => Time.fix(s);
+*/
 
   static const VRDcmTime kTM =
       const VRDcmTime._(25, 0x4d54, "TM", 2, kMaxShortVF, "TimeString", 2, 14);
@@ -458,13 +460,14 @@ class VRDecimalString extends VRString {
     return num.parse(s, (s) => null);
   }
 
-  /// Fix
+/* Enhancement
   @override
   String fix(String s) {
     //TODO:
     // how to fix? replace with no-value;
     return s;
   }
+*/
 
   static const VRDecimalString kDS = const VRDecimalString._(
       7, 0x5344, "DS", 2, kMaxShortVF, "DecimalString", 1, 16);

@@ -10,9 +10,6 @@ environment:
   sdk: '>=1.24.2 <2.0.0'
 
 dependencies:
-  base:
-    path: C:/odw/sdk/base
-    version: ^0.6.1
   date_time:
     path: C:/odw/sdk/date_time
     version: ^0.6.1

@@ -4,10 +4,10 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:base/base.dart';
-import 'package:tag/src/errors.dart';
+import 'package:system/system.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
+import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
 import 'package:tag/src/p_tag_codes.dart';
 import 'package:tag/src/p_tag_keywords.dart';
@@ -2916,9 +2916,13 @@ class PTag extends Tag {
       = const PTag._("DateOfLastCalibration", 0x00181200,
           "Date of Last Calibration", VR.kDA, VM.k1_n, false);
   static const PTag kTimeOfLastCalibration
-      //(0018,1201)
-      = const PTag._("TimeOfLastCalibration", 0x00181201,
-          "Time of Last Calibration", VR.kTM, VM.k1_n, false);
+  //(0018,1201)
+  = const PTag._("TimeOfLastCalibration", 0x00181201,
+                     "Time of Last Calibration", VR.kTM, VM.k1_n, false);
+  static const PTag kDateTimeOfLastCalibration
+  //(0018,1201)
+  = const PTag._("DateTimeOfLastCalibration", 0x00181202,
+                     "Time of Last Calibration", VR.kTM, VM.k1_n, false);
   static const PTag kConvolutionKernel
       //(0018,1210)
       = const PTag._("ConvolutionKernel", 0x00181210, "Convolution Kernel",
@@ -5155,6 +5159,10 @@ class PTag extends Tag {
       //(0018,9810)
       = const PTag._("ZeroVelocityPixelValue", 0x00189810,
           "Zero Velocity Pixel Value", VR.kUSSS, VM.k1, false);
+  static const PTag kInstructionPerformedDateTime
+  //(0018,9810)
+  = const PTag._("InstructionPerformedDateTime", 0x00189919,
+                     "Instruction Performed Date Time", VR.kDT, VM.k1, false);
   static const PTag kContributingEquipmentSequence
       //(0018,A001)
       = const PTag._("ContributingEquipmentSequence", 0x0018A001,

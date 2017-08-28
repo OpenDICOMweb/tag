@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:system/system.dart';
+import 'package:system/server.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 
@@ -25,11 +25,8 @@ List<int> tags = const [
 
 /// Test the Tag Class
 void main() {
-  tagTest();
-}
+  Server.initialize(name: 'tag_test', level: Level.debug);
 
-/// Simple Tag Test
-void tagTest() {
   test('Simple Tag Test', () {
     for (int i = 0; i < tags.length; i++) {
       Tag tag = PTag.lookupByCode(tags[i], VR.kUN);
