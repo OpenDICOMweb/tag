@@ -173,7 +173,7 @@ Null invalidValuesLengthError(Tag tag, List values) {
 
 class InvalidValuesError<V> extends Error {
   final Tag tag;
-  final List values;
+  final List<V> values;
 
   InvalidValuesError(this.tag, this.values);
 
@@ -181,7 +181,7 @@ class InvalidValuesError<V> extends Error {
   String toString() => '${_msg(tag, values)}';
 
   static String _msg<V>(Tag tag, List<V> values) =>
-      'InvalidValuesError: Tag(${tag.info})\n  values: ${values}';
+      'InvalidValuesError: ${tag.info}\n  values: ${values}';
 }
 
 Null invalidValuesError<V>(Tag tag, List<V> values) {
