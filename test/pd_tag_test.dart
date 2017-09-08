@@ -5,12 +5,13 @@
 
 import 'package:logger/logger.dart';
 import 'package:tag/tag.dart';
+import 'package:system/server.dart';
 import 'package:test/test.dart';
 
-final Logger log = new Logger('DateTimeTests', Level.debug);
 
 void main() {
   privateDataTag();
+  Server.initialize(name: 'pd_tag_test', level: Level.info0);
 }
 
 void privateDataTag() {

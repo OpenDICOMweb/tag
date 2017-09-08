@@ -25,7 +25,7 @@ List<int> tags = const [
 
 /// Test the Tag Class
 void main() {
-  Server.initialize(name: 'tag_test', level: Level.debug);
+  Server.initialize(name: 'tag_test', level: Level.info0);
 
   test('Simple Tag Test', () {
     for (int i = 0; i < tags.length; i++) {
