@@ -5,10 +5,12 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:tag/tag.dart';
+import 'package:system/server.dart';
 import 'package:test/test.dart';
 
 void main() {
   testStaticMethods();
+  Server.initialize(name: 'tag_statics_test', level: Level.info0);
 }
 
 void testStaticMethods() {

@@ -6,11 +6,12 @@
 
 import 'package:logger/logger.dart';
 import 'package:tag/tag.dart';
+import 'package:system/server.dart';
 import 'package:test/test.dart';
 
-final Logger log = new Logger('uint_test.dart', Level.debug);
-
 void main() {
+  Server.initialize(name: 'pc_tag_test', level: Level.info0);
+
   test("PrivateCreatorTag ACUSON Test", () {
     PCTag pTag = new PCTag(0x00090010, VR.kUN, "ACUSON");
     expect(pTag is PCTagKnown, true);

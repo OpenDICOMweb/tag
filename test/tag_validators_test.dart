@@ -11,7 +11,7 @@ import 'package:test/test.dart';
 import 'package:test_tools/random_string.dart' as rsg;
 
 void main() {
-  Server.initialize(name: 'tag_validator', level: Level.debug);
+  Server.initialize(name: 'tag_validators_test', level: Level.info0);
 
   Tag tagCS0 = PTag.kSpecificCharacterSet;
   Tag tagCS1 = PTag.kImageType;
