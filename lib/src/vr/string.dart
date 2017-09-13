@@ -9,7 +9,7 @@ import 'dart:typed_data';
 
 import 'package:date_time/date_time.dart';
 import 'package:string/string.dart';
-import 'package:system/system.dart';
+import 'package:system/core.dart';
 import 'package:uid/uid.dart';
 
 import 'vr.dart';
