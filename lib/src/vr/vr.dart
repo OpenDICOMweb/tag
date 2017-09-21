@@ -174,6 +174,44 @@ abstract class VR<T> {
   static const VR kUSOW = VR.kUN;
   static const VR kUSOW1 = VR.kUN;
 
+  static const int kAEindex = 1;
+  static const int kASindex = 2;
+  static const int kATindex = 3;
+  static const int kBRindex = 4;
+  static const int kCSindex = 5;
+  static const int kDAindex = 6;
+  static const int kDSindex = 7;
+  static const int kDTindex = 8;
+  static const int kFDindex = 9;
+  static const int kFLindex = 10;
+  static const int kISindex = 11;
+  static const int kLOindex = 12;
+  static const int kLTindex = 13;
+  static const int kOBindex = 14;
+  static const int kODindex = 15;
+  static const int kOFindex = 16;
+  static const int kOLindex = 17;
+  static const int kOWindex = 18;
+  static const int kPNindex = 19;
+  static const int kSHindex = 20;
+  static const int kSLindex = 21;
+  static const int kSQindex = 22;
+  static const int kSSindex = 23;
+  static const int kSTindex = 24;
+  static const int kTMindex = 25;
+  static const int kUCindex = 26;
+  static const int kUIindex = 27;
+  static const int kULindex = 28;
+  static const int kUNindex = 29;
+  static const int kURindex = 30;
+  static const int kUSindex = 31;
+  static const int kUTindex = 32;
+
+
+
+
+
+
   static const List<VR> vrList = const <VR>[
     kInvalid,
     kAE, kAS, kAT, kBR, kCS,

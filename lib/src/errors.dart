@@ -18,21 +18,22 @@ class InvalidTagError extends Error {
   String toString() => Tag.toMsg(tag);
 }
 
-dynamic tagError(Object obj) => throw new InvalidTagError(obj);
+//Urgent Fix
+dynamic invalidTagError(Object obj) => throw new InvalidTagError(obj);
 
 //TODO: convert this to handle both int and String and remove next two Errors
-class InvalidTagKeyError extends Error {
+class InvalidKeyError extends Error {
   dynamic key;
   VR vr;
   String creator;
 
-  InvalidTagKeyError(this.key, [this.vr, this.creator]);
+  InvalidKeyError(this.key, [this.vr, this.creator]);
 
   @override
   String toString() => _msg(key, vr, creator);
 
   static String _msg(key, [VR vr, String creator]) =>
-      'InvalidTagKeyError: "$_value" $vr creator:"$creator"';
+      'InvalidKeyError: "$_value" $vr creator:"$creator"';
 
   static String _value(key) {
     if (key == null) return 'null';
@@ -42,9 +43,9 @@ class InvalidTagKeyError extends Error {
   }
 }
 
-Null invalidTagKeyError(dynamic key, [VR vr, String creator]) {
-  log.error(InvalidTagKeyError._msg(key, vr, creator));
-  if (throwOnError) throw new InvalidTagKeyError(key);
+Null invalidKeyError(dynamic key, [VR vr, String creator]) {
+  log.error(InvalidKeyError._msg(key, vr, creator));
+  if (throwOnError) throw new InvalidKeyError(key);
   return null;
 }
 

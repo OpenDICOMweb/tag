@@ -98,7 +98,10 @@ abstract class Tag {
 
   // **** VR Getters
 
+  int get vrCode => vr.code;
   int get vrIndex => vr.index;
+  int get vrMinValueLength => vr.minValueLength;
+  int get vrMaxValueLength => vr.maxValueLength;
 
   @deprecated
   int get sizeInBytes => elementSize;
@@ -233,7 +236,7 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool hasValidValues<V>(List<V> vList, [bool throwOnError = false]) {
+  bool hasValidValues<V>(Iterable<V> vList, [bool throwOnError = false]) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
     if (!isValidValuesType(vList)) {
@@ -252,7 +255,7 @@ abstract class Tag {
     return true;
   }
 
-  bool isValidValuesType<V>(List<V> values) => vr.isValidValuesType(values);
+  bool isValidValuesType<V>(Iterable<V> values) => vr.isValidValuesType(values);
 
 /*  bool isValidElement(Element e) {
     if (e == null) return false;
@@ -385,7 +388,7 @@ abstract class Tag {
   static Tag lookup(dynamic key, [VR vr = VR.kUN, dynamic creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
-    return invalidTagKeyError(key, vr, creator);
+    return invalidKeyError(key, vr, creator);
   }
 
   //TODO: redoc
