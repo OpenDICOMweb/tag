@@ -247,15 +247,17 @@ abstract class Tag {
       invalidValuesLengthError(this, vList);
       return false;
     }
-    for (int i = 0; i < vList.length; i++)
-      if (isNotValidValue(vList[i])) {
+    List<V> v = vList.toList(growable: false);
+    for (int i = 0; i < v.length; i++)
+      if (isNotValidValue(v[i])) {
         invalidValuesError(this, vList);
         return false;
       }
     return true;
   }
 
-  bool isValidValuesType<V>(Iterable<V> values) => vr.isValidValuesType(values);
+  bool isValidValuesType<V>(Iterable<V> values) =>
+      vr.isValidValuesType(values);
 
 /*  bool isValidElement(Element e) {
     if (e == null) return false;

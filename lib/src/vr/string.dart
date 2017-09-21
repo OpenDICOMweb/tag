@@ -59,7 +59,7 @@ abstract class VRString extends VR<String> {
 
   /// Returns true if the [Type] of values is [List<String>].
   @override
-  bool isValidValuesType(List vList) => vList is List<String>;
+  bool isValidValuesType(Iterable<String> vList) => vList is List<String>;
 /* Flush when working
   {
     if (vList is! List<String>) return false;

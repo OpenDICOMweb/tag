@@ -79,7 +79,7 @@ abstract class VR<T> {
   bool isValidType(dynamic value);
 
   /// Returns true if the [List] [Type] of values is valid for [this].
-  bool isValidValuesType(List<T> values);
+  bool isValidValuesType(Iterable<T> values);
 
   bool isValidLength(int length) => false;
 
@@ -208,10 +208,6 @@ abstract class VR<T> {
   static const int kUTindex = 32;
 
 
-
-
-
-
   static const List<VR> vrList = const <VR>[
     kInvalid,
     kAE, kAS, kAT, kBR, kCS,
@@ -277,7 +273,7 @@ class VRUnknown extends VR<int> {
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(List values) => values is List<int>;
+  bool isValidValuesType(Iterable<int> values) => values is List<int>;
 
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
   /// UN - Unknown. The supertype of all VRs.
@@ -320,7 +316,7 @@ class VRSequence extends VR<int> {
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(List vList) {
+  bool isValidValuesType(Iterable<Item> vList) {
     for (var v in vList) if (!v.isItem) return false;
     return true;
   }

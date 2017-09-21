@@ -19,7 +19,7 @@ class InvalidTagError extends Error {
 }
 
 //Urgent Fix
-dynamic invalidTagError(Object obj) => throw new InvalidTagError(obj);
+Null invalidTagError(Object obj) => throw new InvalidTagError(obj);
 
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidKeyError extends Error {
@@ -145,7 +145,7 @@ class InvalidValuesTypeError extends Error {
       'InvalidValuesTypeError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesTypeError(Tag tag, List values) {
+Null invalidValuesTypeError(Tag tag, Iterable values) {
   log.error(InvalidValuesTypeError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesTypeError(tag, values);
   return null;
@@ -166,7 +166,7 @@ class InvalidValuesLengthError extends Error {
       'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesLengthError(Tag tag, List values) {
+Null invalidValuesLengthError(Tag tag, Iterable values) {
   log.error(InvalidValuesLengthError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesLengthError(tag, values);
   return null;
@@ -174,18 +174,18 @@ Null invalidValuesLengthError(Tag tag, List values) {
 
 class InvalidValuesError<V> extends Error {
   final Tag tag;
-  final List<V> values;
+  final Iterable<V> values;
 
   InvalidValuesError(this.tag, this.values);
 
   @override
   String toString() => '${_msg(tag, values)}';
 
-  static String _msg<V>(Tag tag, List<V> values) =>
+  static String _msg<V>(Tag tag, Iterable<V> values) =>
       'InvalidValuesError: ${tag.info}\n  values: ${values}';
 }
 
-Null invalidValuesError<V>(Tag tag, List<V> values) {
+Null invalidValuesError<V>(Tag tag, Iterable<V> values) {
   if (log != null) log.error(InvalidValuesError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesError(tag, values);
   return null;
