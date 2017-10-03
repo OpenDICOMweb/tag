@@ -265,7 +265,10 @@ class VRUnknown extends VR<int> {
 
   /// Returns [true] of [value] is UN.
   @override
-  bool isValid(Object value) => isValidType(value) && _inRange(value);
+  bool isValid(dynamic value) => isValidType(value) && _inRange(value);
+
+  @override
+  bool isNotValid(dynamic value) => !isValid(value);
 
   /// Returns true if the [Type] of values is [int].
   @override

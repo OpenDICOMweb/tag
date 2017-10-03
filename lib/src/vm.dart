@@ -33,6 +33,8 @@ class VM {
     return 'k$s';
   }
 
+  String get keyword => 'k$id';
+
   bool get isFixed => min == max;
   bool get isSingleton => width == 0;
 
