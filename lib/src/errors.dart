@@ -22,8 +22,8 @@ class InvalidTagError extends Error {
 Null invalidTagError(Object obj) => throw new InvalidTagError(obj);
 
 //TODO: convert this to handle both int and String and remove next two Errors
-class InvalidKeyError extends Error {
-  dynamic key;
+class InvalidKeyError<K> extends Error {
+  K key;
   VR vr;
   String creator;
 
@@ -32,10 +32,10 @@ class InvalidKeyError extends Error {
   @override
   String toString() => _msg(key, vr, creator);
 
-  static String _msg(key, [VR vr, String creator]) =>
+  static String _msg<K>(K key, [VR vr, String creator]) =>
       'InvalidKeyError: "$_value" $vr creator:"$creator"';
 
-  static String _value(key) {
+  static String _value(Object key) {
     if (key == null) return 'null';
     if (key is String) return key;
     if (key is int) return Tag.toDcm(key);
@@ -43,7 +43,7 @@ class InvalidKeyError extends Error {
   }
 }
 
-Null invalidKeyError(dynamic key, [VR vr, String creator]) {
+Null invalidKeyError<K>(K key, [VR vr, String creator]) {
   log.error(InvalidKeyError._msg(key, vr, creator));
   if (throwOnError) throw new InvalidKeyError(key);
   return null;
@@ -60,7 +60,7 @@ class InvalidTagCodeError extends Error {
 
   static String _msg(int code) => 'InvalidTagCodeError: "${_value(code)}"';
 
-  static String _value(code) => (code == null) ? 'null' : Tag.toDcm(code);
+  static String _value(int code) => (code == null) ? 'null' : Tag.toDcm(code);
 }
 
 Null invalidTagCodeError(int code) {

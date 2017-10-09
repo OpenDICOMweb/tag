@@ -10,26 +10,25 @@ import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
 import 'package:tag/src/vr/vr.dart';
 
-typedef Tag TagMaker<E>(int code, VR<E> vr, [dynamic name]);
+typedef Tag TagMaker<E>(int code, VR<E> vr);
 
 abstract class PrivateTag extends Tag {
   @override
   final int code;
   @override
   final VR vr;
+  @override
+  final VM vm;
 
-  const PrivateTag(this.code, [this.vr = VR.kUN]);
+  const PrivateTag(this.code, [this.vr = VR.kUN, this.vm = VM.k1_n]) : super();
 
-  PrivateTag._(this.code, [this.vr = VR.kUN]);
+  PrivateTag._(this.code, [this.vr = VR.kUN, this.vm = VM.k1_n]);
 
   @override
   bool get isPrivate => true;
 
   @override
-  VM get vm => VM.k1_n;
-
-  @override
-  String get name => "Illegal Private Tag";
+  String get name => 'Illegal Private Tag';
 
   int get index => -1;
 
@@ -68,13 +67,16 @@ class PrivateTagGroupLength extends PrivateTag {
   VM get vm => VM.k1;
 
   @override
-  String get name => "Private Group Length Tag";
+  String get name => 'Private Group Length Tag';
 
 
 
+/*
   //Flush at V0.9.0 if not used.
   static PrivateTagGroupLength maker(int code, VR vr, [_]) =>
       new PrivateTagGroupLength(code, vr);
+*/
+
 }
 
 /// Private Illegal Tags have have codes that are (gggg,eeee),
@@ -87,8 +89,11 @@ class PrivateTagIllegal extends PrivateTag {
   PrivateTagIllegal(int code, VR vr) : super(code, vr);
 
   @override
-  String get name => "Private Illegal Tag";
+  String get name => 'Private Illegal Tag';
 
+/* Flush if not needed
   static PrivateTagIllegal maker(int code, VR vr, String name) =>
       new PrivateTagIllegal(code, vr);
+*/
+
 }

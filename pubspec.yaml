@@ -7,21 +7,21 @@ author: Jim Philbin <mailto:jfphilbin@gmail.com>
 homepage: https://github.com/OpenDICOMweb/tag
 
 environment:
-  sdk: '>=1.24.2 <2.0.0'
+  sdk: '>=1.24.2 <2.1.0'
 
 dependencies:
   date_time:
     path: C:/odw/sdk/date_time
-    version: ^0.6.3
+    version: ^0.6.5
   number:
     path: C:/odw/sdk/number
-    version: ^0.6.3
+    version: ^0.6.5
   string:
     path: C:/odw/sdk/string
-    version: ^0.6.3
+    version: ^0.6.5
   system:
     path: C:/odw/sdk/system
-    version: ^0.6.3
+    version: ^0.6.5
   uid:
     path: C:/odw/sdk/uid
     version: ^0.6.3

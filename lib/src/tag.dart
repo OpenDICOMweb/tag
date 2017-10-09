@@ -44,7 +44,7 @@ abstract class Tag {
   const Tag();
 
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag fromCode(int code, VR vr, [dynamic creator]) {
+  static Tag fromCode(int code, VR vr, [Object creator]) {
     if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
     if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
     if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
@@ -61,9 +61,9 @@ abstract class Tag {
   // Tag.private(this.code, this.vr, this.vm, this.keyword, this.name,
   //     [this.isRetired = false, this.type = EType.kUnknown]);
   int get code;
-  VR get vr;
-  String get keyword => "UnknownTag";
-  String get name => "Unknown Tag";
+  String get keyword => 'UnknownTag';
+  String get name => 'Unknown Tag';
+  VR get vr => VR.kUN;
   VM get vm => VM.k1_n;
 
   bool get isRetired => true;
@@ -72,7 +72,7 @@ abstract class Tag {
   /// Returns [true] if [this] is a [Tag] defined by the DICOM Standard
   /// or one of the known private [Tag]s ([PCTag] or [PDTag]) defined
   /// in the ODW SDK.
-  bool get isKnown => keyword != "UnknownTag";
+  bool get isKnown => keyword != 'UnknownTag';
 
   bool get isUnKnown => !isKnown;
 
@@ -142,7 +142,7 @@ abstract class Tag {
     if (vm.max == -1) {
       return vr.maxVFLength;
     } else {
-      var maxVF = maxValues * vr.maxValueLength;
+      final maxVF = maxValues * vr.maxValueLength;
       return (maxVF > vr.maxVFLength) ? vr.maxVFLength : maxVF;
     }
   }
@@ -217,7 +217,7 @@ abstract class Tag {
   bool get inDcmDirRange => kMinDcmDirTag <= code && code <= kMaxDcmDirTag;
 
   String get info {
-    String retired = (isRetired) ? '- Retired' : '';
+    final retired = (isRetired) ? '- Retired' : '';
     return '$runtimeType$dcm $vr $vm $keyword $retired';
   }
 
@@ -236,7 +236,7 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool hasValidValues<V>(Iterable<V> vList, [bool throwOnError = false]) {
+  bool hasValidValues<V>(Iterable<V> vList, {bool throwOnError = false}) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
     if (!isValidValuesType(vList)) {
@@ -247,16 +247,17 @@ abstract class Tag {
       invalidValuesLengthError(this, vList);
       return false;
     }
-    List<V> v = vList.toList(growable: false);
-    for (int i = 0; i < v.length; i++)
-      if (isNotValidValue(v[i])) {
+
+    for (var v in vList) {
+      if (isNotValidValue(v)) {
         invalidValuesError(this, vList);
         return false;
       }
+    }
     return true;
   }
 
-  bool isValidValuesType<V>(Iterable<V> values) =>
+  bool isValidValuesType(Iterable values) =>
       vr.isValidValuesType(values);
 
 /*  bool isValidElement(Element e) {
@@ -284,10 +285,10 @@ abstract class Tag {
   List<E> parseValues<E>(List<String> sList) {
     //print('parseList: $sList');
     if (isNotValidLength(sList.length)) return null;
-    List<E> values = new List<E>(sList.length);
-    for (int i = 0; i < values.length; i++) {
+    final values = new List<E>(sList.length);
+    for (var i = 0; i < values.length; i++) {
       //log.debug('sList[$i]: ${sList[i]}');
-      E v = vr.parse(sList[i]);
+      final E v = vr.parse(sList[i]);
       //log.debug('v: $v');
       if (v == null) return null;
       values[i] = v;
@@ -304,19 +305,18 @@ abstract class Tag {
   //TODO: make this work with [ParseIssues]
   List<String> issues<E>(List<E> values) {
     print('issues: $values');
-    List<String> sList = [];
-    for (int i = 0; i < values.length; i++) {
-      var s = vr.issues(values[i]);
+    final sList = <String>[];
+    for (var i = 0; i < values.length; i++) {
+      final s = vr.issues(values[i]);
       if (s != null) sList.add('$i: $s');
     }
     return sList;
   }
 
-  List<V> checkValues<V>(List<V> values) =>
-      (hasValidValues(values)) ? values : null;
+  List<V> checkValues<V>(List<V> values) => (hasValidValues(values)) ? values : null;
 
   // Placeholder until VR is integrated into TagBase
-  List<E> checkValue<E>(dynamic value) => vr.isValid(value) ? value : null;
+  List<E> checkValue<E>(Object value) => vr.isValid(value) ? value : null;
 
   /// Returns [true] if [length] is a valid number of values for [this].
   bool isValidLength(int length) {
@@ -363,11 +363,11 @@ abstract class Tag {
   /// keywords have been converted to underscores ('_'), because
   /// dashes are illegal in Dart identifiers.
   String keywordToName(String keyword) {
-    List<int> kw = keyword.codeUnits;
-    List<int> name = new List<int>();
+    final kw = keyword.codeUnits;
+    final name = <int>[];
     name[0] = kw[0];
-    for (int i = 0; i < kw.length; i++) {
-      int char = kw[i];
+    for (var i = 0; i < kw.length; i++) {
+      final char = kw[i];
       if (isUppercaseChar(char)) name.add(kSpace);
       name.add(char);
     }
@@ -375,31 +375,31 @@ abstract class Tag {
   }
 
   String stringToKeyword(String s) {
-    s = s.replaceAll(' ', '_');
-    s = s.replaceAll('-', '_');
-    s = s.replaceAll('.', '_');
-    return s;
+    var v = s;
+    v = v.replaceAll(' ', '_');
+    v = v.replaceAll('-', '_');
+    v = v.replaceAll('.', '_');
+    return v;
   }
 
   @override
   String toString() {
-    String retired = (isRetired == false) ? "" : ", (Retired)";
+    final retired = (isRetired == false) ? '' : ', (Retired)';
     return '$runtimeType: $dcm $keyword, $vr, $vm$retired';
   }
 
-  static Tag lookup(dynamic key, [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookup<V>(V key, [VR vr = VR.kUN, Object creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
-    return invalidKeyError(key, vr, creator);
+    return invalidKeyError<V>(key, vr, creator);
   }
 
   //TODO: redoc
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag lookupByCode(int code, [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookupByCode(int code, [VR vr = VR.kUN, Object creator]) {
     if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
     if (Tag.isPrivateCode(code)) {
-      if (Tag.isPrivateGroupLengthCode(code))
-        return new PrivateTagGroupLength(code, vr);
+      if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
       throw 'Error: Unknown Private Tag Code${Tag.toDcm(code)}';
@@ -409,8 +409,7 @@ abstract class Tag {
     }
   }
 
-  static Tag lookupByKeyword(String keyword,
-      [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookupByKeyword(String keyword, [VR vr = VR.kUN, Object creator]) {
 /*    Tag tag = Tag.lookupKeyword(keyword, vr);
     if (tag != null) return tag;
     tag = Tag.lookupPrivateCreatorKeyword(keyword, vr) {
@@ -438,20 +437,20 @@ abstract class Tag {
     if (identical(e1, e2)) return true;
     if (e1 == null || e2 == null) return false;
     if (e1.length != e2.length) return false;
-    for (int i = 0; i < e1.length; i++) if (e1[i] != e2[i]) return false;
+    for (var i = 0; i < e1.length; i++) if (e1[i] != e2[i]) return false;
     return true;
   }
 
   //TODO: needed or used?
   static Tag lookupPublicCode(int code, VR vr) {
-    Tag tag = PTag.lookupByCode(code, vr);
+    final tag = PTag.lookupByCode(code, vr);
     if (tag != null) return tag;
     if (Tag.isPublicGroupLengthCode(code)) return new PTagGroupLength(code);
     return new PTagUnknown(code, vr);
   }
 
   static Tag lookupPublicKeyword(String keyword, VR vr) {
-    Tag tag = PTag.lookupByKeyword(keyword, vr);
+    final tag = PTag.lookupByKeyword(keyword, vr);
     if (tag != null) return tag;
     if (Tag.isPublicGroupLengthKeyword(keyword))
       return new PTagGroupLength.keyword(keyword);
@@ -459,8 +458,7 @@ abstract class Tag {
   }
 
   static Tag lookupPrivateCreatorCode(int code, VR vr, String token) {
-    if (Tag.isPrivateGroupLengthCode(code))
-      return new PrivateTagGroupLength(code, vr);
+    if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
     if (isPrivateCreatorCode(code)) return new PCTag(code, vr, token);
     throw new InvalidTagCodeError(code);
   }
@@ -471,10 +469,9 @@ abstract class Tag {
           : new PDTagUnknown(code, vr, creator);
   */
 
-
   /// Returns a [String] corresponding to [tag], which might be an
   /// [int], [String], or [Tag].
-  static String toMsg(dynamic tag) {
+  static String toMsg(Object tag) {
     String msg;
     if (tag is int) {
       msg = 'Code ${Tag.toDcm(tag)}';
@@ -488,21 +485,19 @@ abstract class Tag {
 
   static List<String> lengthChecker(
       List values, int minLength, int maxLength, int width) {
-    int length = values.length;
+    final length = values.length;
     // These are the most common cases.
     if (length == 0 || (length == 1 && width == 0)) return null;
     List<String> msgs;
     if (length % width != 0)
       msgs = ['Invalid Length($length) not a multiple of vmWidth($width)'];
     if (length < minLength) {
-      var msg = 'Invalid Length($length) less than minLength($minLength)';
-      msgs = msgs ??= [];
-      msgs.add(msg);
+      final msg = 'Invalid Length($length) less than minLength($minLength)';
+      msgs = msgs ??= []..add(msg);
     }
     if (length > maxLength) {
-      var msg = 'Invalid Length($length) greater than maxLength($maxLength)';
-      msgs = msgs ??= [];
-      msgs.add(msg); //TODO: test Not sure this is working
+      final msg = 'Invalid Length($length) greater than maxLength($maxLength)';
+      msgs = msgs ??= []..add(msg);
     }
     return (msgs == null) ? null : msgs;
   }
@@ -518,12 +513,11 @@ abstract class Tag {
       Group.isPublic(Group.fromTag(code)) && Elt.fromTag(code) == 0;
 
   static bool isPublicGroupLengthKeyword(String keyword) =>
-      keyword == 'PublicGroupLengthKeyword' ||
-      isPublicGroupLengthKeywordCode(keyword);
+      keyword == 'PublicGroupLengthKeyword' || isPublicGroupLengthKeywordCode(keyword);
 
   //TODO: test - needs to handle 'oxGGGGEEEE' and 'GGGGEEEE'
   static bool isPublicGroupLengthKeywordCode(String keywordCode) {
-    int code = int.parse(keywordCode, radix: 16, onError: (String s) => null);
+    final code = int.parse(keywordCode, radix: 16, onError: (s) => null);
     return (Elt.fromTag(code) == 0) ? true : false;
   }
 
@@ -532,18 +526,17 @@ abstract class Tag {
       isPrivateCode(code) && Elt.isPrivateCreator(Elt.fromTag(code));
 
   static bool isCreatorCodeInGroup(int code, int group) {
-    int g = group << 16;
+    final g = group << 16;
     return (code >= (g + 0x10)) && (code <= (g + 0xFF));
   }
 
   static bool isPDataCodeInSubgroup(int code, int group, int subgroup) {
-    int sg = (group << 16) + (subgroup << 8);
+    final sg = (group << 16) + (subgroup << 8);
     return (code >= sg && (code <= (sg + 0xFF)));
   }
 
   static bool isPrivateDataCode(int code) =>
-      Group.isPrivate(Group.fromTag(code)) &&
-      Elt.isPrivateData(Elt.fromTag(code));
+      Group.isPrivate(Group.fromTag(code)) && Elt.isPrivateData(Elt.fromTag(code));
 
   static int privateCreatorBase(int code) => Elt.pcBase(Elt.fromTag(code));
 
@@ -558,13 +551,13 @@ abstract class Tag {
   /// If the [PCTag ]is present, verifies that [pd] and [pc]
   /// have the same [group], and that [pd] has a valid [Elt].
   static bool isValidPrivateDataTag(int pd, int pc) {
-    int pdg = Group.checkPrivate(Group.fromTag(pd));
-    int pcg = Group.checkPrivate(Group.fromTag(pc));
+    final pdg = Group.checkPrivate(Group.fromTag(pd));
+    final pcg = Group.checkPrivate(Group.fromTag(pc));
     if (pdg == null || pcg == null || pdg != pcg) return false;
     return Elt.isValidPrivateData(Elt.fromTag(pd), Elt.fromTag(pc));
   }
 
-  //**** Private Tag Code "Constructors" ****
+  //**** Private Tag Code 'Constructors' ****
   static bool isPCIndex(int pcIndex) => 0x0010 <= pcIndex && pcIndex <= 0x00FF;
 
   /// Returns a valid [PCTag], or [null].
@@ -576,16 +569,13 @@ abstract class Tag {
 
   /// Returns a valid [PDTagKnown], or [null].
   static int toPrivateData(int group, int pcIndex, int pdIndex) {
-    if (Group.isPrivate(group) &&
-        _isPCIndex(pcIndex) &&
-        _isPDIndex(pcIndex, pdIndex))
+    if (Group.isPrivate(group) && _isPCIndex(pcIndex) && _isPDIndex(pcIndex, pdIndex))
       return _toPrivateData(group, pcIndex, pcIndex);
     return null;
   }
 
   /// Returns a [PCTag], without checking arguments.
-  static int _toPrivateCreator(int group, int pcIndex) =>
-      (group << 16) + pcIndex;
+  static int _toPrivateCreator(int group, int pcIndex) => (group << 16) + pcIndex;
 
   /// Returns a [PDTagKnown], without checking arguments.
   static int _toPrivateData(int group, int pcIndex, int pdIndex) =>
@@ -600,8 +590,7 @@ abstract class Tag {
   //static bool _isSimplePDIndex(int pde) => 0x1000 >= pde && pde <= 0xFFFF;
 
   /// Return [true] if [pdi] is a valid Private Data Index.
-  static bool _isPDIndex(int pci, int pdi) =>
-      _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
+  static bool _isPDIndex(int pci, int pdi) => _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
 
   /// Returns the offset base for a Private Data Element with the
   /// Private Creator [pcIndex].
@@ -625,21 +614,21 @@ abstract class Tag {
   /// Returns [code] in DICOM format '(gggg,eeee)'.
   static String toDcm(int code) {
     if (code == null) return '"null"';
-    return '(${Group.hex(Group.fromTag(code), "")},'
-        '${Elt.hex(Elt.fromTag(code), "")})';
+    return '(${Group.hex(Group.fromTag(code), '')},'
+        '${Elt.hex(Elt.fromTag(code), '')})';
   }
 
   /// Returns a [List] of DICOM tag codes in '(gggg,eeee)' format
   static Iterable<String> listToDcm(List<int> tags) => tags.map(toDcm);
 
-  /// Takes a [String] in format "(gggg,eeee)" and returns [int].
+  /// Takes a [String] in format '(gggg,eeee)' and returns [int].
   static int toInt(String s) {
-    String tmp = s.substring(1, 5) + s.substring(6, 10);
+    final tmp = '${s.substring(1, 5)}${s.substring(6, 10)}';
     return int.parse(tmp, radix: 16);
   }
 
   static bool rangeError(int tag, int min, int max) {
-    String msg = 'Invalid tag: $tag not in $min <= x <= $max';
+    final msg = 'Invalid tag: $tag not in $min <= x <= $max';
     throw new RangeError(msg);
   }
 }

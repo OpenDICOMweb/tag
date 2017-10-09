@@ -25,8 +25,8 @@ const int kMaxUN = kUint32Max - 2;
 /// Converts [bytes] into a valid [TypedData<List<int>>] and returns it.
 /// If [bytes] is [null] or empty (`bytes.length == 0`), returns an
 /// empty [List<int>]. If the list cannot be converted returns null.
-typedef List<int> BytesToValues(Uint8List bytes,
-    [int offset, int length, bool toView]);
+typedef TypedData BytesToValues(Uint8List bytes,
+                                {int offset, int length, bool asView});
 
 /// Verifies [bytes] into a valid [TypedData<List<int>>], and
 /// if it is aligned (on a valid byte boundary) returns a View of
@@ -56,20 +56,11 @@ class VRInt extends VR<int> {
   /// The method that converts bytes ([Uint8List]) to values.
   final BytesToValues fromBytes;
 
-  const VRInt._(
-      int index,
-      int code,
-      String id,
-      int elementSize,
-      int vfLengthSize,
-      int maxVFLength,
-      String keyword,
-      this.minValue,
-      this.maxValue,
-      this.fromBytes,
+  const VRInt._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword, this.minValue, this.maxValue, this.fromBytes,
       [bool undefinedLengthAllowed = false])
       : super(index, code, id, elementSize, vfLengthSize, maxVFLength, keyword,
-            undefinedLengthAllowed);
+            undefinedLengthAllowed: undefinedLengthAllowed);
 
   @override
   bool get isBinary => true;
@@ -87,20 +78,19 @@ class VRInt extends VR<int> {
 
   /// Returns true if the [Type] of values is [int].
   @override
-  bool isValidValuesType(Iterable<int> values) => values is List<int>;
+  bool isValidValuesType(Iterable values) => values is List<int>;
 
   // [true] if [this] is one of OB, OL, OW, or UN;
   @override
   bool get isLengthAlwaysValid => vfLengthSize == 4;
 
-
   /// Returns a [ParseIssues] object indicating the the issues with [n].
-  /// If there are no issues returns the empty string ("").
+  /// If there are no issues returns the empty string ('').
   @override
   ParseIssues issues(int n) {
     if (!isValid(n)) {
-      var msg = 'Invalid value: min($minValue) <= value($n) <= max($minValue)';
-      return new ParseIssues("VRInt", '$n', 0, 0, [msg]);
+      final msg = 'Invalid value: min($minValue) <= value($n) <= max($minValue)';
+      return new ParseIssues('VRInt', '$n', 0, 0, [msg]);
     }
     return null;
   }
@@ -113,14 +103,14 @@ class VRInt extends VR<int> {
     return n;
   }
 
-  List<int> viewOfBytes(TypedData list) {
-    int length = list.lengthInBytes ~/ list.elementSizeInBytes;
-    return fromBytes(list, 0, length, true);
+  Uint8List uint8ListViewOfBytes(TypedData list) {
+    final length = list.lengthInBytes ~/ list.elementSizeInBytes;
+    return fromBytes(list, offset: 0, length:length, asView: true);
   }
 
-  List<int> copyBytes(TypedData list) {
-    int length = list.lengthInBytes ~/ list.elementSizeInBytes;
-    return fromBytes(list, 0, length, false);
+  TypedData copyBytes(TypedData list) {
+    final length = list.lengthInBytes ~/ list.elementSizeInBytes;
+    return fromBytes(list, offset: 0, length: length, asView: false);
   }
 
   // The constants defined below are in the order of the next line:
@@ -129,43 +119,43 @@ class VRInt extends VR<int> {
   //TODO: improve documentation
   // Note: VR.kAT values are a list of Uint16, but with 2x the number of
   // element, since each element is x[0] << 16 + x[1].
-  static const VRInt kAT = const VRInt._(3, 0x5441, "AT", 4, 2, kMaxShortVF,
-      "Attribute Tag Code", 0, Uint32.maxValue, Uint16.fromBytes);
+  static const VRInt kAT = const VRInt._(3, 0x5441, 'AT', 4, 2, kMaxShortVF,
+      'Attribute Tag Code', 0, Uint32.maxValue, Uint16.fromBytes);
 
-  static const VRInt kOB = const VRInt._(14, 0x424f, "OB", 1, 4, kMaxOB,
-      "OtherByte", 0, Uint8.maxValue, Uint8.fromBytes, true);
+  static const VRInt kOB = const VRInt._(14, 0x424f, 'OB', 1, 4, kMaxOB, 'OtherByte', 0,
+      Uint8.maxValue, Uint8.fromBytes, true);
 
-  static const VRInt kOL = const VRInt._(17, 0x4c4f, "OL", 4, 4, kMaxOL,
-      "OtherLong", 0, Uint32.maxValue, Uint32.fromBytes);
+  static const VRInt kOL = const VRInt._(
+      17, 0x4c4f, 'OL', 4, 4, kMaxOL, 'OtherLong', 0, Uint32.maxValue, Uint32.fromBytes);
 
-  static const VRInt kOW = const VRInt._(18, 0x574f, "OW", 2, 4, kMaxOW,
-      "OtherWord", 0, Uint16.maxValue, Uint16.fromBytes, true);
+  static const VRInt kOW = const VRInt._(18, 0x574f, 'OW', 2, 4, kMaxOW, 'OtherWord', 0,
+      Uint16.maxValue, Uint16.fromBytes, true);
 
-  static const VRInt kSL = const VRInt._(21, 0x4c53, "SL", 4, 2, kMaxShortVF,
-      "SignedLong", Int32.minValue, Int32.maxValue, Int32.fromBytes);
+  static const VRInt kSL = const VRInt._(21, 0x4c53, 'SL', 4, 2, kMaxShortVF,
+      'SignedLong', Int32.minValue, Int32.maxValue, Int32.fromBytes);
 
-  static const VRInt kSS = const VRInt._(23, 0x5353, "SS", 2, 2, kMaxShortVF,
-      "SignedShort", Int16.minValue, Int16.maxValue, Int16.fromBytes);
+  static const VRInt kSS = const VRInt._(23, 0x5353, 'SS', 2, 2, kMaxShortVF,
+      'SignedShort', Int16.minValue, Int16.maxValue, Int16.fromBytes);
 
-  static const VRInt kUL = const VRInt._(28, 0x4c55, "UL", 4, 2, kMaxShortVF,
-      "UnsignedLong", 0, Uint32.maxValue, Uint32.fromBytes);
+  static const VRInt kUL = const VRInt._(28, 0x4c55, 'UL', 4, 2, kMaxShortVF,
+      'UnsignedLong', 0, Uint32.maxValue, Uint32.fromBytes);
 
-  static const VRInt kUS = const VRInt._(31, 0x5355, "US", 2, 2, kMaxShortVF,
-      "UnsignedShort", 0, Uint16.maxValue, Uint16.fromBytes);
+  static const VRInt kUS = const VRInt._(31, 0x5355, 'US', 2, 2, kMaxShortVF,
+      'UnsignedShort', 0, Uint16.maxValue, Uint16.fromBytes);
 
   // **** All VRs below this line are treated as VR.kUN. ****
-  static const VRInt kOBOW = const VRInt._(29, 0x4e55, "OBOW", 1, 4, kMaxUN,
-      "OBorOW", 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kOBOW = const VRInt._(
+      29, 0x4e55, 'OBOW', 1, 4, kMaxUN, 'OBorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSSS = const VRInt._(29, 0x4e55, "USSS", 1, 4, kMaxUN,
-      "USorSS", 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSSS = const VRInt._(
+      29, 0x4e55, 'USSS', 1, 4, kMaxUN, 'USorSS', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSSSOW = const VRInt._(29, 0x4e55, "USSSOW", 1, 4, kMaxUN,
-      "USorSSorOW", 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSSSOW = const VRInt._(29, 0x4e55, 'USSSOW', 1, 4, kMaxUN,
+      'USorSSorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSOW = const VRInt._(29, 0x4e55, "USOW", 1, 4, kMaxUN,
-      "USorOW", 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSOW = const VRInt._(
+      29, 0x4e55, 'USOW', 1, 4, kMaxUN, 'USorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSOW1 = const VRInt._(29, 0x4e55, "USOW1", 1, 4, kMaxUN,
-      "USorOW1", 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSOW1 = const VRInt._(
+      29, 0x4e55, 'USOW1', 1, 4, kMaxUN, 'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
 }
