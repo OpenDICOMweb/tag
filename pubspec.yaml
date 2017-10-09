@@ -1,13 +1,13 @@
 name: tag
 description: The Tag class and friends
-version: 0.6.3
+version: 0.6.5
 
 author: Jim Philbin <mailto:jfphilbin@gmail.com>
 
 homepage: https://github.com/OpenDICOMweb/tag
 
 environment:
-  sdk: '>=1.24.2 <2.0.0'
+  sdk: '>=1.24.2 <2.1.0'
 
 dependencies:
   date_time:

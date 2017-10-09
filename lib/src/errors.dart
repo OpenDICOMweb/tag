@@ -144,7 +144,7 @@ class InvalidValuesTypeError extends Error {
       'InvalidValuesTypeError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesTypeError(Tag tag, List values) {
+Null invalidValuesTypeError(Tag tag, Iterable values) {
   log.error(InvalidValuesTypeError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesTypeError(tag, values);
   return null;
@@ -165,7 +165,7 @@ class InvalidValuesLengthError extends Error {
       'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesLengthError(Tag tag, List values) {
+Null invalidValuesLengthError(Tag tag, Iterable values) {
   log.error(InvalidValuesLengthError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesLengthError(tag, values);
   return null;

@@ -233,10 +233,10 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool hasValidValues<V>(List<V> vList, [bool throwOnError = false]) {
+  bool hasValidValues<V>(Iterable<V> vList, [bool throwOnError = false]) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
-    if (!isValidValuesType(vList)) {
+    if (!isValidValuesType<V>(vList)) {
       invalidValuesTypeError(this, vList);
       return false;
     }
@@ -244,9 +244,9 @@ abstract class Tag {
       invalidValuesLengthError(this, vList);
       return false;
     }
-    for (int i = 0; i < vList.length; i++)
-      if (isNotValidValue(vList[i])) {
-        invalidValuesError(this, vList);
+    for (var v in vList)
+      if (isNotValidValue<V>(v)) {
+        invalidValuesError<V>(this, vList);
         return false;
       }
     return true;
