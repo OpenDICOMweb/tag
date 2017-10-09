@@ -25,8 +25,8 @@ const int kMaxUN = kUint32Max - 2;
 /// Converts [bytes] into a valid [TypedData<List<int>>] and returns it.
 /// If [bytes] is [null] or empty (`bytes.length == 0`), returns an
 /// empty [List<int>]. If the list cannot be converted returns null.
-typedef List<int> BytesToValues(Uint8List bytes,
-    [int offset, int length, bool toView]);
+typedef TypedData BytesToValues(Uint8List bytes,
+{int offset, int length, bool asView});
 
 /// Verifies [bytes] into a valid [TypedData<List<int>>], and
 /// if it is aligned (on a valid byte boundary) returns a View of
@@ -113,14 +113,14 @@ class VRInt extends VR<int> {
     return n;
   }
 
-  List<int> viewOfBytes(TypedData list) {
+  TypedData viewOfBytes(TypedData list) {
     int length = list.lengthInBytes ~/ list.elementSizeInBytes;
-    return fromBytes(list, 0, length, true);
+    return fromBytes(list, offset: 0, length: length, asView: true);
   }
 
-  List<int> copyBytes(TypedData list) {
+  TypedData copyBytes(TypedData list) {
     int length = list.lengthInBytes ~/ list.elementSizeInBytes;
-    return fromBytes(list, 0, length, false);
+    return fromBytes(list, offset: 0, length: length, asView: true);
   }
 
   // The constants defined below are in the order of the next line:

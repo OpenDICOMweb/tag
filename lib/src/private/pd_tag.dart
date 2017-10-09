@@ -55,7 +55,7 @@ class PDTagUnknown extends PDTag {
 class PDTagKnown extends PDTag {
   final PDTagDefinition definition;
 
-  const PDTagKnown(int code, VR vr, creator, this.definition)
+  const PDTagKnown(int code, VR vr, PCTag creator, this.definition)
       : super._(code, vr, creator);
 
   @override

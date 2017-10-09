@@ -382,10 +382,10 @@ abstract class Tag {
     return '$runtimeType: $dcm $keyword, $vr, $vm$retired';
   }
 
-  static Tag lookup(dynamic key, [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookup<K>(K key, [VR vr = VR.kUN, dynamic creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
-    return invalidTagKeyError(key, vr, creator);
+    return invalidTagKeyError<K>(key, vr, creator);
   }
 
   //TODO: redoc

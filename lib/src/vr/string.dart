@@ -70,7 +70,7 @@ abstract class VRString extends VR<String> {
 
   /// Returns a [List<String>] converted from [bytes].
   List<String> bytesToValues(Uint8List bytes) {
-    if (bytes == null || bytes.length == 0) emptyList;
+    if (bytes == null || bytes.isEmpty) emptyList;
     if (bytes.length.isEven) {
       if (bytes[bytes.length - 1] == kSpace || bytes[bytes.length - 1] == kNull)
         bytes = bytes.buffer.asUint8List(0, bytes.length - 1);
@@ -126,19 +126,19 @@ abstract class VRString extends VR<String> {
     var issues = new ParseIssues(name, s);
     _getLengthIssues(s.length, issues);
     for (int i = 0; i < s.length; i++)
-      if (!filter(s.codeUnitAt(i))) issues += '${_invalidChar(s, i)}\n';
+      if (!filter(s.codeUnitAt(i))) issues.add( '${_invalidChar(s, i)}\n');
     return issues;
   }
 
   /// Returns a [String] containing an invalid length error message,
   /// or [null] if there are no errors.
   void _getLengthIssues(int length, ParseIssues issues) {
-    if (length == null) issues += 'Invalid length(Null)';
-    if (length == 0) issues += 'Invalid length(0)';
+    if (length == null) issues.add( 'Invalid length(Null)');
+    if (length == 0) issues.add( 'Invalid length(0)');
     if (length < minValueLength || maxValueLength < length)
-      issues +=
-          'Length error: min($minValueLength) <= value($length) <= max($maxValueLength)';
-  }
+      issues.add(
+          'Length error: min($minValueLength) <= value($length) <= max($maxValueLength)');
+          }
 
   /// Returns a [String] containing an invalid character error message.
   String _invalidChar(String s, int pos) =>
@@ -292,8 +292,8 @@ class VRDcmAge extends VRString {
     var issues = new ParseIssues("VR.kAS", s);
     _getLengthIssues(s.length, issues);
     for (int i = 0; i < 3; i++)
-      if (!isDigitChar(s.codeUnitAt(i))) issues += '${_invalidChar(s, i)}\n';
-    if (!_isAgeMarker(s.codeUnitAt(3))) issues += '${_invalidChar(s, 3)}\n';
+      if (!isDigitChar(s.codeUnitAt(i))) issues.add( '${_invalidChar(s, i)}\n');
+    if (!_isAgeMarker(s.codeUnitAt(3))) issues.add( '${_invalidChar(s, 3)}\n');
     return issues;
   }
 
@@ -449,7 +449,7 @@ class VRDecimalString extends VRString {
   @override
   ParseIssues issues(String s) {
     var issues = new ParseIssues("VR.kDS", s);
-    if (isNotValid(s)) issues += 'Invalid Decimal value $s';
+    if (isNotValid(s)) issues.add( 'Invalid Decimal value $s');
     return issues;
   }
 
@@ -486,7 +486,7 @@ class VRIntString extends VRString {
   ParseIssues issues(String s) {
     assert(s != null);
     var issues = new ParseIssues("VR.kUR", s);
-    if (isNotValid(s)) issues += 'Invalid Integer String (IS) value: $s';
+    if (isNotValid(s)) issues.add( 'Invalid Integer String (IS) value: $s');
     return issues;
   }
 
@@ -541,13 +541,13 @@ class VRPersonName extends VRString {
     var issues = new ParseIssues("VR.kPN", s);
     var groups = s.split('=');
     if (groups.length < 1 || groups.length > 3)
-      issues += 'Invalid number of ComponentGroups: min(1) '
-          '<= value(${groups.length}) <= max(3)\n';
+      issues.add( 'Invalid number of ComponentGroups: min(1) '
+          '<= value(${groups.length}) <= max(3)\n');
     for (String group in groups) {
       if (group.length > 64)
-        issues += 'Invalid Component Group Length: min(1) '
-            '<= value(${group.length} <= max(64)\n';
-      issues += '{_getFilteredError(s, _isDcmChar)}';
+        issues.add( 'Invalid Component Group Length: min(1) '
+            '<= value(${group.length} <= max(64)\n');
+      issues.add( '{_getFilteredError(s, _isDcmChar)}');
     }
     return issues;
   }
@@ -618,7 +618,7 @@ class VRUid extends VRString {
   @override
   ParseIssues issues(String s) {
     var issues = new ParseIssues("VR.kUR", s);
-    if (!isValid(s)) issues += 'Invalid Uid: $s';
+    if (!isValid(s)) issues.add( 'Invalid Uid: $s');
     return issues;
   }
 
@@ -657,7 +657,7 @@ class VRUri extends VRString {
     try {
       Uri.parse(s);
     } on FormatException catch (e) {
-      issues += e.toString();
+      issues.add( e.toString());
     }
     return issues;
   }

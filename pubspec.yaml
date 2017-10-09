@@ -12,16 +12,16 @@ environment:
 dependencies:
   date_time:
     path: C:/odw/sdk/date_time
-    version: ^0.6.3
+    version: ^0.6.5
   number:
     path: C:/odw/sdk/number
-    version: ^0.6.3
+    version: ^0.6.5
   string:
     path: C:/odw/sdk/string
-    version: ^0.6.3
+    version: ^0.6.5
   system:
     path: C:/odw/sdk/system
-    version: ^0.6.3
+    version: ^0.6.5
   uid:
     path: C:/odw/sdk/uid
     version: ^0.6.3

@@ -16631,7 +16631,10 @@ class PTagGroupLength extends PTag {
       true,
       EType.k3);
 
+/*
   static Tag maker(int code, VR _, [__]) => new PTagGroupLength(code);
+*/
+
 }
 
 //Flush not used
