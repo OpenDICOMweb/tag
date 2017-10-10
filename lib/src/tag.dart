@@ -49,7 +49,7 @@ abstract class Tag {
     if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
     if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
     // This should never happen
-    throw 'Error: Unknown Tag Code${Tag.toDcm}';
+    return invalidTagCodeError(code);
   }
 
   //TODO: When regenerating Tag rework constructors as follows:
@@ -402,7 +402,8 @@ abstract class Tag {
       if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
-      throw 'Error: Unknown Private Tag Code${Tag.toDcm(code)}';
+      return invalidTagCodeError(code,
+		      'Error: Unknown Private Tag Code${Tag.toDcm(code)}');
     } else {
       // This should never happen
       return invalidTagCodeError(code);

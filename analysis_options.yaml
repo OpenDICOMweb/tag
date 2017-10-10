@@ -43,14 +43,14 @@ linter:
     - avoid_null_checks_in_equality_operators
     - avoid_positional_boolean_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
+#    - avoid_returning_null
     - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_types_on_closure_parameters
     - await_only_futures
     - camel_case_types
     - cascade_invocations
-    - constant_identifier_names
+#    - constant_identifier_names
     - directives_ordering
     - empty_catches
     - empty_constructor_bodies
@@ -72,7 +72,7 @@ linter:
     - prefer_conditional_assignment
     - prefer_const_constructors
     - prefer_const_constructors_in_immutables
-    - prefer_constructors_over_static_methods
+#    - prefer_constructors_over_static_methods
     - prefer_contains
     - prefer_expression_function_bodies
     - prefer_final_fields
