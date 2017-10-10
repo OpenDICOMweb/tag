@@ -131,9 +131,9 @@ Null invalidValueFieldLengthError(Uint8List vfBytes, int elementSize) {
   return null;
 }
 
-class InvalidValuesTypeError extends Error {
+class InvalidValuesTypeError<V> extends Error {
   final Tag tag;
-  final List values;
+  final Iterable<V> values;
 
   InvalidValuesTypeError(this.tag, this.values) {
     if (log != null) log.error(toString());
@@ -142,11 +142,11 @@ class InvalidValuesTypeError extends Error {
   @override
   String toString() => _msg(tag, values);
 
-  static String _msg(Tag tag, List values) =>
+  static String _msg<V>(Tag tag, Iterable<V> values) =>
       'InvalidValuesTypeError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesTypeError(Tag tag, Iterable values) {
+Null invalidValuesTypeError<V>(Tag tag, Iterable<V> values) {
   log.error(InvalidValuesTypeError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesTypeError(tag, values);
   return null;

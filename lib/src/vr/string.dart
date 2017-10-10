@@ -280,8 +280,10 @@ class VRDcmAge extends VRString {
 
   bool _isAgeMarker(int c) => (c == kD || c == kW || c == kM || c == kY) ? true : false;
 
+/* Flush if not needed
   bool _isLowercaseAgeMarker(int c) =>
       (c == kd || c == kw || c == km || c == ky) ? true : false;
+*/
 
   static const VRDcmAge kAS =
       const VRDcmAge._(2, 0x5341, 'AS', 2, kMaxShortVF, 'AgeString', 4, 4);
