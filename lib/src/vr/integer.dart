@@ -78,7 +78,7 @@ class VRInt extends VR<int> {
 
   /// Returns true if the [Type] of values is [int].
   @override
-  bool isValidValuesType(Iterable values) => values is List<int>;
+  bool isValidValuesType(Iterable values) => values is Iterable<int>;
 
   // [true] if [this] is one of OB, OL, OW, or UN;
   @override
@@ -158,4 +158,8 @@ class VRInt extends VR<int> {
 
   static const VRInt kUSOW1 = const VRInt._(
       29, 0x4e55, 'USOW1', 1, 4, kMaxUN, 'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
+}
+
+class VRIntSpecial extends VRInt {
+
 }

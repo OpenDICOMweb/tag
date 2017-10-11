@@ -163,15 +163,14 @@ abstract class VR<T> {
   static const VR kUR = VRUri.kUR;
   static const VR kUT = VRDcmText.kUT;
 
-  // Placeholder for Bulkdata Reference
-  static const VR kBR = VRUnknown.kBR;
-
+  // Special values used by Tag
   // Special values used by Tag
   static const VR kOBOW = VR.kUN;
   static const VR kUSSS = VR.kUN;
   static const VR kUSSSOW = VR.kUN;
   static const VR kUSOW = VR.kUN;
   static const VR kUSOW1 = VR.kUN;
+
 
   static const int kAEindex = 1;
   static const int kASindex = 2;
@@ -206,9 +205,17 @@ abstract class VR<T> {
   static const int kUSindex = 31;
   static const int kUTindex = 32;
 
+  // Special values used by Tag
+  static const VR kOBOW = VR.kOBOW;
+  static const VR kUSSS = VR.kUSSS;
+  static const VR kUSSSOW = VR.kUSSSOW;
+  static const VR kUSOW = VR.USOW;
+
+
+
   static const List<VR> vrList = const <VR>[
     kInvalid,
-    kAE, kAS, kAT, kBR, kCS,
+    kAE, kAS, kAT, 0, kCS,
     kDA, kDS, kDT, kFD, kFL,
     kIS, kLO, kLT, kOB, kOD,
     kOF, kOL, kOW, kPN, kSH,

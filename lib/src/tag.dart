@@ -16,6 +16,7 @@ import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
+import 'package:tag/src/values_issues.dart';
 import 'package:tag/src/vm.dart';
 import 'package:tag/src/vr/vr.dart';
 
@@ -257,8 +258,7 @@ abstract class Tag {
     return true;
   }
 
-  bool isValidValuesType(Iterable values) =>
-      vr.isValidValuesType(values);
+  bool isValidValuesType(Iterable values) => vr.isValidValuesType(values);
 
 /*  bool isValidElement(Element e) {
     if (e == null) return false;
@@ -319,7 +319,7 @@ abstract class Tag {
   List<E> checkValue<E>(Object value) => vr.isValid(value) ? value : null;
 
   /// Returns [true] if [length] is a valid number of values for [this].
-  bool isValidLength(int length) {
+  bool isValidLength(int length, [ValuesIssues issues]) {
     // If a VR has a long Value Field, then it has [VM.k1], and its length is always valid.
     if (vr.isLengthAlwaysValid == true) return true;
     // These are the most common cases.
@@ -329,7 +329,8 @@ abstract class Tag {
 
   bool isValidWidth(int length) => width == 0 || (length % width) == 0;
 
-  bool isNotValidLength(int length) => !isValidLength(length);
+  bool isNotValidLength(int length, [ValuesIssues issues]) =>
+      !isValidLength(length, issues);
 
   int checkLength(int length) => (isValidLength(length)) ? length : null;
 
@@ -402,8 +403,8 @@ abstract class Tag {
       if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
-      return invalidTagCodeError(code,
-		      'Error: Unknown Private Tag Code${Tag.toDcm(code)}');
+      return invalidTagCodeError(
+          code, 'Error: Unknown Private Tag Code${Tag.toDcm(code)}');
     } else {
       // This should never happen
       return invalidTagCodeError(code);
