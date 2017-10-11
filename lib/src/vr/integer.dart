@@ -10,7 +10,8 @@ import 'package:number/number.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 
-import 'vr.dart';
+import 'package:tag/src/vr/vr.dart';
+import 'package:tag/src/values_issues.dart';
 
 // Maximum Value Field length for different [VRInt]s.
 
@@ -79,7 +80,7 @@ class VRInt extends VR<int> {
 
   /// Returns [true] if [n] is valid for this [VRInt].
   @override
-  bool isValid(Object n) => (n is int) && (minValue <= n) && (n <= maxValue);
+  bool isValid(Object n, [ValuesIssues issues]) => (n is int) && (minValue <= n) && (n <= maxValue);
 
   /// Returns [true] of [value] is [double].
   @override
@@ -87,7 +88,7 @@ class VRInt extends VR<int> {
 
   /// Returns true if the [Type] of values is [int].
   @override
-  bool isValidValuesType(Iterable values) => values is List<int>;
+  bool isValidValuesType(Iterable values, [ValuesIssues issues]) => values is List<int>;
 
   // [true] if [this] is one of OB, OL, OW, or UN;
   @override

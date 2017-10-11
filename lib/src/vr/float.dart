@@ -7,7 +7,9 @@
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 
-import 'vr.dart';
+import 'package:tag/src/values_issues.dart';
+import 'package:tag/src/vr/vr.dart';
+
 
 // Maximum Value Field length for different Float VRs.
 const int kMaxOD = kUint32Max - 8;
@@ -32,7 +34,7 @@ class VRFloat extends VR<double> {
 
   /// Returns [true] of [value] is [double].
   @override
-  bool isValid(Object value) =>  isValidType(value);
+  bool isValid(Object value, [ValuesIssues issues]) =>  isValidType(value);
 
   /// Returns [true] of [value] is [double].
   @override
@@ -40,7 +42,7 @@ class VRFloat extends VR<double> {
 
   /// Returns true if the [Type] of values is [double].
   @override
-  bool isValidValuesType(Iterable values) => values is List<double>;
+  bool isValidValuesType(Iterable values, [ValuesIssues issues]) => values is List<double>;
 
   // [true] if [this] is one of OF, OD;
   @override

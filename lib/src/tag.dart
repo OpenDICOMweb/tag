@@ -16,6 +16,7 @@ import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
+import 'package:tag/src/values_issues.dart';
 import 'package:tag/src/vm.dart';
 import 'package:tag/src/vr/vr.dart';
 
@@ -235,26 +236,27 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool hasValidValues<V>(Iterable<V> vList) {
+  bool isValidValues<V>(Iterable<V> vList, [ValuesIssues issues]) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
-    if (!isValidValuesType<V>(vList)) {
+    if (!isValidValuesType<V>(vList, issues)) {
       invalidValuesTypeError(this, vList);
       return false;
     }
-    if (isNotValidLength(vList.length)) {
+    if (isNotValidLength(vList.length, issues)) {
       invalidValuesLengthError(this, vList);
       return false;
     }
     for (var v in vList)
-      if (isNotValidValue<V>(v)) {
+      if (isNotValidValue<V>(v, issues)) {
         invalidValuesError<V>(this, vList);
         return false;
       }
     return true;
   }
 
-  bool isValidValuesType<V>(List<V> values) => vr.isValidValuesType(values);
+  bool isValidValuesType<V>(List<V> values, [ValuesIssues issues]) =>
+		  vr.isValidValuesType(values, issues);
 
 /*  bool isValidElement(Element e) {
     if (e == null) return false;
@@ -273,12 +275,12 @@ abstract class Tag {
   }
 */
 
-  bool isValidValue<V>(V value) => vr.isValid(value);
-  bool isNotValidValue<V>(V value) => vr.isNotValid(value);
+  bool isValidValue<V>(V value, [ValuesIssues issues]) => vr.isValid(value, issues);
+  bool isNotValidValue<V>(V value, [ValuesIssues issues]) => vr.isNotValid(value, issues);
 
   /// Returns a [list<E>] of valid values for this [Tag], or [null] if
   /// and of the [String]s in [sList] are not parsable.
-  List<V> parseValues<V>(List<String> sList) {
+  List<V> parseValues<V>(List<String> sList, [ValuesIssues issues]) {
     //print('parseList: $sList');
     if (isNotValidLength(sList.length)) return null;
     final values = new List<V>(sList.length);
@@ -309,13 +311,13 @@ abstract class Tag {
     return sList;
   }
 
-  List<V> checkValues<V>(List<V> values) => (hasValidValues(values)) ? values : null;
+  List<V> checkValues<V>(List<V> values) => (isValidValues(values)) ? values : null;
 
   // Placeholder until VR is integrated into TagBase
   V checkValue<V>(V value) => vr.isValid(value) ? value : null;
 
   /// Returns [true] if [length] is a valid number of values for [this].
-  bool isValidLength(int length) {
+  bool isValidLength(int length, [ValuesIssues issues]) {
     // If a VR has a long Value Field, then it has [VM.k1], and its length is always valid.
     if (vr.isLengthAlwaysValid == true) return true;
     // These are the most common cases.
@@ -323,9 +325,11 @@ abstract class Tag {
     return length >= minValues && length <= maxValues && (length % width) == 0;
   }
 
-  bool isValidWidth(int length) => width == 0 || (length % width) == 0;
+  bool isValidWidth(int length, [ValuesIssues issues]) =>
+		  width == 0 || (length % width) == 0;
 
-  bool isNotValidLength(int length) => !isValidLength(length);
+  bool isNotValidLength(int length, [ValuesIssues issues]) =>
+		  !isValidLength(length, issues);
 
   int checkLength(int length) => (isValidLength(length)) ? length : null;
 

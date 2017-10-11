@@ -16,9 +16,15 @@ class InvalidTagError extends Error {
 
   @override
   String toString() => Tag.toMsg(tag);
+
+  static String _msg<K>(Object tag) => 'InvalidTagError: $tag';
 }
 
-dynamic tagError(Object obj) => throw new InvalidTagError(obj);
+Null invalidTagError(Object obj) {
+  log.error(InvalidTagKeyError._msg(obj));
+  if (throwOnError) throw new InvalidTagError(obj);
+  return null;
+}
 
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidTagKeyError<K> extends Error {
@@ -59,7 +65,7 @@ class InvalidTagCodeError extends Error {
   String toString() => _msg(code, msg);
 
   static String _msg(int code, String msg) =>
-		  'InvalidTagCodeError: "${_value(code)}": $msg';
+      'InvalidTagCodeError: "${_value(code)}": $msg';
 
   static String _value(int code) => (code == null) ? 'null' : Tag.toDcm(code);
 }
@@ -126,8 +132,7 @@ class InvalidValueFieldLengthError extends Error {
 
 Null invalidValueFieldLengthError(Uint8List vfBytes, int elementSize) {
   log.error(InvalidValueFieldLengthError._msg(vfBytes, elementSize));
-  if (throwOnError)
-    throw new InvalidValueFieldLengthError(vfBytes, elementSize);
+  if (throwOnError) throw new InvalidValueFieldLengthError(vfBytes, elementSize);
   return null;
 }
 
