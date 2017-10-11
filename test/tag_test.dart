@@ -28,13 +28,12 @@ void main() {
   Server.initialize(name: 'tag_test', level: Level.info0);
 
   test('Simple Tag Test', () {
-    for (int i = 0; i < tags.length; i++) {
-      Tag tag = PTag.lookupByCode(tags[i], VR.kUN);
-      log.debug('${tag.info}');
-      log.debug(
-          'isShort: ${tag.hasShortVF}, sizeInBytes: ${tag.vr.elementSize}');
-      log.debug(
-          'min: ${tag.minValues}, max: ${tag.maxValues}, width: ${tag.width}');
+    for (var i = 0; i < tags.length; i++) {
+      final tag = PTag.lookupByCode(tags[i], VR.kUN);
+      log
+        ..debug('${tag.info}')
+        ..debug('isShort: ${tag.hasShortVF}, sizeInBytes: ${tag.vr.elementSize}')
+        ..debug('min: ${tag.minValues}, max: ${tag.maxValues}, width: ${tag.width}');
     }
   });
 }

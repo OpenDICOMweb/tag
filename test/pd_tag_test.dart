@@ -15,10 +15,10 @@ void main() {
 }
 
 void privateDataTag() {
-  test("PrivatedataTag Test", () {
-    int code = 0x00190010;
-    var pcTag = new PCTag(code, VR.kLO, "Unknown");
-    PDTag pdt = new PDTag(code, VR.kUN, pcTag);
+  test('PrivatedataTag Test', () {
+    final code = 0x00190010;
+    final pcTag = new PCTag(code, VR.kLO, 'Unknown');
+    final pdt = new PDTag(code, VR.kUN, pcTag);
     expect((pdt.isPrivate), true);
     expect((pdt.isCreator), false);
     log.debug(pdt.toString());

@@ -5,6 +5,7 @@
 
 import 'dart:typed_data';
 
+import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 
@@ -25,7 +26,7 @@ abstract class VR<T> {
 
   const VR(this.index, this.code, this.id, this.elementSize, this.vfLengthSize,
       this.maxVFLength, this.keyword,
-      [this.undefinedLengthAllowed = false]);
+      {this.undefinedLengthAllowed = false});
 
   VR operator [](int i) => vrList[i];
 
@@ -61,7 +62,7 @@ abstract class VR<T> {
       'elementSize($elementSize) vfLengthSize($vfLengthSize), '
       'maxVFLength($maxVFLength)';
 
-  int headerLength(bool isEVR) => (isEVR) ? ((hasShortVF) ? 8 : 12) : 8;
+  int headerLength({bool isEVR}) => (isEVR) ? ((hasShortVF) ? 8 : 12) : 8;
 
   /// Returns the length in number of elements.
   int toLength(int lengthInBytes) => lengthInBytes ~/ elementSize;
@@ -76,13 +77,12 @@ abstract class VR<T> {
   bool isNotValid(Object value) => !isValid(value);
 
   /// Returns [true] if the [Type] of [value] is valid for [this].
-  bool isValidType(dynamic value);
+  bool isValidType(T value);
 
   /// Returns true if the [List] [Type] of values is valid for [this].
-  bool isValidValuesType(List<T> values);
+  bool isValidValuesType(Iterable values) => values is List<T>;
 
   bool isValidLength(int length) => false;
-
 
   T check(T value) => (isValid(value)) ? value : null;
 
@@ -92,7 +92,7 @@ abstract class VR<T> {
 
   // **** Must be overridden.
   /// Returns a [ParseIssues] object indicating any issues with value.
-  /// If there are no issues returns the empty string ("").
+  /// If there are no issues returns the empty string ('').
   //Urgent: finish
   ParseIssues issues(T value) => null;
 
@@ -102,8 +102,7 @@ abstract class VR<T> {
 
   // **** Must be overridden.
   /// Returns [true] if [bytes] has a valid Value Field length.
-  bool isValidBytes(Uint8List bytes) =>
-      bytes.length > -1 && bytes.length < maxVFLength;
+  bool isValidBytes(Uint8List bytes) => bytes.length < maxVFLength;
 
   @override
   String toString() => asString;
@@ -164,9 +163,7 @@ abstract class VR<T> {
   static const VR kUR = VRUri.kUR;
   static const VR kUT = VRDcmText.kUT;
 
-  // Placeholder for Bulkdata Reference
-  static const VR kBR = VRUnknown.kBR;
-
+  // Special values used by Tag
   // Special values used by Tag
   static const VR kOBOW = VR.kUN;
   static const VR kUSSS = VR.kUN;
@@ -174,9 +171,53 @@ abstract class VR<T> {
   static const VR kUSOW = VR.kUN;
   static const VR kUSOW1 = VR.kUN;
 
+
+  static const int kAEindex = 1;
+  static const int kASindex = 2;
+  static const int kATindex = 3;
+  static const int kBRindex = 4;
+  static const int kCSindex = 5;
+  static const int kDAindex = 6;
+  static const int kDSindex = 7;
+  static const int kDTindex = 8;
+  static const int kFDindex = 9;
+  static const int kFLindex = 10;
+  static const int kISindex = 11;
+  static const int kLOindex = 12;
+  static const int kLTindex = 13;
+  static const int kOBindex = 14;
+  static const int kODindex = 15;
+  static const int kOFindex = 16;
+  static const int kOLindex = 17;
+  static const int kOWindex = 18;
+  static const int kPNindex = 19;
+  static const int kSHindex = 20;
+  static const int kSLindex = 21;
+  static const int kSQindex = 22;
+  static const int kSSindex = 23;
+  static const int kSTindex = 24;
+  static const int kTMindex = 25;
+  static const int kUCindex = 26;
+  static const int kUIindex = 27;
+  static const int kULindex = 28;
+  static const int kUNindex = 29;
+  static const int kURindex = 30;
+  static const int kUSindex = 31;
+  static const int kUTindex = 32;
+
+  // Special values used by Tag
+/*
+  static const VR kOBOW = VR.kOBOW;
+  static const VR kUSSS = VR.kUSSS;
+  static const VR kUSSSOW = VR.kUSSSOW;
+  static const VR kUSOW = VR.USOW;
+*/
+
+
+
   static const List<VR> vrList = const <VR>[
     kInvalid,
-    kAE, kAS, kAT, kBR, kCS,
+    kAE, kAS, kAT, kUN, kCS,
     kDA, kDS, kDT, kFD, kFL,
     kIS, kLO, kLT, kOB, kOD,
     kOF, kOL, kOW, kPN, kSH,
@@ -184,10 +225,10 @@ abstract class VR<T> {
     kUC, kUI, kUL, kUN, kUR,
     kUS, kUT // stop reformat
   ];
-
+//Urgent
   static const Map<int, VR> vrMap = const <int, VR>{
     0x0000: kInvalid,
-    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5242: kBR, 0x5343: kCS,
+    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5242: kInvalid, 0x5343: kCS,
     0x4144: kDA, 0x5344: kDS, 0x5444: kDT, 0x4446: kFD, 0x4c46: kFL,
     0x5349: kIS, 0x4f4c: kLO, 0x544c: kLT, 0x424f: kOB, 0x444f: kOD,
     0x464f: kOF, 0x4c4f: kOL, 0x574f: kOW, 0x4e50: kPN, 0x4853: kSH,
@@ -199,14 +240,14 @@ abstract class VR<T> {
   static VR lookup(int vrCode) => vrMap[vrCode];
 
   static const Map<String, VR> _idMap = const <String, VR>{
-    "AE": kAE, "AS": kAS, "BR": kBR, "CS": kCS,
-    "DA": kDA, "DS": kDS, "DT": kDT, "IS": kIS,
-    "LO": kLO, "LT": kLT, "PN": kPN, "SH": kSH,
-    "ST": kST, "TM": kTM, "UC": kUC, "UI": kUI,
-    "UR": kUR, "UT": kUT, "AT": kAT, "OB": kOB,
-    "OW": kOW, "SL": kSL, "SS": kSS, "UL": kUL,
-    "US": kUS, "FD": kFD, "FL": kFL, "OD": kOD,
-    "OF": VR.kOF // prevent reformat
+    'AE': kAE, 'AS': kAS, 'BR': kInvalid, 'CS': kCS,
+    'DA': kDA, 'DS': kDS, 'DT': kDT, 'IS': kIS,
+    'LO': kLO, 'LT': kLT, 'PN': kPN, 'SH': kSH,
+    'ST': kST, 'TM': kTM, 'UC': kUC, 'UI': kUI,
+    'UR': kUR, 'UT': kUT, 'AT': kAT, 'OB': kOB,
+    'OW': kOW, 'SL': kSL, 'SS': kSS, 'UL': kUL,
+    'US': kUS, 'FD': kFD, 'FL': kFL, 'OD': kOD,
+    'OF': VR.kOF // prevent reformat
   };
 
   static VR lookupId(String id) => _idMap[id];
@@ -214,9 +255,9 @@ abstract class VR<T> {
 
 //TODO: clean this up. remove VR.kUnknown and VR.kBR. How to handle SQ
 class VRUnknown extends VR<int> {
-  const VRUnknown._(int index, int code, String id, int elementSize,
-      int vfLengthSize, int maxVFLength, String keyword)
-      : super(index, code, id, 1, 4, kMaxLongVF, keyword, true);
+  const VRUnknown._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword)
+      : super(index, code, id, 1, 4, kMaxLongVF, keyword, undefinedLengthAllowed: true);
 
   @override
   bool get isBinary => true;
@@ -233,29 +274,32 @@ class VRUnknown extends VR<int> {
   @override
   bool isValid(Object value) => isValidType(value) && _inRange(value);
 
+  @override
+  bool isNotValid(Object value) => !isValid(value);
+
   /// Returns true if the [Type] of values is [int].
   @override
   bool isValidType(Object value) => value is int;
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(List values) => values is List<int>;
+  bool isValidValuesType(Iterable values) => values is List<int>;
 
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
   /// UN - Unknown. The supertype of all VRs.
   static const VRUnknown kUN =
-      const VRUnknown._(29, 0x4e55, "UN", 1, 4, kMaxUN, "Unknown");
+      const VRUnknown._(29, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
 
   //TODO: this should have its own class
   static const VRUnknown kBR = const VRUnknown._(
       4,
       0x5242,
-      "BR",
+      'BR',
       0,
       0,
       -1,
-      "B"
-      "DRef");
+      'B'
+      'DRef');
 }
 
 //TODO: clean this up. remove VR.kUnknown and VR.kBR. How to handle SQ
@@ -266,9 +310,9 @@ class VRSequence extends VR<int> {
   @override
   final int maxValueLength = kMaxLongVF;
 
-  const VRSequence._(int index, int code, String id, int elementSize,
-      int vfLengthSize, int maxVFLength, String keyword)
-      : super(index, code, id, 1, 4, kMaxLongVF, keyword, true);
+  const VRSequence._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword)
+      : super(index, code, id, 1, 4, kMaxLongVF, keyword, undefinedLengthAllowed: true);
 
   @override
   bool get isSequence => true;
@@ -278,32 +322,31 @@ class VRSequence extends VR<int> {
 
   /// Returns true if the [Type] of values is Item.
   @override
-  bool isValidType(dynamic value) => value.isItem;
+  bool isValidType(Object value) => value is Dataset;
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(List vList) {
+  bool isValidValuesType(Iterable vList) {
     for (var v in vList) if (!v.isItem) return false;
     return true;
   }
-
 
 /* Flush if not needed
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
   /// UN - Unknown. The supertype of all VRs
   static const VRUnknown kUN =
-  const VRUnknown._(29, 0x4e55, "UN", 1, 4, kMaxUN, "Unknown");
+  const VRUnknown._(29, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
 */
 
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
   static const VR kSQ =
-      const VRSequence._(22, 0x5153, "SQ", 1, 4, kMaxLongVF, "Sequence");
+      const VRSequence._(22, 0x5153, 'SQ', 1, 4, kMaxLongVF, 'Sequence');
 }
 
 //TODO: decide if this class is really needed
 class VRInvalid extends VR<int> {
-  const VRInvalid._(int index, int code, String id, int elementSize,
-      int vfLengthSize, int maxVFLength, String keyword)
+  const VRInvalid._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword)
       : super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
   @override
@@ -312,8 +355,8 @@ class VRInvalid extends VR<int> {
   @override
   bool isValidType(Object v) => false;
   @override
-  bool isValidValuesType(dynamic v) => false;
+  bool isValidValuesType(Object v) => false;
 
   static const VRUnknown kInvalid =
-      const VRUnknown._(0, 0, "Invalid", 0, 0, 0, "Invalid VR");
+      const VRUnknown._(0, 0, 'Invalid', 0, 0, 0, 'Invalid VR');
 }

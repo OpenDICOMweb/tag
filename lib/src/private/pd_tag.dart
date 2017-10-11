@@ -18,7 +18,7 @@ class PDTag extends PrivateTag {
 
   factory PDTag(int code, VR vr, [PCTag creator]) {
     if (creator != null) {
-      var definition = creator.lookupData(code);
+      final definition = creator.lookupData(code);
       if (definition != null)
         return new PDTagKnown(code, vr, creator, definition);
       return new PDTagUnknown(code, vr, creator);
@@ -34,8 +34,11 @@ class PDTag extends PrivateTag {
   @override
   VM get vm => VM.k1_n;
 
+/*
   static PDTag maker(int code, VR vr, [PCTag creator]) =>
       new PDTag(code, vr, creator);
+*/
+
 }
 
 
@@ -48,8 +51,11 @@ class PDTagUnknown extends PDTag {
   @override
   bool get isKnown => false;
 
+/* flush if not used
   static PDTagUnknown maker(int code, VR vr, [PCTag creator]) =>
       new PDTagUnknown(code, vr, creator);
+*/
+
 }
 
 class PDTagKnown extends PDTag {

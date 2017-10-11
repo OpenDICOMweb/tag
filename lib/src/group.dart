@@ -22,7 +22,7 @@ class Group {
   static int fromTag(int tagCode) => tagCode >> shiftCount;
 
   /// Returns the tag Group number as a hex [String].
-  static String hex(int g, [String prefix = "0x"]) => Int.hex(g, 4, prefix);
+  static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
   /// Returns [true] if [g] is Public Group (even), or a valid Private Group.
   static bool isValid(int g) => g.isEven || isPrivate(g);

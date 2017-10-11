@@ -18,7 +18,7 @@ class Elt {
   static int fromTag(int tagCode) => tagCode & kElementMask;
 
   /// Returns the [Elt] [int] as a hex [String].
-  static String hex(int g, [String prefix = "0x"]) => Int.hex(g, 4, prefix);
+  static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
   /// Returns [true] if [v] fits in 16-bits.
   static bool isValid(int v) => (0 <= v && v <= 0xFFFF) ? true : false;
@@ -37,8 +37,8 @@ class Elt {
   static bool isValidPrivateData(int pdElt, int pcElt) {
     //  print('pd($pdElt), pc($pcElt)');
     if (pdElt == null) return false;
-    int base = pcBase(pcElt);
-    int limit = pcLimit(pcElt);
+    final base = pcBase(pcElt);
+    final limit = pcLimit(pcElt);
     //  print('base($base), limit($limit)');
     if (base == null || limit == null) return false;
     return pcBase(pcElt) <= pdElt && pdElt <= pcLimit(pcElt);

@@ -37,20 +37,20 @@ linter:
     - avoid_as
     - avoid_catches_without_on_clauses
     - avoid_catching_errors
-    - avoid_classes_with_only_static_members
+#    - avoid_classes_with_only_static_members
     - avoid_function_literals_in_foreach_calls
     - avoid_init_to_null
     - avoid_null_checks_in_equality_operators
     - avoid_positional_boolean_parameters
     - avoid_return_types_on_setters
-    - avoid_returning_null
+#    - avoid_returning_null
     - avoid_returning_this
     - avoid_setters_without_getters
     - avoid_types_on_closure_parameters
     - await_only_futures
     - camel_case_types
     - cascade_invocations
-    - constant_identifier_names
+#    - constant_identifier_names
     - directives_ordering
     - empty_catches
     - empty_constructor_bodies

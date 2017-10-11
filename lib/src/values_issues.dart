@@ -25,12 +25,12 @@ class ValuesIssues<E> {
 
   List<ParseIssues> get issues => _vIssues ??= <ParseIssues>[];
 
-  bool get isEmpty => issues.length == 0;
+  bool get isEmpty => issues.isEmpty;
 
   String get phrase {
-    if (issues.length == 0) return "has no issues.";
-    if (issues.length == 1) return "has the following issue:\n ";
-    return "has the following issues:\n ";
+    if (issues.isEmpty) return 'has no issues.';
+    if (issues.length == 1) return 'has the following issue:\n ';
+    return 'has the following issues:\n ';
   }
 
   ValuesIssues add(ParseIssues pIssues) {
@@ -40,18 +40,18 @@ class ValuesIssues<E> {
 
   /// Check the length of a value.
   String get lengthMsg {
-    int length = values.length;
-    int min = tag.minValues;
+    final length = values.length;
+    final min = tag.minValues;
     if (length < min)
       return 'Invalid length($length) too short - minimun($min)\n';
-    int max = tag.maxValues;
+    final max = tag.maxValues;
     if (length > max)
       return '${name}Invalid length($length) too long - maximum($max)\n';
-    return "";
+    return '';
   }
 
   @override
-  String toString() => (isValidLength && issues.length == 0)
-      ? ""
+  String toString() => (isValidLength && issues.isEmpty)
+      ? ''
       : '$name:\n $lengthMsg ${issues.join('\n  ')}';
 }

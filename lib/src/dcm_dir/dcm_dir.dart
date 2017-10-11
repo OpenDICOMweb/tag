@@ -17,133 +17,133 @@ class DcmDir {
   final bool isRetired;
 
   const DcmDir(
-      this.keyword, this.code, this.name, this.vr, this.vm, this.isRetired);
+      this.keyword, this.code, this.name, this.vr, this.vm, {this.isRetired});
 
   static const DcmDir kFileSetID = const DcmDir(
-      "FileSetID", 0x00041130, "File-set ID", VR.kCS, VM.k1, false);
+      'FileSetID', 0x00041130, 'File-set ID', VR.kCS, VM.k1, isRetired: false);
 
   static const DcmDir kFileSetDescriptorFileID = const DcmDir(
-      "FileSetDescriptorFileID",
+      'FileSetDescriptorFileID',
       0x00041130,
-      "File-set Descriptor File ID",
+      'File-set Descriptor File ID',
       VR.kCS,
       VM.k1_8,
-      false);
+      isRetired: false);
 
   static const DcmDir kSpecificCharacterSetOfFileSetDescriptorFile =
       const DcmDir(
-          "SpecificCharacterSetOfFileSetDescriptorFile",
+          'SpecificCharacterSetOfFileSetDescriptorFile',
           0x00041142,
-          "Specific Character Set of File Set Descriptor File",
+          'Specific Character Set of File Set Descriptor File',
           VR.kCS,
           VM.k1,
-          false);
+          isRetired: false);
 
   static const DcmDir kOffsetOfTheFirstDirectoryRecordOfTheRootDirectoryEntity =
       const DcmDir(
-          "OffsetOfTheFirstDirectoryRecordOfTheRootDirectoryEntity",
+          'OffsetOfTheFirstDirectoryRecordOfTheRootDirectoryEntity',
           0x00041200,
-          "SOffset of the First Directory Record of the Root Directory Entity",
+          'SOffset of the First Directory Record of the Root Directory Entity',
           VR.kUL,
           VM.k1,
-          false);
+          isRetired: false);
 
   static const DcmDir kOffsetOfTheLastDirectoryRecordOfTheRootDirectoryEntity =
       const DcmDir(
-          "OffsetOfTheLastDirectoryRecordOfTheRootDirectoryEntity",
+          'OffsetOfTheLastDirectoryRecordOfTheRootDirectoryEntity',
           0x00041202,
-          "Offset of the Last Directory Record of the Root Directory Entity",
+          'Offset of the Last Directory Record of the Root Directory Entity',
           VR.kUL,
           VM.k1,
-          false);
+          isRetired: false);
 
   static const DcmDir kFileSetConsistencyFlag = const DcmDir(
-      "FileSetConsistencyFlag",
+      'FileSetConsistencyFlag',
       0x00041212,
-      "File-set Consistency Flag",
+      'File-set Consistency Flag',
       VR.kUS,
       VM.k1,
-      false);
+      isRetired: false);
 
   static const DcmDir kDirectoryRecordSequence = const DcmDir(
-      "DirectoryRecordSequence",
+      'DirectoryRecordSequence',
       0x00041220,
-      "Directory Record Sequence",
+      'Directory Record Sequence',
       VR.kSQ,
       VM.k1,
-      false);
+      isRetired: false);
 
   static const DcmDir kOffsetOfTheNextDirectoryRecord = const DcmDir(
-      "OffsetOfTheNextDirectoryRecord",
+      'OffsetOfTheNextDirectoryRecord',
       0x00041400,
-      "Offset of the Next Directory Record",
+      'Offset of the Next Directory Record',
       VR.kUL,
       VM.k1,
-      false);
+      isRetired: false);
 
-  static const DcmDir kRecordInUseFlag = const DcmDir("RecordInUseFlag",
-      0x00041410, "Record In-use Flag", VR.kUS, VM.k1, false);
+  static const DcmDir kRecordInUseFlag = const DcmDir('RecordInUseFlag',
+      0x00041410, 'Record In-use Flag', VR.kUS, VM.k1, isRetired: false);
 
   static const DcmDir kOffsetOfReferencedLowerLevelDirectoryEntity =
       const DcmDir(
-          "OffsetOfReferencedLowerLevelDirectoryEntity",
+          'OffsetOfReferencedLowerLevelDirectoryEntity',
           0x00041420,
-          "Offset of Referenced Lower-Level Directory Entity",
+          'Offset of Referenced Lower-Level Directory Entity',
           VR.kUL,
           VM.k1,
-          false);
+          isRetired: false);
 
-  static const DcmDir kDirectoryRecordType = const DcmDir("DirectoryRecordType",
-      0x00041430, "Directory​Record​Type", VR.kCS, VM.k1, false);
+  static const DcmDir kDirectoryRecordType = const DcmDir('DirectoryRecordType',
+      0x00041430, 'Directory​Record​Type', VR.kCS, VM.k1, isRetired: false);
 
   static const DcmDir kPrivateRecordUID = const DcmDir(
-      "PrivateRecordUID", 0x0004, "Private Record UID", VR.kUI, VM.k1, false);
+      'PrivateRecordUID', 0x0004, 'Private Record UID', VR.kUI, VM.k1, isRetired: false);
 
-  static const DcmDir kReferencedFileID = const DcmDir("ReferencedFileID",
-      0x00041500, "Referenced File ID", VR.kCS, VM.k1_8, false);
+  static const DcmDir kReferencedFileID = const DcmDir('ReferencedFileID',
+      0x00041500, 'Referenced File ID', VR.kCS, VM.k1_8, isRetired: false);
 
   static const DcmDir kMRDRDirectoryRecordOffset = const DcmDir(
-      "MRDRDirectoryRecordOffset",
+      'MRDRDirectoryRecordOffset',
       0x0004,
-      "MRDR Directory Record Offset",
+      'MRDR Directory Record Offset',
       VR.kUL,
       VM.k1,
-      true);
+      isRetired: true);
 
   static const DcmDir kReferencedSOPClassUIDInFile = const DcmDir(
-      "ReferencedSOPClassUIDInFile",
+      'ReferencedSOPClassUIDInFile',
       0x00041510,
-      "Referenced SOP Class UID in File",
+      'Referenced SOP Class UID in File',
       VR.kUI,
       VM.k1,
-      false);
+      isRetired: false);
 
   static const DcmDir kReferencedSOPInstanceUIDInFile = const DcmDir(
-      "ReferencedSOPInstanceUIDInFile",
+      'ReferencedSOPInstanceUIDInFile',
       0x00041511,
-      "Referenced SOP Instance UID in File",
+      'Referenced SOP Instance UID in File',
       VR.kUI,
       VM.k1,
-      false);
+      isRetired: false);
 
   static const DcmDir kReferencedTransferSyntaxUIDInFile = const DcmDir(
-      "ReferencedTransferSyntaxUIDInFile",
+      'ReferencedTransferSyntaxUIDInFile',
       0x00041512,
-      "Referenced Transfer Syntax UID in File",
+      'Referenced Transfer Syntax UID in File',
       VR.kUI,
       VM.k1,
-      false);
+      isRetired: false);
 
   static const DcmDir kReferencedRelatedGeneralSOPClassUIDInFile = const DcmDir(
-      "ReferencedRelatedGeneralSOPClassUIDInFile",
+      'ReferencedRelatedGeneralSOPClassUIDInFile',
       0x0004151a,
-      "Referenced Related General SOP Class UID in File",
+      'Referenced Related General SOP Class UID in File',
       VR.kUI,
       VM.k1_n,
-      false);
+      isRetired: false);
 
-  static const DcmDir kNumberOfReferences = const DcmDir("NumberOfReferences",
-      0x00041600, "Number of References", VR.kUL, VM.k1, true);
+  static const DcmDir kNumberOfReferences = const DcmDir('NumberOfReferences',
+      0x00041600, 'Number of References', VR.kUL, VM.k1, isRetired: true);
 
   static const List<DcmDir> dcmDirTags = const <DcmDir>[
     kFileSetID, // (0004,1130)

@@ -40,7 +40,7 @@ class VRFloat extends VR<double> {
 
   /// Returns true if the [Type] of values is [double].
   @override
-  bool isValidValuesType(List values) => values is List<double>;
+  bool isValidValuesType(Iterable values) => values is List<double>;
 
   // [true] if [this] is one of OF, OD;
   @override
@@ -57,17 +57,17 @@ class VRFloat extends VR<double> {
   // index, code, id, elementSize, vfLengthFieldSize, maxVFLength, keyword
   /// FD. A 64-bit floating point [List<double>], with a 16-bit value field.
   static const VRFloat kFD =
-      const VRFloat._(9, 0x4446, "FD", 8, 2, kMaxShortVF, "FloatDouble");
+      const VRFloat._(9, 0x4446, 'FD', 8, 2, kMaxShortVF, 'FloatDouble');
 
   /// FL. A 32-bit floating point [List<double>], with a 16-bit value field.
   static const VRFloat kFL =
-      const VRFloat._(10, 0x4c46, "FL", 4, 2, kMaxShortVF, "FloatSingle");
+      const VRFloat._(10, 0x4c46, 'FL', 4, 2, kMaxShortVF, 'FloatSingle');
 
   /// OD. A 64-bit floating point [List<double>], with a 32-bit value field.
   static const VRFloat kOD =
-      const VRFloat._(15, 0x444f, "OD", 8, 4, kMaxOD, "OtherDouble");
+      const VRFloat._(15, 0x444f, 'OD', 8, 4, kMaxOD, 'OtherDouble');
 
   /// OF. A 32-bit floating point [List<double>], with a 32-bit value field.
   static const VRFloat kOF =
-      const VRFloat._(16, 0x464f, "OF", 4, 4, kMaxOF, "OtherFloat");
+      const VRFloat._(16, 0x464f, 'OF', 4, 4, kMaxOF, 'OtherFloat');
 }
