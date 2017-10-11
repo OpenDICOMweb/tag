@@ -42,7 +42,7 @@ class InvalidTagKeyError<K> extends Error {
   }
 }
 
-Null invalidTagKeyError<K>(K key, [VR vr, String creator]) {
+Null invalidTagKey<K>(K key, [VR vr, String creator]) {
   log.error(InvalidTagKeyError._msg(key, vr, creator));
   if (throwOnError) throw new InvalidTagKeyError(key);
   return null;
@@ -64,7 +64,7 @@ class InvalidTagCodeError extends Error {
   static String _value(int code) => (code == null) ? 'null' : Tag.toDcm(code);
 }
 
-Null invalidTagCodeError(int code, [String msg]) {
+Null invalidTagCode(int code, [String msg]) {
   log.error(InvalidTagCodeError._msg(code, msg));
   if (throwOnError) throw new InvalidTagCodeError(code, msg);
   return null;

@@ -51,7 +51,7 @@ abstract class Tag {
     if (Tag.isPrivateDataCode(code) && creator is PCTag)
       return new PDTag(code, vr, creator);
     // This should never happen
-    return invalidTagCodeError(code);
+    return invalidTagCode(code);
   }
 
   //TODO: When regenerating Tag rework constructors as follows:
@@ -387,12 +387,12 @@ abstract class Tag {
   static Tag lookup<K>(K key, [VR vr = VR.kUN, String creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
-    return invalidTagKeyError<K>(key, vr, creator);
+    return invalidTagKey<K>(key, vr, creator);
   }
 
   //TODO: redoc
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag lookupByCode<T>(int code, [VR vr = VR.kUN, T creator]) {
+  static Tag lookupByCode(int code, [VR vr = VR.kUN, dynamic creator]) {
     String msg;
     if (code.isEven) {
       if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
@@ -405,10 +405,10 @@ abstract class Tag {
         return new PDTag(code, vr, creator);
       msg = 'Unknown Private Tag Code: creator: $creator';
     }
-    return invalidTagCodeError(code, msg);
+    return invalidTagCode(code, msg);
   }
 
-  static Tag lookupByKeyword<T>(String keyword, [VR vr = VR.kUN, T creator]) {
+  static Tag lookupByKeyword(String keyword, [VR vr = VR.kUN, dynamic creator]) {
 /*    Tag tag = Tag.lookupKeyword(keyword, vr);
     if (tag != null) return tag;
     tag = Tag.lookupPrivateCreatorKeyword(keyword, vr) {
