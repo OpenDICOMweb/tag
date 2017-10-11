@@ -15,7 +15,7 @@ import 'string.dart';
 
 //TODO: Explain VR class structure
 
-abstract class VR<T> {
+abstract class VR<V> {
   final int index;
   final int code;
   final String id;
@@ -77,14 +77,14 @@ abstract class VR<T> {
   bool isNotValid(Object value) => !isValid(value);
 
   /// Returns [true] if the [Type] of [value] is valid for [this].
-  bool isValidType(T value);
+  bool isValidType(V value);
 
   /// Returns true if the [List] [Type] of values is valid for [this].
-  bool isValidValuesType(Iterable values) => values is List<T>;
+  bool isValidValuesType(Iterable values) => values is List<V>;
 
   bool isValidLength(int length) => false;
 
-  T check(T value) => (isValid(value)) ? value : null;
+  V check(V value) => (isValid(value)) ? value : null;
 
   // **** Must be overridden.
   /// Returns a valid value, or if not parsable, [null].
@@ -94,11 +94,11 @@ abstract class VR<T> {
   /// Returns a [ParseIssues] object indicating any issues with value.
   /// If there are no issues returns the empty string ('').
   //Urgent: finish
-  ParseIssues issues(T value) => null;
+  ParseIssues issues(V value) => null;
 
   // **** Must be overridden.
   /// Returns a new value that is legal and a best practice.
-  T fix(T value) => null;
+  V fix(V value) => null;
 
   // **** Must be overridden.
   /// Returns [true] if [bytes] has a valid Value Field length.

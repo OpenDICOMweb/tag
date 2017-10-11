@@ -51,20 +51,22 @@ Null invalidTagKeyError<K>(K key, [VR vr, String creator]) {
 //Flush when replaced with InvalidTagKeyError
 class InvalidTagCodeError extends Error {
   int code;
+  String msg;
 
-  InvalidTagCodeError(this.code);
+  InvalidTagCodeError(this.code, [this.msg]);
 
   @override
-  String toString() => _msg(code);
+  String toString() => _msg(code, msg);
 
-  static String _msg(int code) => 'InvalidTagCodeError: "${_value(code)}"';
+  static String _msg(int code, String msg) =>
+		  'InvalidTagCodeError: "${_value(code)}": $msg';
 
   static String _value(int code) => (code == null) ? 'null' : Tag.toDcm(code);
 }
 
-Null invalidTagCodeError(int code) {
-  log.error(InvalidTagCodeError._msg(code));
-  if (throwOnError) throw new InvalidTagCodeError(code);
+Null invalidTagCodeError(int code, [String msg]) {
+  log.error(InvalidTagCodeError._msg(code, msg));
+  if (throwOnError) throw new InvalidTagCodeError(code, msg);
   return null;
 }
 
@@ -91,16 +93,16 @@ class InvalidVRError extends Error {
   VR vr;
   String message;
 
-  InvalidVRError(this.vr, [this.message = ""]);
+  InvalidVRError(this.vr, [this.message = '']);
 
   @override
   String toString() => _msg(vr);
 
-  static String _msg(VR vr, [String message = ""]) =>
+  static String _msg(VR vr, [String message = '']) =>
       'Error: Invalid VR (Value Representation) "$vr" - $message';
 }
 
-Null invalidVRError(VR vr, [String message = ""]) {
+Null invalidVRError(VR vr, [String message = '']) {
   log.error(InvalidVRError._msg(vr, message));
   if (throwOnError) throw new InvalidVRError(vr);
   return null;
@@ -181,7 +183,7 @@ class InvalidValuesError<V> extends Error {
   String toString() => '${_msg(tag, values)}';
 
   static String _msg<V>(Tag tag, List<V> values) =>
-      'InvalidValuesError: ${tag.info}\n  values: ${values}';
+      'InvalidValuesError: ${tag.info}\n  values: $values';
 }
 
 Null invalidValuesError<V>(Tag tag, List<V> values) {
