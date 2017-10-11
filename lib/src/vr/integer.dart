@@ -160,6 +160,3 @@ class VRInt extends VR<int> {
       29, 0x4e55, 'USOW1', 1, 4, kMaxUN, 'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
 }
 
-class VRIntSpecial extends VRInt {
-
-}

@@ -206,16 +206,18 @@ abstract class VR<T> {
   static const int kUTindex = 32;
 
   // Special values used by Tag
+/*
   static const VR kOBOW = VR.kOBOW;
   static const VR kUSSS = VR.kUSSS;
   static const VR kUSSSOW = VR.kUSSSOW;
   static const VR kUSOW = VR.USOW;
+*/
 
 
 
   static const List<VR> vrList = const <VR>[
     kInvalid,
-    kAE, kAS, kAT, 0, kCS,
+    kAE, kAS, kAT, kUN, kCS,
     kDA, kDS, kDT, kFD, kFL,
     kIS, kLO, kLT, kOB, kOD,
     kOF, kOL, kOW, kPN, kSH,
@@ -223,10 +225,10 @@ abstract class VR<T> {
     kUC, kUI, kUL, kUN, kUR,
     kUS, kUT // stop reformat
   ];
-
+//Urgent
   static const Map<int, VR> vrMap = const <int, VR>{
     0x0000: kInvalid,
-    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5242: kBR, 0x5343: kCS,
+    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5242: kInvalid, 0x5343: kCS,
     0x4144: kDA, 0x5344: kDS, 0x5444: kDT, 0x4446: kFD, 0x4c46: kFL,
     0x5349: kIS, 0x4f4c: kLO, 0x544c: kLT, 0x424f: kOB, 0x444f: kOD,
     0x464f: kOF, 0x4c4f: kOL, 0x574f: kOW, 0x4e50: kPN, 0x4853: kSH,
@@ -238,7 +240,7 @@ abstract class VR<T> {
   static VR lookup(int vrCode) => vrMap[vrCode];
 
   static const Map<String, VR> _idMap = const <String, VR>{
-    'AE': kAE, 'AS': kAS, 'BR': kBR, 'CS': kCS,
+    'AE': kAE, 'AS': kAS, 'BR': kInvalid, 'CS': kCS,
     'DA': kDA, 'DS': kDS, 'DT': kDT, 'IS': kIS,
     'LO': kLO, 'LT': kLT, 'PN': kPN, 'SH': kSH,
     'ST': kST, 'TM': kTM, 'UC': kUC, 'UI': kUI,
