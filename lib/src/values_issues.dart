@@ -8,15 +8,15 @@
 import 'package:string/string.dart';
 import 'package:tag/src/tag.dart';
 
-class ValuesIssues<E> {
+class Issues<V> {
   final String name;
   final Tag tag;
-  final List<E> values;
+  final Iterable<V> values;
   List<ParseIssues> _vIssues;
 
-  ValuesIssues(this.name, this.tag, this.values);
+  Issues(this.name, this.tag, this.values);
 
-  ValuesIssues operator +(ParseIssues issue) {
+  Issues operator +(ParseIssues issue) {
     add(issue);
     return this;
   }
@@ -33,7 +33,7 @@ class ValuesIssues<E> {
     return 'has the following issues:\n ';
   }
 
-  ValuesIssues add(ParseIssues pIssues) {
+  Issues add(ParseIssues pIssues) {
     if (issues.isNotEmpty) issues.add(pIssues);
     return this;
   }

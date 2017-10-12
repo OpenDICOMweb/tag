@@ -9,7 +9,7 @@ import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 
-import 'package:tag/src/values_issues.dart';
+import 'package:tag/src/issues.dart';
 import 'package:tag/src/vr/float.dart';
 import 'package:tag/src/vr/integer.dart';
 import 'package:tag/src/vr/string.dart';
@@ -72,16 +72,16 @@ abstract class VR<V> {
   bool get isLengthAlwaysValid => false;
 
   /// Returns [true] if [value] is valid for [this].
-  bool isValid(V value, [ValuesIssues issues]);
+  bool isValid(V value, [Issues issues]);
 
   /// Returns [true] of [value] is not valid for this VR.kUN.
-  bool isNotValid(V value, [ValuesIssues issues]) => !isValid(value, issues);
+  bool isNotValid(V value, [Issues issues]) => !isValid(value, issues);
 
   /// Returns [true] if the [Type] of [value] is valid for [this].
   bool isValidType(V value);
 
   /// Returns true if the [List] [Type] of values is valid for [this].
-  bool isValidValuesType(Iterable<V> values, [ValuesIssues issues]) => values is List<V>;
+  bool isValidValuesType(Iterable<V> values, [Issues issues]) => values is List<V>;
 
   bool isValidLength(int length) => false;
 
@@ -273,10 +273,10 @@ class VRUnknown extends VR<int> {
 
   /// Returns [true] of [value] is UN.
   @override
-  bool isValid(int value, [ValuesIssues issues]) =>  _inRange(value);
+  bool isValid(int value, [Issues issues]) =>  _inRange(value);
 
   @override
-  bool isNotValid(int value, [ValuesIssues issues]) =>
+  bool isNotValid(int value, [Issues issues]) =>
 		  !isValid(value, issues);
 
   /// Returns true if the [Type] of values is [int].
@@ -285,7 +285,7 @@ class VRUnknown extends VR<int> {
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(Iterable<int> values, [ValuesIssues issues]) => values is
+  bool isValidValuesType(Iterable<int> values, [Issues issues]) => values is
   List<int>;
 
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
@@ -321,7 +321,7 @@ class VRSequence extends VR<Dataset> {
   bool get isSequence => true;
 
   @override
-  bool isValid(Object value, [ValuesIssues issues]) => isValidType(value);
+  bool isValid(Object value, [Issues issues]) => isValidType(value);
 
   /// Returns true if the [Type] of values is Item.
   @override
@@ -329,7 +329,7 @@ class VRSequence extends VR<Dataset> {
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(Iterable<Dataset> vList, [ValuesIssues issues]) {
+  bool isValidValuesType(Iterable<Dataset> vList, [Issues issues]) {
     for (var v in vList) if (v is! Dataset) return false;
     return true;
   }
@@ -353,12 +353,12 @@ class VRInvalid extends VR<int> {
       : super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
   @override
-  bool isValid(Object v, [ValuesIssues issues]) => false;
+  bool isValid(Object v, [Issues issues]) => false;
 
   @override
   bool isValidType(Object v) => false;
   @override
-  bool isValidValuesType(Object v, [ValuesIssues issues]) => false;
+  bool isValidValuesType(Object v, [Issues issues]) => false;
 
   static const VRUnknown kInvalid =
       const VRUnknown._(0, 0, 'Invalid', 0, 0, 0, 'Invalid VR');

@@ -12,11 +12,11 @@ import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
+import 'package:tag/src/issues.dart';
 import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
-import 'package:tag/src/values_issues.dart';
 import 'package:tag/src/vm.dart';
 import 'package:tag/src/vr/vr.dart';
 
@@ -102,6 +102,7 @@ abstract class Tag {
   // **** VR Getters
 
   int get vrIndex => vr.index;
+  int get vrCode => vr.code;
 
   @deprecated
   int get sizeInBytes => elementSize;
@@ -236,7 +237,7 @@ abstract class Tag {
   /// [width]: The [width] of the matrix of values. If [width == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
-  bool isValidValues<V>(Iterable<V> vList, [ValuesIssues issues]) {
+  bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
     if (vr == VR.kUN) return true;
     if (vList == null) return false;
     if (!isValidValuesType<V>(vList, issues)) {
@@ -255,7 +256,7 @@ abstract class Tag {
     return true;
   }
 
-  bool isValidValuesType<V>(List<V> values, [ValuesIssues issues]) =>
+  bool isValidValuesType<V>(List<V> values, [Issues issues]) =>
 		  vr.isValidValuesType(values, issues);
 
 /*  bool isValidElement(Element e) {
@@ -275,12 +276,12 @@ abstract class Tag {
   }
 */
 
-  bool isValidValue<V>(V value, [ValuesIssues issues]) => vr.isValid(value, issues);
-  bool isNotValidValue<V>(V value, [ValuesIssues issues]) => vr.isNotValid(value, issues);
+  bool isValidValue<V>(V value, [Issues issues]) => vr.isValid(value, issues);
+  bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValid(value, issues);
 
   /// Returns a [list<E>] of valid values for this [Tag], or [null] if
   /// and of the [String]s in [sList] are not parsable.
-  List<V> parseValues<V>(List<String> sList, [ValuesIssues issues]) {
+  List<V> parseValues<V>(List<String> sList, [Issues issues]) {
     //print('parseList: $sList');
     if (isNotValidLength(sList.length)) return null;
     final values = new List<V>(sList.length);
@@ -301,14 +302,10 @@ abstract class Tag {
       : null;
 
   //TODO: make this work with [ParseIssues]
-  List<String> issues<V>(List<V> values) {
-    print('issues: $values');
-    final sList = <String>[];
-    for (var i = 0; i < values.length; i++) {
-      final s = vr.issues(values[i]);
-      if (s != null) sList.add('$i: $s');
-    }
-    return sList;
+  Issues issues<V>(Tag tag, Iterable<V> values) {
+  	final issues = new Issues('Tag: $tag');
+  	isValidValues(values, issues);
+    return issues;
   }
 
   List<V> checkValues<V>(List<V> values) => (isValidValues(values)) ? values : null;
@@ -317,7 +314,7 @@ abstract class Tag {
   V checkValue<V>(V value) => vr.isValid(value) ? value : null;
 
   /// Returns [true] if [length] is a valid number of values for [this].
-  bool isValidLength(int length, [ValuesIssues issues]) {
+  bool isValidLength(int length, [Issues issues]) {
     // If a VR has a long Value Field, then it has [VM.k1], and its length is always valid.
     if (vr.isLengthAlwaysValid == true) return true;
     // These are the most common cases.
@@ -325,10 +322,10 @@ abstract class Tag {
     return length >= minValues && length <= maxValues && (length % width) == 0;
   }
 
-  bool isValidWidth(int length, [ValuesIssues issues]) =>
+  bool isValidWidth(int length, [Issues issues]) =>
 		  width == 0 || (length % width) == 0;
 
-  bool isNotValidLength(int length, [ValuesIssues issues]) =>
+  bool isNotValidLength(int length, [Issues issues]) =>
 		  !isValidLength(length, issues);
 
   int checkLength(int length) => (isValidLength(length)) ? length : null;
@@ -396,7 +393,7 @@ abstract class Tag {
 
   //TODO: redoc
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag lookupByCode(int code, [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookupByCode(int code, [VR vr = VR.kUN, Object creator]) {
     String msg;
     if (code.isEven) {
       if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
@@ -412,7 +409,7 @@ abstract class Tag {
     return invalidTagCode(code, msg);
   }
 
-  static Tag lookupByKeyword(String keyword, [VR vr = VR.kUN, dynamic creator]) {
+  static Tag lookupByKeyword(String keyword, [VR vr = VR.kUN, Object creator]) {
 /*    Tag tag = Tag.lookupKeyword(keyword, vr);
     if (tag != null) return tag;
     tag = Tag.lookupPrivateCreatorKeyword(keyword, vr) {

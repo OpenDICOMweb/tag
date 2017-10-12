@@ -9,7 +9,7 @@ import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
-import 'package:tag/src/p_tag_codes.dart';
+import 'package:tag/src/p_tag_code_map.dart';
 import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
@@ -84,7 +84,7 @@ class PTag extends Tag {
   static PTag lookupByCode(int code,
       [VR vr = VR.kUN, bool shouldThrow = false]) {
     assert(Tag.isPublicCode(code));
-    final tag = pTagCodes[code];
+    final tag = pTagCodeMap[code];
     if (tag != null) return tag;
 
     // This is fromTag Group Length Tag

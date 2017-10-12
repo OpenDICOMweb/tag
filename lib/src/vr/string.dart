@@ -13,7 +13,7 @@ import 'package:system/core.dart';
 import 'package:uid/uid.dart';
 
 import 'package:tag/src/vr/vr.dart';
-import 'package:tag/src/values_issues.dart';
+import 'package:tag/src/issues.dart';
 
 typedef bool Tester<String>(String value, int min, int max);
 typedef String ErrorMsg<String>(String value, int min, int max);
@@ -50,7 +50,7 @@ abstract class VRString extends VR<String> {
 
   /// Returns [true] if [v] is valid for [this].
   @override
-  bool isValid(String v, [ValuesIssues issues]) =>
+  bool isValid(String v, [Issues issues]) =>
       (minValueLength <= v.length) && (v.length <= maxValueLength);
 
   /// Returns [true] if [values] is [List<String>].
@@ -59,7 +59,7 @@ abstract class VRString extends VR<String> {
 
   /// Returns true if the [Type] of values is [List<String>].
   @override
-  bool isValidValuesType(Iterable vList, [ValuesIssues issues]) =>
+  bool isValidValuesType(Iterable vList, [Issues issues]) =>
       vList is Iterable<String>;
 
   /// Returns a [List<String>] converted from [bytes].
@@ -151,7 +151,7 @@ class VRDcmString extends VRString {
   bool get isLengthAlwaysValid => this == VR.kUC;
 
   @override
-  bool isValid(Object s, [ValuesIssues issues]) =>
+  bool isValid(Object s, [Issues issues]) =>
       (s is String) && _filteredTest(s, _isDcmChar);
 
   @override
@@ -181,7 +181,7 @@ class VRDcmText extends VRString {
   bool get isUtf8 => true;
 
   @override
-  bool isValid(Object s, [ValuesIssues issues]) =>
+  bool isValid(Object s, [Issues issues]) =>
       (s is String) && _filteredTest(s, _isTextChar);
 
   @override
@@ -209,7 +209,7 @@ class VRCodeString extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(Object s, [ValuesIssues issues]) =>
+  bool isValid(Object s, [Issues issues]) =>
       (s is String) && _filteredTest(s, _isCodeStringChar);
 
   @override
@@ -234,7 +234,7 @@ class VRDcmAge extends VRString {
   @override
 
   /// Returns [true] if [s] is a valid DICOM Age String (AS).
-  bool isValid(Object s, [ValuesIssues issues]) {
+  bool isValid(Object s, [Issues issues]) {
     if (s is String) {
       assert(s != null);
       if (s.length != 4) return false;
@@ -301,7 +301,7 @@ class VRDcmDate extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) => Date.isValidString(s);
+  bool isValid(String s, [Issues issues]) => Date.isValidString(s);
 
   @override
   Date parse(String s, {int start = 0, int end}) =>
@@ -322,7 +322,7 @@ class VRDcmDateTime extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) =>
+  bool isValid(String s, [Issues issues]) =>
       DcmDateTime.isValidString(s.trimRight());
 
   @override
@@ -344,7 +344,7 @@ class VRDcmTime extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) => Time.isValidString(s.trimRight());
+  bool isValid(String s, [Issues issues]) => Time.isValidString(s.trimRight());
 
   @override
   Time parse(String s, {int start = 0, int end}) =>
@@ -365,7 +365,7 @@ class VRDecimalString extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) => parse(s, issues) != null;
+  bool isValid(String s, [Issues issues]) => parse(s, issues) != null;
 
   @override
   ParseIssues issues(String s) {
@@ -375,7 +375,7 @@ class VRDecimalString extends VRString {
   }
 
   @override
-  num parse(String s, [ValuesIssues issues]) {
+  num parse(String s, [Issues issues]) {
     assert(s != null);
     if (!isValidLength(s.length)) return invalidStringLengthError(s);
     return num.parse(s, (s) => null);
@@ -392,7 +392,7 @@ class VRIntString extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) => parse(s, issues) != null;
+  bool isValid(String s, [Issues issues]) => parse(s, issues) != null;
 
   @override
   ParseIssues issues(String s) {
@@ -403,7 +403,7 @@ class VRIntString extends VRString {
   }
 
   @override
-  int parse(String s, [ValuesIssues issues]) {
+  int parse(String s, [Issues issues]) {
     assert(s != null);
     if (!isValidLength(s.length)) return invalidStringLengthError(s);
     return int.parse(s.trim(), onError: (s) => null);
@@ -427,7 +427,7 @@ class VRPersonName extends VRString {
   bool get isAscii => false;
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) {
+  bool isValid(String s, [Issues issues]) {
     var groups = s.split('=');
     groups ??= [s];
     for (var group in groups)
@@ -501,7 +501,7 @@ class VRUid extends VRString {
   String get padChar => '\u0000';
 
   @override
-  bool isValid(Object s, [ValuesIssues issues]) => Uid.isValidString(s);
+  bool isValid(Object s, [Issues issues]) => Uid.isValidString(s);
 
   /// Returns [true] if [uidString] starts with the DICOM UID root.
   bool hasDicomRoot(String uidString) => uidString.startsWith(Uid.dicomRoot);
@@ -527,7 +527,7 @@ class VRUri extends VRString {
             maxValueLength);
 
   @override
-  bool isValid(String s, [ValuesIssues issues]) =>  parse(s, issues) != null;
+  bool isValid(String s, [Issues issues]) =>  parse(s, issues) != null;
 
   // Always [true] because UR can only have one value with a length up
   // to [kMaxVFLength];
@@ -549,7 +549,7 @@ class VRUri extends VRString {
 
   // Parse DICOM Time.
   @override
-  Uri parse(String uriString, [ValuesIssues issues]) {
+  Uri parse(String uriString, [Issues issues]) {
     assert(uriString != null && uriString != '');
     if (!isValidLength(uriString.length)) return null;
     Uri uri;
