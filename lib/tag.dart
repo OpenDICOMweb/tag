@@ -5,18 +5,19 @@
 // See the AUTHORS file for other contributors.
 
 export 'package:tag/src/color_palette.dart';
+export 'package:tag/src/deid_option.dart';
 export 'package:tag/src/e_type.dart';
 export 'package:tag/src/elt.dart';
 export 'package:tag/src/errors.dart';
 export 'package:tag/src/group.dart';
+export 'package:tag/src/ie_type.dart';
 export 'package:tag/src/issues.dart';
 export 'package:tag/src/p_tag.dart';
-export 'package:tag/src/p_tag_codes.dart';
 export 'package:tag/src/p_tag_code_map.dart';
+export 'package:tag/src/p_tag_codes.dart';
 export 'package:tag/src/p_tag_keywords.dart';
 export 'package:tag/src/private/pc_tag.dart';
 export 'package:tag/src/private/pc_tag_definitions.dart';
-
 export 'package:tag/src/private/pc_tag_map.dart';
 export 'package:tag/src/private/pc_tag_names.dart';
 export 'package:tag/src/private/pd_tag.dart';

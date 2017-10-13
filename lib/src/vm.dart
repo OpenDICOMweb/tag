@@ -44,7 +44,7 @@ class VM {
   // Members
   // Special case optimization [k1] [width == 0]
   //                           name min max width
-  static const VM k1 = const VM._('1', 1, 1, 0);
+  static const VM k1 = const VM._('1', 1, 1, 1);
   // ignore constant_identifier_names
   static const VM k1_2 = const VM._('1_2', 1, 2, 1);
   static const VM k1_3 = const VM._('1-3', 1, 3, 1);

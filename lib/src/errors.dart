@@ -191,9 +191,9 @@ class InvalidValuesError<V> extends Error {
       'InvalidValuesError: ${tag.info}\n  values: $values';
 }
 
-Null invalidValuesError<V>(Tag tag, List<V> values) {
-  if (log != null) log.error(InvalidValuesError._msg(tag, values));
-  if (throwOnError) throw new InvalidValuesError(tag, values);
+Null invalidValuesError<V>(Tag tag, Iterable<V> values) {
+  if (log != null) log.error(InvalidValuesError._msg<V>(tag, values));
+  if (throwOnError) throw new InvalidValuesError<V>(tag, values);
   return null;
 }
 

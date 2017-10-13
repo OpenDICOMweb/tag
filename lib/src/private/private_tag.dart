@@ -30,6 +30,8 @@ abstract class PrivateTag extends Tag {
   @override
   String get name => 'Illegal Private Tag';
 
+  //Urgent: fix
+  @override
   int get index => -1;
 
   /// The Private Subgroup for this Tag.

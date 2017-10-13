@@ -25,8 +25,7 @@ const int kMaxUN = kUint32Max - 2;
 /// Converts [bytes] into a valid [TypedData<List<int>>] and returns it.
 /// If [bytes] is [null] or empty (`bytes.length == 0`), returns an
 /// empty [List<int>]. If the list cannot be converted returns null.
-typedef TypedData BytesToValues(Uint8List bytes,
-{int offset, int length, bool asView});
+typedef TypedData BytesToValues(Uint8List bytes, {int offset, int length, bool asView});
 
 /// Verifies [bytes] into a valid [TypedData<List<int>>], and
 /// if it is aligned (on a valid byte boundary) returns a View of
@@ -56,20 +55,11 @@ class VRInt extends VR<int> {
   /// The method that converts bytes ([Uint8List]) to values.
   final BytesToValues fromBytes;
 
-  const VRInt._(
-      int index,
-      int code,
-      String id,
-      int elementSize,
-      int vfLengthSize,
-      int maxVFLength,
-      String keyword,
-      this.minValue,
-      this.maxValue,
-      this.fromBytes,
+  const VRInt._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword, this.minValue, this.maxValue, this.fromBytes,
       [bool undefinedLengthAllowed = false])
       : super(index, code, id, elementSize, vfLengthSize, maxVFLength, keyword,
-             undefinedLengthAllowed: undefinedLengthAllowed);
+            undefinedLengthAllowed: undefinedLengthAllowed);
 
   @override
   bool get isBinary => true;
@@ -77,9 +67,13 @@ class VRInt extends VR<int> {
   @override
   bool get isInteger => true;
 
-  /// Returns [true] if [n] is valid for this [VRInt].
+  /// Returns [true] if [v] is valid for this [VRInt].
   @override
-  bool isValid(Object n, [Issues issues]) => (n is int) && (minValue <= n) && (n <= maxValue);
+  bool isValidValue(int v, [Issues issues]) {
+    print('n: $v, min: $minValue, max: $maxValue');
+	  return v >= minValue && (v <= maxValue);
+  }
+
 
   /// Returns [true] of [value] is [double].
   @override
@@ -93,12 +87,11 @@ class VRInt extends VR<int> {
   @override
   bool get isLengthAlwaysValid => vfLengthSize == 4;
 
-
   /// Returns a [ParseIssues] object indicating the the issues with [n].
   /// If there are no issues returns the empty string ('').
   @override
   ParseIssues issues(int n) {
-    if (!isValid(n)) {
+    if (!isValidValue(n)) {
       final msg = 'Invalid value: min($minValue) <= value($n) <= max($minValue)';
       return new ParseIssues('VRInt', '$n', 0, 0, [msg]);
     }
@@ -132,14 +125,14 @@ class VRInt extends VR<int> {
   static const VRInt kAT = const VRInt._(3, 0x5441, 'AT', 4, 2, kMaxShortVF,
       'Attribute Tag Code', 0, Uint32.maxValue, Uint16.fromBytes);
 
-  static const VRInt kOB = const VRInt._(14, 0x424f, 'OB', 1, 4, kMaxOB,
-      'OtherByte', 0, Uint8.maxValue, Uint8.fromBytes, true);
+  static const VRInt kOB = const VRInt._(14, 0x424f, 'OB', 1, 4, kMaxOB, 'OtherByte', 0,
+      Uint8.maxValue, Uint8.fromBytes, true);
 
-  static const VRInt kOL = const VRInt._(17, 0x4c4f, 'OL', 4, 4, kMaxOL,
-      'OtherLong', 0, Uint32.maxValue, Uint32.fromBytes);
+  static const VRInt kOL = const VRInt._(
+      17, 0x4c4f, 'OL', 4, 4, kMaxOL, 'OtherLong', 0, Uint32.maxValue, Uint32.fromBytes);
 
-  static const VRInt kOW = const VRInt._(18, 0x574f, 'OW', 2, 4, kMaxOW,
-      'OtherWord', 0, Uint16.maxValue, Uint16.fromBytes, true);
+  static const VRInt kOW = const VRInt._(18, 0x574f, 'OW', 2, 4, kMaxOW, 'OtherWord', 0,
+      Uint16.maxValue, Uint16.fromBytes, true);
 
   static const VRInt kSL = const VRInt._(21, 0x4c53, 'SL', 4, 2, kMaxShortVF,
       'SignedLong', Int32.minValue, Int32.maxValue, Int32.fromBytes);
@@ -154,18 +147,18 @@ class VRInt extends VR<int> {
       'UnsignedShort', 0, Uint16.maxValue, Uint16.fromBytes);
 
   // **** All VRs below this line are treated as VR.kUN. ****
-  static const VRInt kOBOW = const VRInt._(29, 0x4e55, 'OBOW', 1, 4, kMaxUN,
-      'OBorOW', 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kOBOW = const VRInt._(
+      29, 0x4e55, 'OBOW', 1, 4, kMaxUN, 'OBorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSSS = const VRInt._(29, 0x4e55, 'USSS', 1, 4, kMaxUN,
-      'USorSS', 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSSS = const VRInt._(
+      29, 0x4e55, 'USSS', 1, 4, kMaxUN, 'USorSS', 0, Uint8.maxValue, Uint8.fromBytes);
 
   static const VRInt kUSSSOW = const VRInt._(29, 0x4e55, 'USSSOW', 1, 4, kMaxUN,
       'USorSSorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSOW = const VRInt._(29, 0x4e55, 'USOW', 1, 4, kMaxUN,
-      'USorOW', 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSOW = const VRInt._(
+      29, 0x4e55, 'USOW', 1, 4, kMaxUN, 'USorOW', 0, Uint8.maxValue, Uint8.fromBytes);
 
-  static const VRInt kUSOW1 = const VRInt._(29, 0x4e55, 'USOW1', 1, 4, kMaxUN,
-      'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
+  static const VRInt kUSOW1 = const VRInt._(
+      29, 0x4e55, 'USOW1', 1, 4, kMaxUN, 'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
 }

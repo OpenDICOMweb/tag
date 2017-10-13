@@ -72,10 +72,10 @@ abstract class VR<V> {
   bool get isLengthAlwaysValid => false;
 
   /// Returns [true] if [value] is valid for [this].
-  bool isValid(V value, [Issues issues]);
+  bool isValidValue(V value, [Issues issues]);
 
   /// Returns [true] of [value] is not valid for this VR.kUN.
-  bool isNotValid(V value, [Issues issues]) => !isValid(value, issues);
+  bool isNotValidValue(V value, [Issues issues]) => !isValidValue(value, issues);
 
   /// Returns [true] if the [Type] of [value] is valid for [this].
   bool isValidType(V value);
@@ -85,7 +85,7 @@ abstract class VR<V> {
 
   bool isValidLength(int length) => false;
 
-  V check(V value) => (isValid(value)) ? value : null;
+  V check(V value) => (isValidValue(value)) ? value : null;
 
   // **** Must be overridden.
   /// Returns a valid value, or if not parsable, [null].
@@ -273,11 +273,7 @@ class VRUnknown extends VR<int> {
 
   /// Returns [true] of [value] is UN.
   @override
-  bool isValid(int value, [Issues issues]) =>  _inRange(value);
-
-  @override
-  bool isNotValid(int value, [Issues issues]) =>
-		  !isValid(value, issues);
+  bool isValidValue(int value, [Issues issues]) =>  _inRange(value);
 
   /// Returns true if the [Type] of values is [int].
   @override
@@ -321,7 +317,7 @@ class VRSequence extends VR<Dataset> {
   bool get isSequence => true;
 
   @override
-  bool isValid(Object value, [Issues issues]) => isValidType(value);
+  bool isValidValue(Object value, [Issues issues]) => isValidType(value);
 
   /// Returns true if the [Type] of values is Item.
   @override
@@ -353,7 +349,7 @@ class VRInvalid extends VR<int> {
       : super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
   @override
-  bool isValid(Object v, [Issues issues]) => false;
+  bool isValidValue(Object v, [Issues issues]) => false;
 
   @override
   bool isValidType(Object v) => false;

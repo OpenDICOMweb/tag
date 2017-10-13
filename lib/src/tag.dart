@@ -7,11 +7,14 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:dataset/dataset.dart';
 import 'package:system/system.dart';
+import 'package:tag/src/deid_option.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
+import 'package:tag/src/ie_type.dart';
 import 'package:tag/src/issues.dart';
 import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/private/pc_tag.dart';
@@ -22,6 +25,11 @@ import 'package:tag/src/vr/vr.dart';
 
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
+
+/// A Element Type predicate. Returns [true] if the Element
+/// corresponding to [key] in the [Dataset] satisfies the
+/// requirements for the SopClass of the [Dataset].
+typedef bool _ETypePredicate<K>(Dataset ds, K key) ;
 
 /// //Fix:
 /// A [Tag] defines the [Type] of a DICOM Attribute.  There are different
@@ -44,17 +52,6 @@ abstract class Tag {
   ///      are generated make them consistent.
   const Tag();
 
-  /// Returns an appropriate [Tag] based on the arguments.
-  static Tag fromCode<T>(int code, VR vr, [T creator]) {
-    if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
-    if (Tag.isPrivateCreatorCode(code) && creator is String)
-      return new PCTag(code, vr, creator);
-    if (Tag.isPrivateDataCode(code) && creator is PCTag)
-      return new PDTag(code, vr, creator);
-    // This should never happen
-    return invalidTagCode(code);
-  }
-
   //TODO: When regenerating Tag rework constructors as follows:
   // Tag(int code, [vr = VR.kUN, vm = VM.k1_n);
   // Tag._(this.code, this.vr, this.vm, this.keyword, this.name,
@@ -63,6 +60,7 @@ abstract class Tag {
   //     [this.isRetired = false, this.type = EType.kUnknown]
   // Tag.private(this.code, this.vr, this.vm, this.keyword, this.name,
   //     [this.isRetired = false, this.type = EType.kUnknown]);
+  int get index;
   int get code;
   VR get vr;
   String get keyword => 'UnknownTag';
@@ -165,16 +163,22 @@ abstract class Tag {
 
   int get width => vm.width;
 
-  /* TODO: remove when sure they are not used.
-  int codeGroup(int code) => code >> 16;
+  // **** Element Type (1, 1c, 2, ...)
+  //Urgent: add EType to tag
+  EType get eType => EType.k3;
+  int get eTypeIndex => eType.index;
+  _ETypePredicate get eTypePredicate => throw new UnimplementedError();
 
-  int codeElt(int code) => code & 0xFFFF;
+  // Information Entity Level
+  IEType get ieType => IEType.kInstance;
+  int get ieIndex => ieType.index;
+  String get ieLevel => ieType.level;
 
-  bool codeGroupIsPrivate(int code) {
-    int g = codeGroup(code);
-    return g.isOdd && (g > 0x0008 && g < 0xFFFE);
-  }
-  */
+  // DeIdentification Method
+  int get deIdIndex => throw new UnimplementedError();
+  String get deIdName => throw new UnimplementedError();
+  DeIdMethod get deIdMethod => throw new UnimplementedError();
+
   int get hashcode => code;
 
   /// Returns true if the Tag is defined by DICOM, false otherwise.
@@ -276,8 +280,8 @@ abstract class Tag {
   }
 */
 
-  bool isValidValue<V>(V value, [Issues issues]) => vr.isValid(value, issues);
-  bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValid(value, issues);
+  bool isValidValue<V>(V value, [Issues issues]) => vr.isValidValue(value, issues);
+  bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValidValue(value, issues);
 
   /// Returns a [list<E>] of valid values for this [Tag], or [null] if
   /// and of the [String]s in [sList] are not parsable.
@@ -311,7 +315,7 @@ abstract class Tag {
   List<V> checkValues<V>(List<V> values) => (isValidValues(values)) ? values : null;
 
   // Placeholder until VR is integrated into TagBase
-  V checkValue<V>(V value) => vr.isValid(value) ? value : null;
+  V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
 
   /// Returns [true] if [length] is a valid number of values for [this].
   bool isValidLength(int length, [Issues issues]) {
@@ -389,6 +393,17 @@ abstract class Tag {
     if (key is int) return lookupByCode(key, vr, creator);
     if (key is String) return lookupByKeyword(key, vr, creator);
     return invalidTagKey<K>(key, vr, creator);
+  }
+
+  /// Returns an appropriate [Tag] based on the arguments.
+  static Tag fromCode<T>(int code, VR vr, [T creator]) {
+	  if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
+	  if (Tag.isPrivateCreatorCode(code) && creator is String)
+		  return new PCTag(code, vr, creator);
+	  if (Tag.isPrivateDataCode(code) && creator is PCTag)
+		  return new PDTag(code, vr, creator);
+	  // This should never happen
+	  return invalidTagCode(code);
   }
 
   //TODO: redoc

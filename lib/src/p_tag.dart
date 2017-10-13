@@ -9,6 +9,7 @@ import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
+import 'package:tag/src/p_tag_codes.dart';
 import 'package:tag/src/p_tag_code_map.dart';
 import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/tag.dart';
@@ -65,6 +66,9 @@ class PTag extends Tag {
         this.type = EType.k3,
 			  super();
 
+
+  @override
+  int get index => pTagCodes.indexOf(code);
 
   @override
   bool get isValid => keyword != _unknownKeyword;
