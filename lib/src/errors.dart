@@ -94,6 +94,7 @@ Null tagKeywordError(String keyword) {
   return null;
 }
 
+/*
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidVRError extends Error {
   VR vr;
@@ -113,6 +114,7 @@ Null invalidVRError(VR vr, [String message = '']) {
   if (throwOnError) throw new InvalidVRError(vr);
   return null;
 }
+*/
 
 class InvalidValueFieldLengthError extends Error {
   final Uint8List vfBytes;
@@ -136,9 +138,9 @@ Null invalidValueFieldLengthError(Uint8List vfBytes, int elementSize) {
   return null;
 }
 
-class InvalidValuesTypeError extends Error {
+class InvalidValuesTypeError<V> extends Error {
   final Tag tag;
-  final List values;
+  final Iterable<V> values;
 
   InvalidValuesTypeError(this.tag, this.values) {
     if (log != null) log.error(toString());
@@ -147,19 +149,19 @@ class InvalidValuesTypeError extends Error {
   @override
   String toString() => _msg(tag, values);
 
-  static String _msg(Tag tag, List values) =>
+  static String _msg<V>(Tag tag, Iterable<V> values) =>
       'InvalidValuesTypeError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesTypeError(Tag tag, Iterable values) {
+Null invalidValuesTypeError<V>(Tag tag, Iterable<V> values) {
   log.error(InvalidValuesTypeError._msg(tag, values));
   if (throwOnError) throw new InvalidValuesTypeError(tag, values);
   return null;
 }
 
-class InvalidValuesLengthError extends Error {
+class InvalidValuesLengthError<V> extends Error {
   final Tag tag;
-  final List values;
+  final Iterable<V> values;
 
   InvalidValuesLengthError(this.tag, this.values) {
     if (log != null) log.error(toString());
@@ -168,26 +170,28 @@ class InvalidValuesLengthError extends Error {
   @override
   String toString() => _msg(tag, values);
 
-  static String _msg(Tag tag, List values) =>
+  static String _msg<V>(Tag tag, Iterable<V> values) =>
       'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesLengthError(Tag tag, Iterable values) {
-  log.error(InvalidValuesLengthError._msg(tag, values));
+Null invalidValuesLengthError<V>(Tag tag, Iterable<V> values, [Issues issues]) {
+	final msg = InvalidValuesLengthError._msg(tag, values);
+  log.error(msg);
+  if (issues != null) issues.add(msg);
   if (throwOnError) throw new InvalidValuesLengthError(tag, values);
   return null;
 }
 
 class InvalidValuesError<V> extends Error {
   final Tag tag;
-  final List<V> values;
+  final Iterable<V> values;
 
   InvalidValuesError(this.tag, this.values);
 
   @override
   String toString() => '${_msg(tag, values)}';
 
-  static String _msg<V>(Tag tag, List<V> values) =>
+  static String _msg<V>(Tag tag, Iterable<V> values) =>
       'InvalidValuesError: ${tag.info}\n  values: $values';
 }
 

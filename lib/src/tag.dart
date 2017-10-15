@@ -29,7 +29,7 @@ const int kElementMask = 0x0000FFFF;
 /// A Element Type predicate. Returns [true] if the Element
 /// corresponding to [key] in the [Dataset] satisfies the
 /// requirements for the SopClass of the [Dataset].
-typedef bool _ETypePredicate<K>(Dataset ds, K key) ;
+typedef bool _ETypePredicate<K>(Dataset ds, K key);
 
 /// //Fix:
 /// A [Tag] defines the [Type] of a DICOM Attribute.  There are different
@@ -66,6 +66,18 @@ abstract class Tag {
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
   VM get vm => VM.k1_n;
+
+  int get vmMin => vm.min;
+  int get vmMax => vm.max;
+  int get vmColumns => vm.columns;
+
+  /// The maximum number of values allowed for [this].
+  int get maxValues {
+    if (vmMax != -1) return vmMax;
+    final n = vr.maxLength - (vr.maxLength % vmColumns);
+    assert(n % vmColumns == 0);
+    return n;
+  }
 
   bool get isRetired => true;
   EType get type => EType.k3;
@@ -126,42 +138,37 @@ abstract class Tag {
   /// The minimum number that MUST be present, if any values are present.
   int get minValues => vm.min;
 
-  int get _vfLimit => (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
-
-  /// The maximum number that MAY be present, if any values are present.
-  int get maxValues => (vm.max != -1) ? vm.max : _vfLimit ~/ vr.minValueLength;
+//  int get _vfLimit => (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
 
   /// The minimum length of the Value Field.
   int get minVFLength => vm.min * vr.minValueLength;
 
-  /// The maximum length of the Value Field.
+/*
+  /// The maximum length of the Value Field for this [Tag].
   int get maxVFLength {
     // Optimization - for most Tags vm.max == 1
-    if (vm.max == 1) return vr.maxValueLength * vr.elementSize;
-    if (vm.max == -1) {
-      return vr.maxVFLength;
-    } else {
-      final maxVF = maxValues * vr.maxValueLength;
-      return (maxVF > vr.maxVFLength) ? vr.maxVFLength : maxVF;
-    }
+    if (vmMax != 1) return vmMax * vr.elementSize;
+    final excess = maxLength % vmColumns;
+    final actual = maxLength - excess;
+    assert(actual % columns == 0);
+    return actual;
   }
+*/
 
   //TODO: Validate that the number of values is legal
   //TODO write unit tests to ensure this is correct
   //TODO: make this work for PrivateTags
 
   /// Returns the maximum number of values allowed for this [Tag].
-  /*
   int get maxLength {
     if (vm.max == -1) {
-      int max = (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
+      final max = (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
       return max ~/ vr.elementSize;
     }
     return vm.max;
   }
-  */
 
-  int get width => vm.width;
+  int get width => vm.columns;
 
   // **** Element Type (1, 1c, 2, ...)
   //Urgent: add EType to tag
@@ -242,16 +249,41 @@ abstract class Tag {
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
+    assert(vList != null);
     if (vr == VR.kUN) return true;
-    if (vList == null) return false;
-    if (!isValidValuesType<V>(vList, issues)) {
+    final ok = isValidValuesType<V>(vList, issues);
+    print('isValidType: $ok $runtimeType: $vList');
+    if (isNotValidValuesType<V>(vList, issues)) {
       invalidValuesTypeError(this, vList);
       return false;
     }
-    if (isNotValidLength(vList.length, issues)) {
+    if (vList.isEmpty) return true;
+    if (isNotValidLength(vList, issues)) {
       invalidValuesLengthError(this, vList);
       return false;
     }
+    if (vList is List<V>) {
+      return _isValidValuesList(vList, issues);
+    } else if (vList is Iterable<V>) {
+      return _isValidValuesIterable(vList, issues);
+    } else {
+      invalidValuesError<V>(this, vList);
+    }
+    return false;
+  }
+
+  bool _isValidValuesList<V>(List<V> vList, [Issues issues]) {
+    for (var i = 0; i < vList.length; i++) {
+      final v = vList[i];
+      if (isNotValidValue<V>(v, issues)) {
+        invalidValuesError<V>(this, vList);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool _isValidValuesIterable<V>(Iterable<V> vList, [Issues issues]) {
     for (var v in vList)
       if (isNotValidValue<V>(v, issues)) {
         invalidValuesError<V>(this, vList);
@@ -260,8 +292,11 @@ abstract class Tag {
     return true;
   }
 
-  bool isValidValuesType<V>(List<V> values, [Issues issues]) =>
-		  vr.isValidValuesType(values, issues);
+  bool isValidValuesType<V>(Iterable<V> values, [Issues issues]) =>
+      vr.isValidValuesType(values, issues);
+
+  bool isNotValidValuesType<V>(Iterable<V> values, [Issues issues]) =>
+      !isValidValuesType(values, issues);
 
 /*  bool isValidElement(Element e) {
     if (e == null) return false;
@@ -287,7 +322,7 @@ abstract class Tag {
   /// and of the [String]s in [sList] are not parsable.
   List<V> parseValues<V>(List<String> sList, [Issues issues]) {
     //print('parseList: $sList');
-    if (isNotValidLength(sList.length)) return null;
+    if (isNotValidLength(sList, issues)) return null;
     final values = new List<V>(sList.length);
     for (var i = 0; i < values.length; i++) {
       //log.debug('sList[$i]: ${sList[i]}');
@@ -301,14 +336,14 @@ abstract class Tag {
 
   // If a VR has a long Value Field, then it has [VM.k1],
   // and its length is always valid.
-  String lengthIssue(int length) => (vr.hasShortVF && isNotValidLength(length))
-      ? 'Invalid Length: min($minValues) <= value($length) <= max($maxValues)'
+  String lengthIssue<V>(Iterable<V> vList) => (vr.hasShortVF && isNotValidLength(vList))
+      ? 'Invalid Length: min($minValues) <= value($vList.length) <= max($maxValues)'
       : null;
 
   //TODO: make this work with [ParseIssues]
   Issues issues<V>(Tag tag, Iterable<V> values) {
-  	final issues = new Issues('Tag: $tag');
-  	isValidValues(values, issues);
+    final issues = new Issues('Tag: $tag');
+    isValidValues(values, issues);
     return issues;
   }
 
@@ -317,22 +352,32 @@ abstract class Tag {
   // Placeholder until VR is integrated into TagBase
   V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
 
-  /// Returns [true] if [length] is a valid number of values for [this].
-  bool isValidLength(int length, [Issues issues]) {
-    // If a VR has a long Value Field, then it has [VM.k1], and its length is always valid.
+  /// Returns [true] if [vList].length is a valid number of values for [this].
+  /// _Note_: If a VR has a long (32-bit) Value Field, then it has [VM.k1],
+  /// and its length is always valid.
+  bool isValidLength<V>(Iterable<V> vList, [Issues issues]) {
+    assert(vList != null);
     if (vr.isLengthAlwaysValid == true) return true;
-    // These are the most common cases.
-    if (length == 0 || (length == 1 && width == 0)) return true;
+    final length = vList.length;
+    if (length == 0) return true;
     return length >= minValues && length <= maxValues && (length % width) == 0;
   }
 
-  bool isValidWidth(int length, [Issues issues]) =>
-		  width == 0 || (length % width) == 0;
+  int getMax() {
+    if (vmMax != -1) return vmMax;
+    final excess = vr.maxLength % vmColumns;
+    final actual = maxLength - excess;
+    assert(actual % vmColumns == 0);
+    return actual;
+  }
 
-  bool isNotValidLength(int length, [Issues issues]) =>
-		  !isValidLength(length, issues);
+  bool isValidWidth<V>(List<V> vList, [Issues issues]) =>
+      width == 0 || (vList.length % width) == 0;
 
-  int checkLength(int length) => (isValidLength(length)) ? length : null;
+  bool isNotValidLength<V>(Iterable<V> vList, [Issues issues]) =>
+      !isValidLength(vList, issues);
+
+//  List<V> checkLength<V>(Iterable<V> vList) => (isValidLength<V>(vList)) ? vList : null;
 
   //Flush?
   String widthError(int length) => 'Invalid Width for Tag$dcm}: '
@@ -343,7 +388,7 @@ abstract class Tag {
       'Invalid Length: min($minValues) <= length($length) <= max($maxValues)';
 
   bool isValidVFLength(int lengthInBytes) =>
-      (lengthInBytes >= minVFLength && lengthInBytes <= maxVFLength);
+      (lengthInBytes >= minVFLength && lengthInBytes <= vr.maxVFLength);
 
   Uint8List checkVFLength(Uint8List bytes) =>
       (isValidVFLength(bytes.length)) ? bytes : null;
@@ -397,20 +442,20 @@ abstract class Tag {
 
   /// Returns an appropriate [Tag] based on the arguments.
   static Tag fromCode<T>(int code, VR vr, [T creator]) {
-	  if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
-	  if (Tag.isPrivateCreatorCode(code) && creator is String)
-		  return new PCTag(code, vr, creator);
-	  if (Tag.isPrivateDataCode(code) && creator is PCTag)
-		  return new PDTag(code, vr, creator);
-	  // This should never happen
-	  return invalidTagCode(code);
+    if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
+    if (Tag.isPrivateCreatorCode(code) && creator is String)
+      return new PCTag(code, vr, creator);
+    if (Tag.isPrivateDataCode(code) && creator is PCTag)
+      return new PDTag(code, vr, creator);
+    // This should never happen
+    return invalidTagCode(code);
   }
 
   //TODO: redoc
   /// Returns an appropriate [Tag] based on the arguments.
   static Tag lookupByCode(int code, [VR vr = VR.kUN, Object creator]) {
     String msg;
-    if (code.isEven) {
+    if (Tag.isPublicCode(code)) {
       if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
       msg = 'Unknown Public Code';
     } else {

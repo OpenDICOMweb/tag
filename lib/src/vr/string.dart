@@ -26,7 +26,6 @@ const List<String> emptyList = const <String>[];
 abstract class VRString extends VR<String> {
   @override
   final int minValueLength;
-  @override
   final int maxValueLength;
 
   /// Create an integer VR.

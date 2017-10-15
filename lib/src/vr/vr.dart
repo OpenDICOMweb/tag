@@ -46,8 +46,8 @@ abstract class VR<V> {
   /// The minimum length of a value.
   int get minValueLength => elementSize;
 
-  /// The maximum length of a value.
-  int get maxValueLength => elementSize;
+  /// The maximum number of values for [this].
+  int get maxLength => maxVFLength ~/ elementSize;
 
   /// Is the kUndefinedLength value allowed as a Value Field Length.
   final bool undefinedLengthAllowed;
@@ -81,7 +81,7 @@ abstract class VR<V> {
   bool isValidType(V value);
 
   /// Returns true if the [List] [Type] of values is valid for [this].
-  bool isValidValuesType(Iterable<V> values, [Issues issues]) => values is List<V>;
+  bool isValidValuesType(Iterable<V> values, [Issues issues]);
 
   bool isValidLength(int length) => false;
 
@@ -107,6 +107,30 @@ abstract class VR<V> {
 
   @override
   String toString() => asString;
+
+  // **** Static methods
+
+  static bool invalid(VR vr, Issues issues, VR correctVR) {
+  	final msg = 'Invalid VR($vr) Error, correct VR is $correctVR.';
+	  return _doError(msg, issues);
+  }
+
+  static bool invalidIndex(int index, Issues issues, VR correctVR) {
+	  final msg = 'Invalid VR index($index = ${vrList[index]}), correct VR is $correctVR.';
+    return _doError(msg, issues);
+  }
+
+  static bool invalidCode(int code, Issues issues, VR correctVR) {
+	  final msg = 'Invalid VR code($code = ${vrMap[code]}), correct VR is $correctVR.';
+	  return _doError(msg, issues);
+  }
+
+  static bool _doError(String msg, Issues issues) {
+	  log.error(msg);
+	  issues.add(msg);
+	  if (throwOnError) throw new InvalidVRError(msg);
+	  return false;
+  }
 
   // **** Constant members
 
@@ -306,7 +330,6 @@ class VRSequence extends VR<Dataset> {
   // 8 is the size of an empty [Item].
   @override
   final int minValueLength = 8;
-  @override
   final int maxValueLength = kMaxLongVF;
 
   const VRSequence._(int index, int code, String id, int elementSize, int vfLengthSize,
@@ -325,10 +348,8 @@ class VRSequence extends VR<Dataset> {
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
-  bool isValidValuesType(Iterable<Dataset> vList, [Issues issues]) {
-    for (var v in vList) if (v is! Dataset) return false;
-    return true;
-  }
+  bool isValidValuesType(Iterable<Dataset> vList, [Issues issues]) =>
+		  vList is Iterable<Dataset>;
 
 /* Flush if not needed
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
@@ -358,4 +379,13 @@ class VRInvalid extends VR<int> {
 
   static const VRUnknown kInvalid =
       const VRUnknown._(0, 0, 'Invalid', 0, 0, 0, 'Invalid VR');
+}
+
+class InvalidVRError extends Error {
+	String msg;
+
+	InvalidVRError(this.msg);
+
+	@override
+	String toString() => msg;
 }

@@ -71,7 +71,7 @@ class VRInt extends VR<int> {
   @override
   bool isValidValue(int v, [Issues issues]) {
     print('n: $v, min: $minValue, max: $maxValue');
-	  return v >= minValue && (v <= maxValue);
+	  return v >= minValue && v <= maxValue;
   }
 
 
@@ -81,7 +81,8 @@ class VRInt extends VR<int> {
 
   /// Returns true if the [Type] of values is [int].
   @override
-  bool isValidValuesType(Iterable values, [Issues issues]) => values is List<int>;
+  bool isValidValuesType(Iterable<int> values, [Issues issues]) =>
+		  values is Iterable<int>;
 
   // [true] if [this] is one of OB, OL, OW, or UN;
   @override

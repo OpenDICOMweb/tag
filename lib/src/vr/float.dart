@@ -6,7 +6,6 @@
 
 import 'package:string/string.dart';
 import 'package:system/system.dart';
-
 import 'package:tag/src/issues.dart';
 import 'package:tag/src/vr/vr.dart';
 
@@ -29,8 +28,7 @@ class VRFloat extends VR<double> {
   @override
   bool get isFloat => true;
 
-  int get minValue => elementSize;
-  int get maxLength => elementSize;
+  int get valueLength => elementSize;
 
   /// Returns [true] of [value] is [double].
   @override
@@ -42,7 +40,7 @@ class VRFloat extends VR<double> {
 
   /// Returns true if the [Type] of values is [double].
   @override
-  bool isValidValuesType(Iterable values, [Issues issues]) => values is List<double>;
+  bool isValidValuesType(Iterable values, [Issues issues]) => values is Iterable<double>;
 
   // [true] if [this] is one of OF, OD;
   @override
