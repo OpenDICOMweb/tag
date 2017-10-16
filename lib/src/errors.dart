@@ -20,10 +20,11 @@ class InvalidTagError extends Error {
   static String _msg<K>(Object tag) => 'InvalidTagError: $tag';
 }
 
-Null invalidTagError(Object obj) {
+//Urgent: jim figure out best way to handel invalid tags
+Object invalidTagError(Object obj) {
   log.error(InvalidTagKeyError._msg(obj));
   if (throwOnError) throw new InvalidTagError(obj);
-  return null;
+  return obj;
 }
 
 //TODO: convert this to handle both int and String and remove next two Errors

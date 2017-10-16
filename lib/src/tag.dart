@@ -692,3 +692,4 @@ abstract class Tag {
     throw new RangeError(msg);
   }
 }
+

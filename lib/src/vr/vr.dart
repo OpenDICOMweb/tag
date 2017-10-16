@@ -128,7 +128,7 @@ abstract class VR<V> {
   static bool _doError(String msg, Issues issues) {
 	  log.error(msg);
 	  issues.add(msg);
-	  if (throwOnError) throw new InvalidVRError(msg);
+	  if (throwOnError) throw new _InvalidVRError(msg);
 	  return false;
   }
 
@@ -381,10 +381,11 @@ class VRInvalid extends VR<int> {
       const VRUnknown._(0, 0, 'Invalid', 0, 0, 0, 'Invalid VR');
 }
 
-class InvalidVRError extends Error {
+// Urgent: jim to fix
+class _InvalidVRError extends Error {
 	String msg;
 
-	InvalidVRError(this.msg);
+	_InvalidVRError(this.msg);
 
 	@override
 	String toString() => msg;
