@@ -94,7 +94,6 @@ Null tagKeywordError(String keyword) {
   return null;
 }
 
-/*
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidVRError extends Error {
   VR vr;
@@ -114,7 +113,6 @@ Null invalidVRError(VR vr, [String message = '']) {
   if (throwOnError) throw new InvalidVRError(vr);
   return null;
 }
-*/
 
 class InvalidValueFieldLengthError extends Error {
   final Uint8List vfBytes;
