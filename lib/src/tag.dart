@@ -267,7 +267,7 @@ abstract class Tag {
     } else if (vList is Iterable<V>) {
       return _isValidValuesIterable(vList, issues);
     } else {
-      invalidValuesError<V>(this, vList);
+      invalidTagValuesError<V>(this, vList);
     }
     return false;
   }
@@ -276,7 +276,7 @@ abstract class Tag {
     for (var i = 0; i < vList.length; i++) {
       final v = vList[i];
       if (isNotValidValue<V>(v, issues)) {
-        invalidValuesError<V>(this, vList);
+        invalidTagValuesError<V>(this, vList);
         return false;
       }
     }
@@ -286,7 +286,7 @@ abstract class Tag {
   bool _isValidValuesIterable<V>(Iterable<V> vList, [Issues issues]) {
     for (var v in vList)
       if (isNotValidValue<V>(v, issues)) {
-        invalidValuesError<V>(this, vList);
+        invalidTagValuesError<V>(this, vList);
         return false;
       }
     return true;
