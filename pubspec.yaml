@@ -33,4 +33,4 @@ dev_dependencies:
   test: ^0.12.0
   test_tools:
     path: C:/odw/sdk/test_tools
-    version: ^0.6.1
+    version: ^0.6.5

@@ -6,7 +6,7 @@
 
 import 'dart:typed_data';
 
-import 'package:system/system.dart';
+import 'package:system/core.dart';
 import 'package:tag/tag.dart';
 
 class InvalidTagError extends Error {
@@ -21,7 +21,9 @@ class InvalidTagError extends Error {
 }
 
 //Urgent: jim figure out best way to handel invalid tags
-Object invalidTagError(Object obj) {
+Object invalidTagError(Object obj, [Issues issues]) {
+	final msg = 'InvalidTagError: $obj';
+	if (issues != null) issues.add(msg);
   log.error(InvalidTagKeyError._msg(obj));
   if (throwOnError) throw new InvalidTagError(obj);
   return obj;
@@ -181,11 +183,11 @@ Null invalidValuesLengthError<V>(Tag tag, Iterable<V> values, [Issues issues]) {
   return null;
 }
 
-class InvalidValuesError<V> extends Error {
+class InvalidTagValuesError<V> extends Error {
   final Tag tag;
   final Iterable<V> values;
 
-  InvalidValuesError(this.tag, this.values);
+  InvalidTagValuesError(this.tag, this.values);
 
   @override
   String toString() => '${_msg(tag, values)}';
@@ -195,8 +197,8 @@ class InvalidValuesError<V> extends Error {
 }
 
 Null invalidValuesError<V>(Tag tag, Iterable<V> values) {
-  if (log != null) log.error(InvalidValuesError._msg<V>(tag, values));
-  if (throwOnError) throw new InvalidValuesError<V>(tag, values);
+  if (log != null) log.error(InvalidTagValuesError._msg<V>(tag, values));
+  if (throwOnError) throw new InvalidTagValuesError<V>(tag, values);
   return null;
 }
 

@@ -8,7 +8,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dataset/dataset.dart';
-import 'package:system/system.dart';
+import 'package:system/core.dart';
 import 'package:tag/src/deid_option.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
@@ -249,7 +249,7 @@ abstract class Tag {
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
-    assert(vList != null);
+    if(vList == null) nullValueError();
     if (vr == VR.kUN) return true;
     final ok = isValidValuesType<V>(vList, issues);
     print('isValidType: $ok $runtimeType: $vList');
