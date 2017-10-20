@@ -22,11 +22,45 @@ class InvalidTagError extends Error {
 
 //Urgent: jim figure out best way to handel invalid tags
 Object invalidTagError(Object obj, [Issues issues]) {
-	final msg = 'InvalidTagError: $obj';
-	if (issues != null) issues.add(msg);
+  final msg = 'InvalidTagError: $obj';
+  if (issues != null) issues.add(msg);
   log.error(InvalidTagKeyError._msg(obj));
   if (throwOnError) throw new InvalidTagError(obj);
   return obj;
+}
+
+class InvalidTagTypeError extends Error {
+  String msg;
+  Tag tag;
+
+  InvalidTagTypeError(this.tag, this.msg);
+
+  @override
+  String toString() => 'InvalidTagTypeError - $msg: $tag';
+}
+
+Null nonIntegerTag(int index, [Issues issues]) =>
+		_doTagError(index, issues, 'Non-Integer Tag');
+
+Null nonFloatTag(int index, [Issues issues]) =>
+		_doTagError(index, issues, 'Non-Float Tag');
+
+Null nonStringTag(int index, [Issues issues]) =>
+		_doTagError(index, issues, 'Non-String Tag');
+
+Null nonSequenceTag(int index, [Issues issues]) =>
+		_doTagError(index, issues, 'Non-Sequence Tag');
+
+Null nonUidTag(int index, [Issues issues]) =>
+		_doTagError(index, issues, 'Non-Uid Tag');
+
+Object _doTagError(int index, Issues issues, [String msg = 'Invalid Tag Type']) {
+	final tag = Tag.lookup(index);
+	final s =  '$msg: $tag';
+  if (issues != null) issues.add(s);
+  log.error(s);
+  if (throwOnError) throw new InvalidTagTypeError(tag, s);
+  return null;
 }
 
 //TODO: convert this to handle both int and String and remove next two Errors
@@ -175,8 +209,9 @@ class InvalidValuesLengthError<V> extends Error {
       'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
 }
 
-Null invalidValuesLengthError<V>(Tag tag, Iterable<V> values, [Issues issues]) {
-	final msg = InvalidValuesLengthError._msg(tag, values);
+Null invalidValuesLengthError<V>(int index, Iterable<V> values, [Issues issues]) {
+	final tag = Tag.lookup(index);
+  final msg = InvalidValuesLengthError._msg(tag, values);
   log.error(msg);
   if (issues != null) issues.add(msg);
   if (throwOnError) throw new InvalidValuesLengthError(tag, values);

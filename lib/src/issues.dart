@@ -8,12 +8,15 @@
 /// when parsing a value.
 class Issues {
   static bool noisy = false;
-  String msg;
   List<String> _issues;
 
-  Issues(this.msg);
+  Issues([this._title]);
 
   List<String> get issues => _issues ??= <String>[];
+
+  String get title => _title ?? 'No Title';
+  String _title;
+  set title(String s) => _title ??= s;
 
   bool get isEmpty => issues.isEmpty;
   bool get isNotEmpty => !isEmpty;
@@ -25,18 +28,17 @@ class Issues {
   }
 
   void add(String msg) {
-  	_issues ??= <String>[];
+    _issues ??= <String>[];
     if (msg != '') issues.add(msg);
   }
 
   String get info {
     if (issues.isEmpty) return (noisy) ? 'No Issues' : '';
     final sb = new StringBuffer('Issues: $_msg');
-    for(var i = 0; i < issues.length; i++)  sb.write('  ${i + 1}: ${issues[i]}\n');
+    for (var i = 0; i < issues.length; i++) sb.write('  ${i + 1}: ${issues[i]}\n');
     return sb.toString();
   }
 
   @override
-  String toString() =>
-     '$runtimeType: $msg\n  ${issues.join('\n  ')}';
+  String toString() => '$runtimeType: $issues\n  ${issues.join('\n  ')}';
 }

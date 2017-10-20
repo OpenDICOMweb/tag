@@ -15452,6 +15452,7 @@ class PTagUnknown extends PTag {
 /// A [Tag] with a known key, but invalid [VR].
 class PTagInvalidVR extends Tag {
 	PTag tag;
+	@override
 	VR badVR;
 	PTagInvalidVR(this.tag, VR badVR) : super();
 

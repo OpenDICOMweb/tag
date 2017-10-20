@@ -17,6 +17,7 @@ import 'package:tag/src/group.dart';
 import 'package:tag/src/ie_type.dart';
 import 'package:tag/src/issues.dart';
 import 'package:tag/src/p_tag.dart';
+import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
@@ -63,6 +64,8 @@ abstract class Tag {
   int get index;
   int get code;
   VR get vr;
+  //Fix: hack to avoid Type problem
+  VR get badVR => null;
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
   VM get vm => VM.k1_n;
@@ -259,7 +262,7 @@ abstract class Tag {
     }
     if (vList.isEmpty) return true;
     if (isNotValidLength(vList, issues)) {
-      invalidValuesLengthError(this, vList);
+      invalidValuesLengthError(code, vList);
       return false;
     }
     if (vList is List<V>) {
@@ -433,6 +436,10 @@ abstract class Tag {
     final retired = (isRetired == false) ? '' : ', (Retired)';
     return '$runtimeType: $dcm $keyword, $vr, $vm$retired';
   }
+
+  //Fix: make this a real index
+  static int codeToIndex(int x) => x;
+  static int keywordToIndex(String kw) => pTagKeywords[kw].code;
 
   static Tag lookup<K>(K key, [VR vr = VR.kUN, String creator]) {
     if (key is int) return lookupByCode(key, vr, creator);
