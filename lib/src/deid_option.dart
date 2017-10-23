@@ -6,24 +6,68 @@
 import 'package:dataset/dataset.dart';
 import 'package:element/element.dart';
 
-typedef List<Element> DeIdMethod<K>(Dataset ds, K key, [Function f]);
+
+typedef Element DeIdAdd<V>(Dataset ds, int index, Element<V> e);
+typedef List<Element> DeIdAddAll<V>(Dataset ds, int index, List<Element<V>> e);
+
+typedef Element<V> DeIdUpdate<V>(Dataset ds, int index, List<V> vList);
+typedef Element<V> DeIdUpdateF<V>(Dataset ds, int index, List<V> f(List<V> vList));
+typedef List<Element> DeIdUpdateAll<V>(Dataset ds, int index, List<Element<V>> e);
+typedef List<Element> DeIdUpdateAllF<V>(Dataset ds, int index, List<V> f(List<V> vList));
+
+typedef List<V> DeIdReplace<V>(Dataset ds, int index, List<V> vList);
+typedef List<V> DeIdReplaceF<V>(Dataset ds, int index, List<V> f(List<V> vList));
+typedef List<Element> DeIdReplaceAll<V>(Dataset ds, int index, List<V> vList);
+typedef List<Element> DeIdReplaceAllF<V>(Dataset ds, int index, List<V> f(List<V> vList));
+
+typedef Element DeIdDelete(Dataset ds, int index);
+typedef List<Element> DeIdDeleteAll(Dataset ds, int index);
 
 //TODO: document
 /// A DICOM Data Element Type.  See PS3.5, Section 7.4.
-abstract class DeIdOptionBase {
+abstract class DeIdOption {
   int get index;
-  String get name;
+  String get keyword;
   DeIdMethod get method;
 
+  List<Element> call(Dataset ds, int index, [Function f]) => method(ds, index, f);
 
-//  static  List<DeIdOptionBase> get kByIndex;
+  static const List<DeIdOption> kByIndex = const <DeIdOption>[];
 
-//  static  Map<String, DeIdOptionBase> get kByKeyword;
+  static DeIdOption lookupByIndex(int index) => kByIndex[index];
 
+  static  const Map<String, DeIdOption>  kByKeyword = const <String, DeIdOption>{};
 
-// static  DeIdOptionBase lookup(int index);
-
+  static DeIdOption lookupByKeyword(String keyword) => kByKeyword[keyword];
 
   @override
-  String toString() => '$runtimeType($name)';
+  String toString() => '$runtimeType($keyword)';
+}
+
+Element delete(Dataset ds, int index) {
+
+}
+
+
+class DeIdBasic {
+	final int  index;
+	final String  keyword;
+	final DeIdMethod  method;
+
+	const DeIdBasic(this.index, this.keyword, this.method);
+
+	List<Element> call(Dataset ds, int index, [Function f]) => method(ds, index, f);
+
+	static const DeIdMethod kNoOp = const DeIdBasic(1, 'true', delete);
+
+	static const List<DeIdBasic> kByIndex = const <DeIdBasic>[];
+
+	static  DeIdBasic lookupByIndex(int index) => kByIndex[index];
+
+	static  const Map<String, DeIdBasic>  kByKeyword = const <String, DeIdBasic>{};
+
+	static  DeIdBasic lookupByKeyword(String keyword) => kByKeyword[keyword];
+
+	@override
+	String toString() => '$runtimeType($keyword)';
 }

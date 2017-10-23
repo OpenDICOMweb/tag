@@ -205,8 +205,11 @@ class InvalidValuesLengthError<V> extends Error {
   @override
   String toString() => _msg(tag, values);
 
-  static String _msg<V>(Tag tag, Iterable<V> values) =>
-      'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
+  static String _msg<V>(Tag tag, Iterable<V> values) {
+  	if (tag == null || tag is! Tag) return invalidTagError(tag);
+	  return 'InvalidValuesLengthError:\n  Tag(${tag.info})\n  values: $values';
+  }
+
 }
 
 Null invalidValuesLengthError<V>(int index, Iterable<V> values, [Issues issues]) {

@@ -9,7 +9,6 @@ import 'dart:typed_data';
 
 import 'package:dataset/dataset.dart';
 import 'package:system/core.dart';
-import 'package:tag/src/deid_option.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -187,7 +186,7 @@ abstract class Tag {
   // DeIdentification Method
   int get deIdIndex => throw new UnimplementedError();
   String get deIdName => throw new UnimplementedError();
-  DeIdMethod get deIdMethod => throw new UnimplementedError();
+ // DeIdMethod get deIdMethod => throw new UnimplementedError();
 
   int get hashcode => code;
 
