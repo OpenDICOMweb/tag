@@ -7,9 +7,8 @@ import 'dart:typed_data';
 
 import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
-import 'package:system/system.dart';
+import 'package:system/core.dart';
 import 'package:tag/src/issues.dart';
-import 'package:tag/src/vr/constants.dart';
 import 'package:tag/src/vr/float.dart';
 import 'package:tag/src/vr/integer.dart';
 import 'package:tag/src/vr/string.dart';
