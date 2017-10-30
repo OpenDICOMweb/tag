@@ -53,6 +53,21 @@ void main() {
 		expect(VR.kCS.index == 13, true);
 
 		//Urgent: finish these tests
+
+		expect(VR.kUS.index == VR.kUSindex, true);
+		expect(VR.kUS.index == 30, true);
+
+		expect(VR.kOBOW.index == VR.kOBOWindex, true);
+		expect(VR.kOBOW.index == 31, true);
+
+		expect(VR.kUSSS.index == VR.kUSSSindex, true);
+		expect(VR.kUSSS.index == 32, true);
+
+		expect(VR.kUSSSOW.index == VR.kUSSSOWindex, true);
+		expect(VR.kUSSSOW.index == 33, true);
+
+		expect(VR.kUSOW.index == VR.kUSOWindex, true);
+		expect(VR.kUSOW.index == 34, true);
 	});
 
 }
