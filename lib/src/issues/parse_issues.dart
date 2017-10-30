@@ -22,22 +22,22 @@ class ParseIssues {
 
   List<String> get issues => _issues ??= <String>[];
 
-  bool get isEmpty => issues.length == 0;
+  bool get isEmpty => issues.isEmpty;
 
   String get term {
-    if (issues.length == 0) return "has no issues.";
-    if (issues.length == 1) return "has the following issue:\n ";
-    return "has the following issues:\n ";
+    if (issues.isEmpty) return 'has no issues.';
+    if (issues.length == 1) return 'has the following issue:\n ';
+    return 'has the following issues:\n ';
   }
 
   List<String> add(String msg) {
-    if (msg != "") issues.add(msg);
+    if (msg != '') issues.add(msg);
     return issues;
   }
 
   /// Check the length of a value.
   void checkLength(int length, int min, int max, [String subtype]) {
-    var name = (subtype == null) ? "" : '$subtype: ';
+    final name = (subtype == null) ? '' : '$subtype: ';
     if (length < min)
       issues.add('$name Invalid length($length) too short - minimun($min)');
     if (length > max)
@@ -48,5 +48,5 @@ class ParseIssues {
 
   @override
   String toString() =>
-      (issues.length == 0) ? "" : '$type:\n${issues.join('\n  ')}';
+      (issues.isEmpty) ? '' : '$type:\n${issues.join('\n  ')}';
 }

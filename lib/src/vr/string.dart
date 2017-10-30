@@ -155,9 +155,9 @@ class VRDcmString extends VRString {
   static const VRDcmString kAE =
       const VRDcmString._(10, 0x4541, 'AE', 2, kMaxShortVF, 'AETitle', 1, 16);
   static const VRDcmString kLO =
-      const VRDcmString._(21, 0x4f4c, 'LO', 2, kMaxShortVF, 'LongString', 1, 64);
+      const VRDcmString._(20, 0x4f4c, 'LO', 2, kMaxShortVF, 'LongString', 1, 64);
   static const VRDcmString kSH =
-      const VRDcmString._(24, 0x4853, 'SH', 2, kMaxShortVF, 'ShortString', 1, 16);
+      const VRDcmString._(23, 0x4853, 'SH', 2, kMaxShortVF, 'ShortString', 1, 16);
   static const VRDcmString kUC = const VRDcmString._(
       7, 0x4355, 'UC', 4, kMaxLongVF, 'UnlimitedCharacters', 1, kMaxLongVF);
 }
@@ -188,9 +188,9 @@ class VRDcmText extends VRString {
 
   //index, code, id, vfLengthSize, maxVFLength, keyword, min, max
   static const VRDcmText kLT =
-      const VRDcmText._(22, 0x544c, 'LT', 2, kMaxShortVF, 'LongText', 1, 10240);
+      const VRDcmText._(21, 0x544c, 'LT', 2, kMaxShortVF, 'LongText', 1, 10240);
   static const VRDcmText kST =
-      const VRDcmText._(27, 0x5453, 'ST', 2, kMaxShortVF, 'ShortText', 1, 1024);
+      const VRDcmText._(26, 0x5453, 'ST', 2, kMaxShortVF, 'ShortText', 1, 1024);
   static const VRDcmText kUT =
       const VRDcmText._(9, 0x5455, 'UT', 4, kMaxLongVF, 'UnlimitedText', 1, kMaxLongVF);
 }
@@ -306,7 +306,7 @@ class VRDcmDate extends VRString {
       Date.issues(s.trimRight(), start: start, end: end);
 
   static const VRDcmDate kDA =
-      const VRDcmDate._(15, 0x4144, 'DA', 2, kMaxShortVF, 'DateString', 8, 8);
+      const VRDcmDate._(14, 0x4144, 'DA', 2, kMaxShortVF, 'DateString', 8, 8);
 }
 
 class VRDcmDateTime extends VRString {
