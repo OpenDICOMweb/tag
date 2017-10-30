@@ -20,7 +20,7 @@ class Elt {
   /// Returns the [Elt] [int] as a hex [String].
   static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
-  /// Returns [true] if [v] fits in 16-bits.
+  /// Returns _true_ if [v] fits in 16-bits.
   static bool isValid(int v) => (0 <= v && v <= 0xFFFF) ? true : false;
 
   static int check(int v) => isValid(v) ? v : null;

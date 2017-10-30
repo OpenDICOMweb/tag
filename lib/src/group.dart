@@ -24,18 +24,18 @@ class Group {
   /// Returns the tag Group number as a hex [String].
   static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
-  /// Returns [true] if [g] is Public Group (even), or a valid Private Group.
+  /// Returns _true_  if [g] is Public Group (even), or a valid Private Group.
   static bool isValid(int g) => g.isEven || isPrivate(g);
 
   /// Returns the Group Number is it is a valid Group Number.
   static int check(int g) => (isValid(g)) ? g : null;
 
-  /// Returns[true] is [g] is a valid Public Group Number.
+  /// Returns_true_  is [g] is a valid Public Group Number.
   static bool isPublic(int g) => g.isEven && (0x0002 <= g && g <= 0xFFFC);
 
   static bool isNotPublic(int g) => !isPublic(g);
 
-  /// Returns [true] if [g] is a valid Private Group Number.
+  /// Returns _true_  if [g] is a valid Private Group Number.
   static bool isPrivate(int g) => g.isOdd && (0x0007 < g && g < 0xFFFF);
 
   static bool isNotPrivate(int g) => !isPrivate(g);

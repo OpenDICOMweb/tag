@@ -23,25 +23,25 @@ const int kMaxOW = kUint32Max - 2;
 const int kMaxUN = kUint32Max - 2;
 
 /// Converts [bytes] into a valid [TypedData<List<int>>] and returns it.
-/// If [bytes] is [null] or empty (`bytes.length == 0`), returns an
+/// If [bytes] is _null_  or empty (`bytes.length == 0`), returns an
 /// empty [List<int>]. If the list cannot be converted returns null.
 typedef TypedData BytesToValues(Uint8List bytes, {int offset, int length, bool asView});
 
 /// Verifies [bytes] into a valid [TypedData<List<int>>], and
 /// if it is aligned (on a valid byte boundary) returns a View of
 /// [bytes]; otherwise, copies [bytes] into a new [TypedData<List<int>>].
-/// If [bytes] is [null] or empty (`bytes.length == 0`), returns an empty
+/// If [bytes] is _null_  or empty (`bytes.length == 0`), returns an empty
 /// [TypedData<List<int>>]. If the list cannot be converted returns null.
 typedef List<int> IntViewer(Uint8List bytes);
 
 /// Returns a [String] specifying any issues with [value]. If [value]
-/// isValidString returns [null].
+/// isValidString returns _null_ .
 typedef String IntIssuer(int value);
 
 /// Returns a valid [int]. Iff [value] is a valid string].  It is returned
 /// unmodified. If [value] has one or more issues that can be fixed, returns
 /// a modified value. If [value] is not valid and cannot be fixed returns
-/// [null].
+/// _null_ .
 typedef int IntFixer(int value);
 
 /// The class of all integer [VR]s.
@@ -69,7 +69,7 @@ class VRInt extends VR<int> {
   @override
   bool get isInteger => true;
 
-  /// Returns [true] if [v] is valid for this [VRInt].
+  /// Returns _true_  if [v] is valid for this [VRInt].
   @override
   bool isValidValue(int v, [Issues issues]) {
     print('n: $v, min: $minValue, max: $maxValue');
@@ -81,7 +81,7 @@ class VRInt extends VR<int> {
   bool isValidValuesType(Iterable<int> values, [Issues issues]) =>
       values is Iterable<int>;
 
-  // [true] if [this] is one of OB, OL, OW, or UN;
+  // _true_  if [this] is one of OB, OL, OW, or UN;
   @override
   bool get isLengthAlwaysValid => vfLengthSize == 4;
 
@@ -158,7 +158,7 @@ class VRUnknown extends VR<int> {
 
   bool _inRange(int value) => value >= 0 && value < 256;
 
-  /// Returns [true] of [value] is UN.
+  /// Returns _true_  of [value] is UN.
   @override
   bool isValidValue(int value, [Issues issues]) => _inRange(value);
 

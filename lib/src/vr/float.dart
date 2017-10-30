@@ -30,7 +30,7 @@ class VRFloat extends VR<double> {
 
   int get valueLength => elementSize;
 
-  /// Returns [true] of [value] is [double].
+  /// Returns _true_  of [value] is [double].
   @override
   bool isValidValue(Object value, [Issues issues]) =>  value is double;
 
@@ -38,7 +38,7 @@ class VRFloat extends VR<double> {
   @override
   bool isValidValuesType(Iterable values, [Issues issues]) => values is Iterable<double>;
 
-  // [true] if [this] is one of OF, OD;
+  // _true_  if [this] is one of OF, OD;
   @override
   bool get isLengthAlwaysValid => vfLengthSize == 4;
 

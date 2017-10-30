@@ -54,7 +54,7 @@ abstract class VR<V> {
   /// The minimum length of a value.
   int get minValueLength => elementSize;
 
-  /// The maximum number of values for [this].
+  /// The maximum number of values for _this_.
   int get maxLength => maxVFLength ~/ elementSize;
 
   bool get hasShortVF => vfLengthSize == 2;
@@ -73,18 +73,18 @@ abstract class VR<V> {
   /// Returns the length in number of elements.
   int toLength(int lengthInBytes) => lengthInBytes ~/ elementSize;
 
-  /// Returns [true] if any number of values is always valid.
+  /// Returns _true_  if any number of values is always valid.
   bool get isLengthAlwaysValid => false;
 
   bool isValidVR(VR vr) => vr.index == index;
 
-  /// Returns [true] if [value] is valid for [this].
+  /// Returns _true_  if [value] is valid for _this_.
   bool isValidValue(V value, [Issues issues]);
 
-  /// Returns [true] of [value] is not valid for this VR.kUN.
+  /// Returns _true_  of [value] is not valid for this VR.kUN.
   bool isNotValidValue(V value, [Issues issues]) => !isValidValue(value, issues);
 
-  /// Returns true if the [List] [Type] of values is valid for [this].
+  /// Returns true if the [List] [Type] of values is valid for _this_.
   @deprecated
   bool isValidValuesType(Iterable<V> values, [Issues issues]);
 
@@ -93,7 +93,7 @@ abstract class VR<V> {
   V check(V value) => (isValidValue(value)) ? value : null;
 
   // **** Must be overridden.
-  /// Returns a valid value, or if not parsable, [null].
+  /// Returns a valid value, or if not parsable, _null_.
   dynamic parse(String s) => null;
 
   // **** Must be overridden.
@@ -107,7 +107,7 @@ abstract class VR<V> {
   V fix(V value) => null;
 
   // **** Must be overridden.
-  /// Returns [true] if [bytes] has a valid Value Field length.
+  /// Returns _true_  if [bytes] has a valid Value Field length.
   bool isValidBytes(Uint8List bytes) => bytes.length < maxVFLength;
 
   @override

@@ -28,10 +28,10 @@ class VM {
 
   /// The [columns] of the array of values. Both [min] and [max] must be
   /// evenly divisible by [columns]. That is [min] % [columns] == [max] %
-  /// [columns] == 0 must be [true].
+  /// [columns] == 0 must be _true_ .
   final int columns;
 
-  /// Returns [true] if this is a VM used only with internal Tags.
+  /// Returns _true_  if this is a VM used only with internal Tags.
   final bool isPrivate;
 
   // Constructor

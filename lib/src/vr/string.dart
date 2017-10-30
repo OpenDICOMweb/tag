@@ -46,7 +46,7 @@ abstract class VRString extends VR<String> {
   @override
   bool get isUtf8 => !isAscii;
 
-  /// Returns [true] if [v] is valid for [this].
+  /// Returns _true_  if [v] is valid for _this_ .
   @override
   bool isValidValue(String v, [Issues issues]) =>
       (minValueLength <= v.length) && (v.length <= maxValueLength);
@@ -82,14 +82,14 @@ abstract class VRString extends VR<String> {
   @override
   dynamic parse(String s) => isValidValue(s);
 
-  /// Returns [true] if [minValueLength] <= length <= [maxValueLength].
+  /// Returns _true_  if [minValueLength] <= length <= [maxValueLength].
   @override
   bool isValidLength(int length) => minValueLength <= length && length <= maxValueLength;
 
-  /// Returns [true] if length is NOT valid.
+  /// Returns _true_  if length is NOT valid.
   bool isNotValidLength(String s) => !isValidLength(s.length);
 
-  /// Returns [true] if all characters pass the filter.
+  /// Returns _true_  if all characters pass the filter.
   bool _filteredTest(String s, bool filter(int c)) {
     if (s == null || !isValidLength(s.length)) return false;
     for (var i = 0; i < s.length; i++) {
@@ -115,7 +115,7 @@ abstract class VRString extends VR<String> {
   }
 
   /// Returns a [String] containing an invalid length error message,
-  /// or [null] if there are no errors.
+  /// or _null_ if there are no errors.
   void _getLengthIssues(int length, ParseIssues issues) {
     if (length == null) issues.add('Invalid length(Null)');
     if (length == 0) issues.add('Invalid length(0)');
@@ -227,7 +227,7 @@ class VRDcmAge extends VRString {
 
   @override
 
-  /// Returns [true] if [s] is a valid DICOM Age String (AS).
+  /// Returns _true_  if [s] is a valid DICOM Age String (AS).
   bool isValidValue(Object s, [Issues issues]) {
     if (s is String) {
       assert(s != null);
@@ -497,7 +497,7 @@ class VRUid extends VRString {
   @override
   bool isValidValue(Object s, [Issues issues]) => Uid.isValidString(s);
 
-  /// Returns [true] if [uidString] starts with the DICOM UID root.
+  /// Returns _true_  if [uidString] starts with the DICOM UID root.
   bool hasDicomRoot(String uidString) => uidString.startsWith(Uid.dicomRoot);
 
   //TODO: this need to return beter messages
@@ -523,7 +523,7 @@ class VRUri extends VRString {
   @override
   bool isValidValue(String s, [Issues issues]) =>  parse(s, issues) != null;
 
-  // Always [true] because UR can only have one value with a length up
+  // Always _true_  because UR can only have one value with a length up
   // to [kMaxVFLength];
   @override
   bool get isLengthAlwaysValid => true;

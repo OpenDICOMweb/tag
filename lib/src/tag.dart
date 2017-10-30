@@ -26,7 +26,7 @@ import 'package:tag/src/vr/vr.dart';
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
 
-/// A Element Type predicate. Returns [true] if the Element
+/// A Element Type predicate. Returns _true_  if the Element
 /// corresponding to [key] in the [Dataset] satisfies the
 /// requirements for the SopClass of the [Dataset].
 typedef bool _ETypePredicate<K>(Dataset ds, K key);
@@ -73,7 +73,7 @@ abstract class Tag {
   int get vmMax => vm.max;
   int get vmColumns => vm.columns;
 
-  /// The maximum number of values allowed for [this].
+  /// The maximum number of values allowed for _this_ .
   int get maxValues {
     if (vmMax != -1) return vmMax;
     final n = vr.maxLength - (vr.maxLength % vmColumns);
@@ -84,7 +84,7 @@ abstract class Tag {
   bool get isRetired => true;
   EType get type => EType.k3;
 
-  /// Returns [true] if [this] is a [Tag] defined by the DICOM Standard
+  /// Returns _true_  if _this_  is a [Tag] defined by the DICOM Standard
   /// or one of the known private [Tag]s ([PCTag] or [PDTag]) defined
   /// in the ODW SDK.
   bool get isKnown => keyword != 'UnknownTag';
@@ -99,16 +99,16 @@ abstract class Tag {
   /// Returns a [String] for the [code] in hexadecimal format, i.e. '0xggggeeee.
   String get hex => hex32(code);
 
-  /// Returns the [group] number for [this] [Tag].
+  /// Returns the [group] number for _this_  [Tag].
   int get group => code >> 16;
 
-  /// Returns the [group] number for [this] in hexadecimal format.
+  /// Returns the [group] number for _this_  in hexadecimal format.
   String get groupHex => Group.hex(group);
 
-  /// Returns the DICOM element [Elt] number for [this] [Tag].
+  /// Returns the DICOM element [Elt] number for _this_  [Tag].
   int get elt => code & kElementMask;
 
-  /// Returns the DICOM element [Elt] number for [this] in hexadecimal format.
+  /// Returns the DICOM element [Elt] number for _this_  in hexadecimal format.
   String get eltHex => Elt.hex(elt);
 
   // **** VR Getters
@@ -206,10 +206,10 @@ abstract class Tag {
 
   int get fmiMax => kMaxFmiTag;
 
-  /// Returns [true] if the [group] is in the File Meta Information group.
+  /// Returns _true_  if the [group] is in the File Meta Information group.
   bool get isFmiGroup => group == 0x0002;
 
-  /// Returns [true] if [code] is in the range of File Meta Information
+  /// Returns _true_  if [code] is in the range of File Meta Information
   /// [Tag] [code]s.
   ///
   /// Note: Does not test tag validity.
@@ -219,12 +219,12 @@ abstract class Tag {
 
   int get dcmDirMax => kMaxDcmDirTag;
 
-  /// Returns [true] if [code] is in the range of DICOM Directory [Tag] [code]s.
+  /// Returns _true_  if [code] is in the range of DICOM Directory [Tag] [code]s.
   ///
   /// Note: Does not test tag validity.
   bool get isDcmDir => kMinDcmDirTag <= code && code <= kMaxDcmDirTag;
 
-  /// Returns [true] if [code] is in the range of DICOM Directory
+  /// Returns _true_  if [code] is in the range of DICOM Directory
   /// [Tag] [code]s.
   ///
   /// Note: Does not test tag validity.
@@ -235,7 +235,7 @@ abstract class Tag {
     return '$runtimeType$dcm $vr $vm $keyword $retired';
   }
 
-  /// Returns [true] is [this] is a valid [Tag].
+  /// Returns _true_  is _this_  is a valid [Tag].
   /// Valid [Tag]s are those defined in PS3.6 and Private [Tag]s that
   /// conform to the DICOM Standard.
   bool get isValid => false;
@@ -299,7 +299,7 @@ abstract class Tag {
   bool isValidValue<V>(V value, [Issues issues]) => vr.isValidValue(value, issues);
   bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValidValue(value, issues);
 
-  /// Returns a [list<E>] of valid values for this [Tag], or [null] if
+  /// Returns a [list<E>] of valid values for this [Tag], or _null_  if
   /// and of the [String]s in [sList] are not parsable.
   List<V> parseValues<V>(List<String> sList, [Issues issues]) {
     //print('parseList: $sList');
@@ -333,7 +333,7 @@ abstract class Tag {
   // Placeholder until VR is integrated into TagBase
   V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
 
-  /// Returns [true] if [vList].length is a valid number of values for [this].
+  /// Returns _true_  if [vList].length is a valid number of values for _this_ .
   /// _Note_: If a VR has a long (32-bit) Value Field, then it has [VM.k1],
   /// and its length is always valid.
   bool isValidLength<V>(Iterable<V> vList, [Issues issues]) {
@@ -473,8 +473,8 @@ abstract class Tag {
 
   //TODO: Use the 'package:collection/collection.dart' ListEquality
   //TODO:  decide if this ahould be here
-  /// Compares the elements of two [List]s and returns [true] if all
-  /// elements are equal; otherwise, returns [false].
+  /// Compares the elements of two [List]s and returns _true_  if all
+  /// elements are equal; otherwise, returns _false_.
   /// Note: this is not recursive!
   static bool listEquals<E>(List<E> e1, List<E> e2) {
     if (identical(e1, e2)) return true;
@@ -603,14 +603,14 @@ abstract class Tag {
   //**** Private Tag Code 'Constructors' ****
   static bool isPCIndex(int pcIndex) => 0x0010 <= pcIndex && pcIndex <= 0x00FF;
 
-  /// Returns a valid [PCTag], or [null].
+  /// Returns a valid [PCTag], or _null_ .
   static int toPrivateCreator(int group, int pcIndex) {
     if (Group.isPrivate(group) && _isPCIndex(pcIndex))
       return _toPrivateCreator(group, pcIndex);
     return null;
   }
 
-  /// Returns a valid [PDTagKnown], or [null].
+  /// Returns a valid [PDTagKnown], or _null_ .
   static int toPrivateData(int group, int pcIndex, int pdIndex) {
     if (Group.isPrivate(group) && _isPCIndex(pcIndex) && _isPDIndex(pcIndex, pdIndex))
       return _toPrivateData(group, pcIndex, pcIndex);
@@ -626,13 +626,13 @@ abstract class Tag {
 
   // **** Private Tag Code Internal Utility functions ****
 
-  /// Return [true] if [pdCode] is a valid Private Creator Index.
+  /// Return _true_  if [pdCode] is a valid Private Creator Index.
   static bool _isPCIndex(int pdCode) => 0x10 <= pdCode && pdCode <= 0xFF;
 
-  // Returns [true] if [pde] in a valid Private Data Index
+  // Returns _true_  if [pde] in a valid Private Data Index
   //static bool _isSimplePDIndex(int pde) => 0x1000 >= pde && pde <= 0xFFFF;
 
-  /// Return [true] if [pdi] is a valid Private Data Index.
+  /// Return _true_  if [pdi] is a valid Private Data Index.
   static bool _isPDIndex(int pci, int pdi) => _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
 
   /// Returns the offset base for a Private Data Element with the
@@ -642,7 +642,7 @@ abstract class Tag {
   /// Returns the limit for a [PDTagKnown] with a base of [pdBase].
   static int _pdLimit(int pdBase) => pdBase + 0x00FF;
 
-  /// Returns [true] if [tag] is in the range of DICOM Dataset Tags.
+  /// Returns _true_  if [tag] is in the range of DICOM Dataset Tags.
   /// Note: Does not test tag validity.
   static bool inDatasetRange(int tag) =>
       (kMinDatasetTag <= tag) && (tag <= kMaxDatasetTag);
