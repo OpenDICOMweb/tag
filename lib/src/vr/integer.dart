@@ -55,6 +55,8 @@ class VRInt extends VR<int> {
   /// The method that converts bytes ([Uint8List]) to values.
   final BytesToValues fromBytes;
 
+  final bool undefinedAllowed;
+
   const VRInt._(int index, int code, String id, int elementSize, int vfLengthSize,
       int maxVFLength, String keyword, this.minValue, this.maxValue, this.fromBytes,
       [bool undefinedLengthAllowed = false])
@@ -117,28 +119,28 @@ class VRInt extends VR<int> {
   //TODO: improve documentation
   // Note: VR.kAT values are a list of Uint16, but with 2x the number of
   // element, since each element is x[0] << 16 + x[1].
-  static const VRInt kAT = const VRInt._(3, 0x5441, 'AT', 4, 2, kMaxShortVF,
+  static const VRInt kAT = const VRInt._(12, 0x5441, 'AT', 4, 2, kMaxShortVF,
       'Attribute Tag Code', 0, Uint32.maxValue, Uint16.fromBytes);
 
-  static const VRInt kOB = const VRInt._(14, 0x424f, 'OB', 1, 4, kMaxOB, 'OtherByte', 0,
+  static const VRInt kOB = const VRInt._(1, 0x424f, 'OB', 1, 4, kMaxOB, 'OtherByte', 0,
       Uint8.maxValue, Uint8.fromBytes, true);
 
   static const VRInt kOL = const VRInt._(
-      17, 0x4c4f, 'OL', 4, 4, kMaxOL, 'OtherLong', 0, Uint32.maxValue, Uint32.fromBytes);
+      6, 0x4c4f, 'OL', 4, 4, kMaxOL, 'OtherLong', 0, Uint32.maxValue, Uint32.fromBytes);
 
-  static const VRInt kOW = const VRInt._(18, 0x574f, 'OW', 2, 4, kMaxOW, 'OtherWord', 0,
+  static const VRInt kOW = const VRInt._(2, 0x574f, 'OW', 2, 4, kMaxOW, 'OtherWord', 0,
       Uint16.maxValue, Uint16.fromBytes, true);
 
-  static const VRInt kSL = const VRInt._(21, 0x4c53, 'SL', 4, 2, kMaxShortVF,
+  static const VRInt kSL = const VRInt._(24, 0x4c53, 'SL', 4, 2, kMaxShortVF,
       'SignedLong', Int32.minValue, Int32.maxValue, Int32.fromBytes);
 
-  static const VRInt kSS = const VRInt._(23, 0x5353, 'SS', 2, 2, kMaxShortVF,
+  static const VRInt kSS = const VRInt._(25, 0x5353, 'SS', 2, 2, kMaxShortVF,
       'SignedShort', Int16.minValue, Int16.maxValue, Int16.fromBytes);
 
-  static const VRInt kUL = const VRInt._(28, 0x4c55, 'UL', 4, 2, kMaxShortVF,
+  static const VRInt kUL = const VRInt._(29, 0x4c55, 'UL', 4, 2, kMaxShortVF,
       'UnsignedLong', 0, Uint32.maxValue, Uint32.fromBytes);
 
-  static const VRInt kUS = const VRInt._(31, 0x5355, 'US', 2, 2, kMaxShortVF,
+  static const VRInt kUS = const VRInt._(30, 0x5355, 'US', 2, 2, kMaxShortVF,
       'UnsignedShort', 0, Uint16.maxValue, Uint16.fromBytes);
 }
 
@@ -166,7 +168,7 @@ class VRUnknown extends VR<int> {
 	//index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
 	/// UN - Unknown. The supertype of all VRs.
 	static const VRUnknown kUN =
-	const VRUnknown._(29, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
+	const VRUnknown._(3, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
 }
 
 /// The class of all integer [VR]s.
@@ -189,7 +191,8 @@ class VRIntSpecial extends VR<int> {
   @override
   bool isValidValue(int value, [Issues issues]) => false;
 
-  bool isValidVR(VR vr) => vrs.contains(vrs);
+  @override
+  bool isValidVR(VR vr) => vrs.contains(vr);
 
   // **** All VRs below this line are special and used for validation only. ****
   // The constants defined below are in the order of the next line:
@@ -205,8 +208,4 @@ class VRIntSpecial extends VR<int> {
 
   static const VRIntSpecial kUSOW =
       const VRIntSpecial._(35, 'USOW', 'USorOW', const <VR>[VRInt.kUS, VRInt.kOW]);
-
-  //TODO: decide if this is needed
-  static const VRIntSpecial kUSOW1 =
-      const VRIntSpecial._(36, 'USOW1', 'USorOW1', const <VR>[VRInt.kUS, VRInt.kOW]);
 }

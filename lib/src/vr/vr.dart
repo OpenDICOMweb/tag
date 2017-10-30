@@ -76,6 +76,8 @@ abstract class VR<V> {
   /// Returns [true] if any number of values is always valid.
   bool get isLengthAlwaysValid => false;
 
+  bool isValidVR(VR vr) => vr.index == index;
+
   /// Returns [true] if [value] is valid for [this].
   bool isValidValue(V value, [Issues issues]);
 
@@ -195,8 +197,6 @@ abstract class VR<V> {
   static const VR kUSSS = VRIntSpecial.kUSSS;
   static const VR kUSSSOW = VRIntSpecial.kUSSSOW;
   static const VR kUSOW = VRIntSpecial.kUSOW;
-  //TODO: decide if this is needed
-  static const VR kUSOW1 = VRIntSpecial.kUSOW1;
 
   // Sequence is 0
   static const int kSQindex = 0;
@@ -217,29 +217,35 @@ abstract class VR<V> {
   static const int kEvrLongMax = kUTindex;
   // Short EVR
   static const int kAEindex = 10;
-  static const int kASindex = 12;
-  static const int kATindex = 13;
-  static const int kCSindex = 14;
-  static const int kDAindex = 15;
-  static const int kDSindex = 16;
-  static const int kDTindex = 17;
-  static const int kFDindex = 18;
-  static const int kFLindex = 19;
-  static const int kISindex = 20;
-  static const int kLOindex = 21;
-  static const int kLTindex = 22;
-  static const int kPNindex = 23;
-  static const int kSHindex = 24;
-  static const int kSLindex = 25;
-  static const int kSSindex = 26;
-  static const int kSTindex = 27;
-  static const int kTMindex = 28;
-  static const int kUIindex = 29;
-  static const int kULindex = 30;
-  static const int kUSindex = 31;
+  static const int kASindex = 11;
+  static const int kATindex = 12;
+  static const int kCSindex = 13;
+  static const int kDAindex = 14;
+  static const int kDSindex = 15;
+  static const int kDTindex = 16;
+  static const int kFDindex = 17;
+  static const int kFLindex = 18;
+  static const int kISindex = 19;
+  static const int kLOindex = 20;
+  static const int kLTindex = 21;
+  static const int kPNindex = 22;
+  static const int kSHindex = 23;
+  static const int kSLindex = 24;
+  static const int kSSindex = 25;
+  static const int kSTindex = 26;
+  static const int kTMindex = 27;
+  static const int kUIindex = 28;
+  static const int kULindex = 29;
+  static const int kUSindex = 30;
+  static const int kOBOWindex = 31;
+  static const int kUSSSindex = 32;
+  static const int kUSSSOWindex = 33;
+  static const int kUSOWindex = 34;
   static const int kEvrShortMin = kAEindex;
   static const int kEvrShortMax = kUSindex;
   static const int kVRIndexMax = kUSindex;
+  static const int kVRSpecialIndexMin = kOBOWindex;
+  static const int kVRSpecialIndexMax = kUSOWindex;
 
   static const List<VR> vrByIndex = const <VR>[
     // Sequence == 0
@@ -252,7 +258,7 @@ abstract class VR<V> {
     kAE, kAS, kAT, kCS, kDA, kDS, kDT, kFD, kFL, kIS,
     kLO, kLT, kPN, kSH, kSL, kSS, kST, kTM, kUI, kUS,
     // EVR Special
-    kOBOW, kUSSS, kUSSSOW, kUSOW, kUSOW1
+    kOBOW, kUSSS, kUSSSOW, kUSOW
   ];
 
   static VR lookupByIndex(int vrIndex) {
@@ -261,39 +267,36 @@ abstract class VR<V> {
   }
 
   static const List<VR> vrAlphabeticList = const <VR>[
-    null,
-    kAE, kAS, kAT, kUN, kCS,
-    kDA, kDS, kDT, kFD, kFL,
-    kIS, kLO, kLT, kOB, kOD,
-    kOF, kOL, kOW, kPN, kSH,
-    kSL, kSQ, kSS, kST, kTM,
-    kUC, kUI, kUL, kUN, kUR,
-    kUS, kUT // stop reformat
+    kAE, kAS, kAT, kCS, kDA,
+    kDS, kDT, kFD, kFL, kIS,
+    kLO, kLT, kOB, kOD, kOF,
+    kOL, kOW, kPN, kSH, kSL,
+    kSQ, kSS, kST, kTM, kUC,
+    kUI, kUL, kUN, kUR, kUS,
+    kUT // stop reformat
   ];
 
 //Urgent remove nulls
   static const Map<int, VR> vrByCode = const <int, VR>{
-    0x0000: null,
-    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5242: null, 0x5343: kCS,
-    0x4144: kDA, 0x5344: kDS, 0x5444: kDT, 0x4446: kFD, 0x4c46: kFL,
-    0x5349: kIS, 0x4f4c: kLO, 0x544c: kLT, 0x424f: kOB, 0x444f: kOD,
-    0x464f: kOF, 0x4c4f: kOL, 0x574f: kOW, 0x4e50: kPN, 0x4853: kSH,
-    0x4c53: kSL, 0x5153: kSQ, 0x5353: kSS, 0x5453: kST, 0x4d54: kTM,
-    0x4355: kUC, 0x4955: kUI, 0x4c55: kUL, 0x4e55: kUN, 0x5255: kUR,
-    0x5355: kUS, 0x5455: kUT // stop reformat
+    0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5343: kCS, 0x4144: kDA,
+    0x5344: kDS, 0x5444: kDT, 0x4446: kFD, 0x4c46: kFL, 0x5349: kIS,
+    0x4f4c: kLO, 0x544c: kLT, 0x424f: kOB, 0x444f: kOD, 0x464f: kOF,
+    0x4c4f: kOL, 0x574f: kOW, 0x4e50: kPN, 0x4853: kSH, 0x4c53: kSL,
+    0x5153: kSQ, 0x5353: kSS, 0x5453: kST, 0x4d54: kTM, 0x4355: kUC,
+    0x4955: kUI, 0x4c55: kUL, 0x4e55: kUN, 0x5255: kUR, 0x5355: kUS,
+    0x5455: kUT // No reformat
   };
 
   static VR lookupByCode(int vrCode) => vrByCode[vrCode];
 
   static const Map<String, VR> vrById = const <String, VR>{
-    'AE': kAE, 'AS': kAS, 'CS': kCS,
-    'DA': kDA, 'DS': kDS, 'DT': kDT, 'IS': kIS,
-    'LO': kLO, 'LT': kLT, 'PN': kPN, 'SH': kSH,
-    'ST': kST, 'TM': kTM, 'UC': kUC, 'UI': kUI,
-    'UR': kUR, 'UT': kUT, 'AT': kAT, 'OB': kOB,
-    'OW': kOW, 'SL': kSL, 'SS': kSS, 'UL': kUL,
-    'US': kUS, 'FD': kFD, 'FL': kFL, 'OD': kOD,
-    'OF': VR.kOF // prevent reformat
+    'AE': kAE, 'AS': kAS, 'AT': kAT, 'CS': kCS, 'DA': kDA,
+    'DS': kDS, 'DT': kDT, 'FD': kFD, 'FL': kFL, 'IS': kIS,
+    'LO': kLO, 'LT': kLT, 'OB': kOB, 'OD': kOD, 'OF': kOF,
+    'OL': kOL, 'OW': kOW, 'PN': kPN, 'SH': kSH, 'SL': kSL,
+    'SQ': kSQ, 'SS': kSS, 'ST': kST, 'TM': kTM, 'UC': kUC,
+    'UI': kUI, 'UL': kUL, 'UN': kUN, 'UR': kUR, 'US': kUS,
+    'UT': kUT, // No reformat
   };
 
   static VR lookupId(String id) => vrById[id];
@@ -323,8 +326,7 @@ class VRSequence extends VR<Dataset> {
       vList is Iterable<Dataset>;
 
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
-  static const VR kSQ =
-      const VRSequence._(22, 0x5153, 'SQ', 1, 4, kMaxLongVF, 'Sequence');
+  static const VR kSQ = const VRSequence._(0, 0x5153, 'SQ', 1, 4, kMaxLongVF, 'Sequence');
 }
 
 // Urgent: jim to fix

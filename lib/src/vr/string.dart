@@ -10,10 +10,9 @@ import 'dart:typed_data';
 import 'package:date_time/date_time.dart';
 import 'package:string/string.dart';
 import 'package:system/core.dart';
-import 'package:uid/uid.dart';
-
-import 'package:tag/src/vr/vr.dart';
 import 'package:tag/src/issues.dart';
+import 'package:tag/src/vr/vr.dart';
+import 'package:uid/uid.dart';
 
 typedef bool Tester<String>(String value, int min, int max);
 typedef String ErrorMsg<String>(String value, int min, int max);
@@ -154,13 +153,13 @@ class VRDcmString extends VRString {
 
   //index, code, id, vfLengthSize, maxVFLength, keyword, min, max
   static const VRDcmString kAE =
-      const VRDcmString._(1, 0x4541, 'AE', 2, kMaxShortVF, 'AETitle', 1, 16);
+      const VRDcmString._(10, 0x4541, 'AE', 2, kMaxShortVF, 'AETitle', 1, 16);
   static const VRDcmString kLO =
-      const VRDcmString._(12, 0x4f4c, 'LO', 2, kMaxShortVF, 'LongString', 1, 64);
+      const VRDcmString._(21, 0x4f4c, 'LO', 2, kMaxShortVF, 'LongString', 1, 64);
   static const VRDcmString kSH =
-      const VRDcmString._(20, 0x4853, 'SH', 2, kMaxShortVF, 'ShortString', 1, 16);
+      const VRDcmString._(24, 0x4853, 'SH', 2, kMaxShortVF, 'ShortString', 1, 16);
   static const VRDcmString kUC = const VRDcmString._(
-      26, 0x4355, 'UC', 4, kMaxLongVF, 'UnlimitedCharacters', 1, kMaxLongVF);
+      7, 0x4355, 'UC', 4, kMaxLongVF, 'UnlimitedCharacters', 1, kMaxLongVF);
 }
 
 class VRDcmText extends VRString {
@@ -189,11 +188,11 @@ class VRDcmText extends VRString {
 
   //index, code, id, vfLengthSize, maxVFLength, keyword, min, max
   static const VRDcmText kLT =
-      const VRDcmText._(13, 0x544c, 'LT', 2, kMaxShortVF, 'LongText', 1, 10240);
+      const VRDcmText._(22, 0x544c, 'LT', 2, kMaxShortVF, 'LongText', 1, 10240);
   static const VRDcmText kST =
-      const VRDcmText._(24, 0x5453, 'ST', 2, kMaxShortVF, 'ShortText', 1, 1024);
+      const VRDcmText._(27, 0x5453, 'ST', 2, kMaxShortVF, 'ShortText', 1, 1024);
   static const VRDcmText kUT =
-      const VRDcmText._(32, 0x5455, 'UT', 4, kMaxLongVF, 'UnlimitedText', 1, kMaxLongVF);
+      const VRDcmText._(9, 0x5455, 'UT', 4, kMaxLongVF, 'UnlimitedText', 1, kMaxLongVF);
 }
 
 /// DICOM DCR Strings -  AE, LO, SH, UC.
@@ -217,7 +216,7 @@ class VRCodeString extends VRString {
 
   //index, code, id, vfLengthSize, maxVFLength, keyword, minValueLength, max
   static const VRCodeString kCS =
-      const VRCodeString._(5, 0x5343, 'CS', 2, kMaxShortVF, 'CodeString', 1, 16);
+      const VRCodeString._(13, 0x5343, 'CS', 2, kMaxShortVF, 'CodeString', 1, 16);
 }
 
 class VRDcmAge extends VRString {
@@ -286,7 +285,7 @@ class VRDcmAge extends VRString {
 */
 
   static const VRDcmAge kAS =
-      const VRDcmAge._(2, 0x5341, 'AS', 2, kMaxShortVF, 'AgeString', 4, 4);
+      const VRDcmAge._(11, 0x5341, 'AS', 2, kMaxShortVF, 'AgeString', 4, 4);
 }
 
 class VRDcmDate extends VRString {
@@ -307,7 +306,7 @@ class VRDcmDate extends VRString {
       Date.issues(s.trimRight(), start: start, end: end);
 
   static const VRDcmDate kDA =
-      const VRDcmDate._(6, 0x4144, 'DA', 2, kMaxShortVF, 'DateString', 8, 8);
+      const VRDcmDate._(15, 0x4144, 'DA', 2, kMaxShortVF, 'DateString', 8, 8);
 }
 
 class VRDcmDateTime extends VRString {
@@ -329,7 +328,7 @@ class VRDcmDateTime extends VRString {
       DcmDateTime.issues(s.trimRight(), start: start, end: end);
 
   static const VRDcmDateTime kDT =
-      const VRDcmDateTime._(8, 0x5444, 'DT', 2, kMaxShortVF, 'DateTimeString', 4, 26);
+      const VRDcmDateTime._(16, 0x5444, 'DT', 2, kMaxShortVF, 'DateTimeString', 4, 26);
 }
 
 class VRDcmTime extends VRString {
@@ -350,7 +349,7 @@ class VRDcmTime extends VRString {
       Time.issues(s.trimRight(), start: start, end: end);
 
   static const VRDcmTime kTM =
-      const VRDcmTime._(25, 0x4d54, 'TM', 2, kMaxShortVF, 'TimeString', 2, 14);
+      const VRDcmTime._(27, 0x4d54, 'TM', 2, kMaxShortVF, 'TimeString', 2, 14);
 }
 
 class VRDecimalString extends VRString {
@@ -377,7 +376,7 @@ class VRDecimalString extends VRString {
   }
 
   static const VRDecimalString kDS =
-      const VRDecimalString._(7, 0x5344, 'DS', 2, kMaxShortVF, 'DecimalString', 1, 16);
+      const VRDecimalString._(15, 0x5344, 'DS', 2, kMaxShortVF, 'DecimalString', 1, 16);
 }
 
 class VRIntString extends VRString {
@@ -405,7 +404,7 @@ class VRIntString extends VRString {
   }
 
   static const VRIntString kIS =
-      const VRIntString._(11, 0x5349, 'IS', 2, kMaxShortVF, 'IntegerString', 1, 12);
+      const VRIntString._(19, 0x5349, 'IS', 2, kMaxShortVF, 'IntegerString', 1, 12);
 }
 
 /// Person Name (PN).
@@ -482,7 +481,7 @@ class VRPersonName extends VRString {
   }
 
   static const VRPersonName kPN =
-      const VRPersonName._(19, 0x4e50, 'PN', 2, kMaxShortVF, 'PersonName', 1, 64 * 3);
+      const VRPersonName._(22, 0x4e50, 'PN', 2, kMaxShortVF, 'PersonName', 1, 64 * 3);
 }
 
 /// _UI_: A DICOM UID (aka OSI OID).
@@ -512,7 +511,7 @@ class VRUid extends VRString {
   //TODO: what should the minimum length be?
   /// Minimum length is based on '1.2.804.xx'.
   static const VRUid kUI =
-      const VRUid._(27, 0x4955, 'UI', 2, kMaxShortVF, 'UniqueID', 10, 64);
+      const VRUid._(28, 0x4955, 'UI', 2, kMaxShortVF, 'UniqueID', 10, 64);
 }
 
 class VRUri extends VRString {
@@ -557,7 +556,7 @@ class VRUri extends VRString {
   }
 
   static const VRUri kUR =
-      const VRUri._(30, 0x5255, 'UR', 4, kMaxLongVF, 'URI', 1, kMaxLongVF);
+      const VRUri._(8, 0x5255, 'UR', 4, kMaxLongVF, 'URI', 1, kMaxLongVF);
 }
 
 class InvalidStringLengthError extends Error {
