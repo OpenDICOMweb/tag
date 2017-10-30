@@ -146,9 +146,16 @@ class InvalidVRError extends Error {
 }
 
 Null invalidVRError(VR vr, [String message = '']) {
-  log.error(InvalidVRError._msg(vr, message));
-  if (throwOnError) throw new InvalidVRError(vr);
-  return null;
+	log.error(InvalidVRError._msg(vr, message));
+	if (throwOnError) throw new InvalidVRError(vr);
+	return null;
+}
+
+Null invalidVRIndexError(int vrIndex, [String message = '']) {
+	final vr = VR.lookupByCode(vrIndex);
+	log.error(InvalidVRError._msg(vr, message));
+	if (throwOnError) throw new InvalidVRError(vr);
+	return null;
 }
 
 class InvalidValueFieldLengthError extends Error {

@@ -1709,14 +1709,14 @@ class PTag extends Tag {
   static const PTag kDarkCurrentCounts
       //(0014,3050)
       = const PTag._(
-          'DarkCurrentCounts', 0x00143050, 'Dark Current Counts', VR.kUN, VM.k1, false);
+          'DarkCurrentCounts', 0x00143050, 'Dark Current Counts', VR.kOBOW, VM.k1, false);
   static const PTag kGainCorrectionReferenceSequence
       //(0014,3060)
       = const PTag._('GainCorrectionReferenceSequence', 0x00143060,
           'Gain Correction Reference Sequence', VR.kSQ, VM.k1, false);
   static const PTag kAirCounts
       //(0014,3070)
-      = const PTag._('AirCounts', 0x00143070, 'Air Counts', VR.kUN, VM.k1, false);
+      = const PTag._('AirCounts', 0x00143070, 'Air Counts', VR.kOBOW, VM.k1, false);
   static const PTag kKVUsedInGainCalibration
       //(0014,3071)
       = const PTag._('KVUsedInGainCalibration', 0x00143071, 'KV Used in Gain Calibration',
@@ -4402,7 +4402,7 @@ class PTag extends Tag {
           false);
   static const PTag kNoName0
       //(0018,9445)
-      = const PTag._('NoName0', 0x00189445, 'See Note 3', VR.kInvalid, VM.kNoVM, true);
+      = const PTag._('NoName0', 0x00189445, 'See Note 3', VR.kUN, VM.kNoVM, true);
   static const PTag kColumnAngulationPatient
       //(0018,9447)
       = const PTag._('ColumnAngulationPatient', 0x00189447, 'Column Angulation (Patient)',
@@ -6346,7 +6346,7 @@ class PTag extends Tag {
           'Ultrasound Color Data Present', VR.kUS, VM.k1, false);
   static const PTag kNoName1
       //(0028,0020)
-      = const PTag._('NoName1', 0x00280020, 'See Note 3', VR.kInvalid, VM.kNoVM, true);
+      = const PTag._('NoName1', 0x00280020, 'See Note 3', VR.kUN, VM.kNoVM, true);
   static const PTag kPixelSpacing
       //(0028,0030)
       = const PTag._('PixelSpacing', 0x00280030, 'Pixel Spacing', VR.kDS, VM.k2, false);
@@ -6661,19 +6661,19 @@ class PTag extends Tag {
   static const PTag kGrayLookupTableDescriptor
       //(0028,1100)
       = const PTag._('GrayLookupTableDescriptor', 0x00281100,
-          'Gray Lookup Table Descriptor', VR.kUN, VM.k3, true);
+          'Gray Lookup Table Descriptor', VR.kUSSS, VM.k3, true);
   static const PTag kRedPaletteColorLookupTableDescriptor
       //(0028,1101)
       = const PTag._('RedPaletteColorLookupTableDescriptor', 0x00281101,
-          'Red Palette Color Lookup Table Descriptor', VR.kUN, VM.k3, false);
+          'Red Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k3, false);
   static const PTag kGreenPaletteColorLookupTableDescriptor
       //(0028,1102)
       = const PTag._('GreenPaletteColorLookupTableDescriptor', 0x00281102,
-          'Green Palette Color Lookup Table Descriptor', VR.kUN, VM.k3, false);
+          'Green Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k3, false);
   static const PTag kBluePaletteColorLookupTableDescriptor
       //(0028,1103)
       = const PTag._('BluePaletteColorLookupTableDescriptor', 0x00281103,
-          'Blue Palette Color Lookup Table Descriptor', VR.kUN, VM.k3, false);
+          'Blue Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k3, false);
   static const PTag kAlphaPaletteColorLookupTableDescriptor
       //(0028,1104)
       = const PTag._('AlphaPaletteColorLookupTableDescriptor', 0x00281104,
@@ -6681,22 +6681,23 @@ class PTag extends Tag {
   static const PTag kLargeRedPaletteColorLookupTableDescriptor
       //(0028,1111)
       = const PTag._('LargeRedPaletteColorLookupTableDescriptor', 0x00281111,
-          'Large Red Palette Color Lookup Table Descriptor', VR.kUN, VM.k4, true);
+          'Large Red Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k4, true);
   static const PTag kLargeGreenPaletteColorLookupTableDescriptor
       //(0028,1112)
       = const PTag._('LargeGreenPaletteColorLookupTableDescriptor', 0x00281112,
-          'Large Green Palette Color Lookup Table Descriptor', VR.kUN, VM.k4, true);
+          'Large Green Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k4, true);
   static const PTag kLargeBluePaletteColorLookupTableDescriptor
       //(0028,1113)
       = const PTag._('LargeBluePaletteColorLookupTableDescriptor', 0x00281113,
-          'Large Blue Palette Color Lookup Table Descriptor', VR.kUN, VM.k4, true);
+          'Large Blue Palette Color Lookup Table Descriptor', VR.kUSSS, VM.k4, true);
   static const PTag kPaletteColorLookupTableUID
       //(0028,1199)
       = const PTag._('PaletteColorLookupTableUID', 0x00281199,
           'Palette Color Lookup Table UID', VR.kUI, VM.k1, false);
   static const PTag kGrayLookupTableData
       //(0028,1200)
-      = const PTag._('GrayLookupTableData', 0x00281200, 'Gray Lookup Table Data', VR.kUN,
+      = const PTag._('GrayLookupTableData', 0x00281200, 'Gray Lookup Table Data',
+		                     VR.kUSSSOW,
           VM.k1_n, true);
   static const PTag kRedPaletteColorLookupTableData
       //(0028,1201)
@@ -6840,7 +6841,8 @@ class PTag extends Tag {
           VM.k1, false);
   static const PTag kLUTDescriptor
       //(0028,3002)
-      = const PTag._('LUTDescriptor', 0x00283002, 'LUT Descriptor', VR.kUN, VM.k3, false);
+      = const PTag._('LUTDescriptor', 0x00283002, 'LUT Descriptor', VR.kUSSS, VM.k3,
+		                     false);
   static const PTag kLUTExplanation
       //(0028,3003)
       =
@@ -6851,7 +6853,7 @@ class PTag extends Tag {
           'ModalityLUTType', 0x00283004, 'Modality LUT Type', VR.kLO, VM.k1, false);
   static const PTag kLUTData
       //(0028,3006)
-      = const PTag._('LUTData', 0x00283006, 'LUT Data', VR.kUN, VM.k1_n, false);
+      = const PTag._('LUTData', 0x00283006, 'LUT Data', VR.kUSOW, VM.k1_n, false);
   static const PTag kVOILUTSequence
       //(0028,3010)
       = const PTag._(
@@ -8087,7 +8089,7 @@ class PTag extends Tag {
   static const PTag kRealWorldValueLastValueMapped
       //(0040,9211)
       = const PTag._('RealWorldValueLastValueMapped', 0x00409211,
-          'Real World Value Last Value Mapped', VR.kUN, VM.k1, false);
+          'Real World Value Last Value Mapped', VR.kUSSS, VM.k1, false);
   static const PTag kRealWorldValueLUTData
       //(0040,9212)
       = const PTag._('RealWorldValueLUTData', 0x00409212, 'Real World Value LUT Data',
@@ -8095,7 +8097,7 @@ class PTag extends Tag {
   static const PTag kRealWorldValueFirstValueMapped
       //(0040,9216)
       = const PTag._('RealWorldValueFirstValueMapped', 0x00409216,
-          'Real World Value First Value Mapped', VR.kUN, VM.k1, false);
+          'Real World Value First Value Mapped', VR.kUSSS, VM.k1, false);
   static const PTag kRealWorldValueIntercept
       //(0040,9224)
       = const PTag._('RealWorldValueIntercept', 0x00409224, 'Real World Value Intercept',
@@ -9598,11 +9600,11 @@ class PTag extends Tag {
   static const PTag kHistogramFirstBinValue
       //(0060,3004)
       = const PTag._('HistogramFirstBinValue', 0x00603004, 'Histogram First Bin Value',
-          VR.kUN, VM.k1, false);
+          VR.kUSSS, VM.k1, false);
   static const PTag kHistogramLastBinValue
       //(0060,3006)
       = const PTag._('HistogramLastBinValue', 0x00603006, 'Histogram Last Bin Value',
-          VR.kUN, VM.k1, false);
+          VR.kUSSS, VM.k1, false);
   static const PTag kHistogramBinWidth
       //(0060,3008)
       = const PTag._(
@@ -14894,7 +14896,7 @@ class PTag extends Tag {
   static const PTag kAudioSampleData
       //(5000,200C)
       = const PTag._(
-          'AudioSampleData', 0x5000200C, 'Audio Sample Data', VR.kUN, VM.k1, true);
+          'AudioSampleData', 0x5000200C, 'Audio Sample Data', VR.kOBOW, VM.k1, true);
   static const PTag kAudioComments
       //(5000,200E)
       = const PTag._('AudioComments', 0x5000200E, 'Audio Comments', VR.kLT, VM.k1, true);
@@ -14911,7 +14913,7 @@ class PTag extends Tag {
           'Curve Referenced Overlay Group', VR.kUS, VM.k1, true);
   static const PTag kCurveData
       //(5000,3000)
-      = const PTag._('CurveData', 0x50003000, 'Curve Data', VR.kUN, VM.k1, true);
+      = const PTag._('CurveData', 0x50003000, 'Curve Data', VR.kOBOW, VM.k1, true);
   static const PTag kSharedFunctionalGroupsSequence
       //(5200,9229)
       = const PTag._('SharedFunctionalGroupsSequence', 0x52009229,
@@ -14926,11 +14928,11 @@ class PTag extends Tag {
           'WaveformSequence', 0x54000100, 'Waveform Sequence', VR.kSQ, VM.k1, false);
   static const PTag kChannelMinimumValue
       //(5400,0110)
-      = const PTag._('ChannelMinimumValue', 0x54000110, 'Channel Minimum Value', VR.kUN,
+      = const PTag._('ChannelMinimumValue', 0x54000110, 'Channel Minimum Value', VR.kOBOW,
           VM.k1, false);
   static const PTag kChannelMaximumValue
       //(5400,0112)
-      = const PTag._('ChannelMaximumValue', 0x54000112, 'Channel Maximum Value', VR.kUN,
+      = const PTag._('ChannelMaximumValue', 0x54000112, 'Channel Maximum Value', VR.kOBOW,
           VM.k1, false);
   static const PTag kWaveformBitsAllocated
       //(5400,1004)
@@ -14942,11 +14944,11 @@ class PTag extends Tag {
           'Waveform Sample Interpretation', VR.kCS, VM.k1, false);
   static const PTag kWaveformPaddingValue
       //(5400,100A)
-      = const PTag._('WaveformPaddingValue', 0x5400100A, 'Waveform Padding Value', VR.kUN,
+      = const PTag._('WaveformPaddingValue', 0x5400100A, 'Waveform Padding Value', VR.kOBOW,
           VM.k1, false);
   static const PTag kWaveformData
       //(5400,1010)
-      = const PTag._('WaveformData', 0x54001010, 'Waveform Data', VR.kUN, VM.k1, false);
+      = const PTag._('WaveformData', 0x54001010, 'Waveform Data', VR.kOBOW, VM.k1, false);
   static const PTag kFirstOrderPhaseCorrectionAngle
       //(5600,0010)
       = const PTag._('FirstOrderPhaseCorrectionAngle', 0x56000010,
@@ -15100,7 +15102,7 @@ class PTag extends Tag {
       = const PTag._('OverlayLabel', 0x60001500, 'Overlay Label', VR.kLO, VM.k1, false);
   static const PTag kOverlayData
       //(6000,3000)
-      = const PTag._('OverlayData', 0x60003000, 'Overlay Data', VR.kUN, VM.k1, false);
+      = const PTag._('OverlayData', 0x60003000, 'Overlay Data', VR.kOBOW, VM.k1, false);
   static const PTag kOverlayComments
       //(6000,4000)
       = const PTag._(
@@ -15119,7 +15121,7 @@ class PTag extends Tag {
       const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOW, VM.k1, false);
 
   static const PTag kPixelDataUN =
-      const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kUN, VM.k1, false);
+      const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOBOW, VM.k1, false);
 
   static const PTag kCoefficientsSDVN
       //(7FE0,0020)
@@ -15136,7 +15138,7 @@ class PTag extends Tag {
   static const PTag kVariablePixelData
       //(7F00,0010)
       = const PTag._(
-          'VariablePixelData', 0x7F000010, 'Variable Pixel Data', VR.kUN, VM.k1, true);
+          'VariablePixelData', 0x7F000010, 'Variable Pixel Data', VR.kOBOW, VM.k1, true);
   static const PTag kVariableNextDataGroup
       //(7F00,0011)
       = const PTag._('VariableNextDataGroup', 0x7F000011, 'Variable Next Data Group',
@@ -15161,17 +15163,6 @@ class PTag extends Tag {
       //(FFFC,FFFC)
       = const PTag._('DataSetTrailingPadding', 0xFFFCFFFC, 'Data Set Trailing Padding',
           VR.kOB, VM.k1, false);
-  static const PTag kItem
-      //(FFFE,E000)
-      = const PTag._('Item', 0xFFFEE000, 'Item', VR.kInvalid, VM.kNoVM, false);
-  static const PTag kItemDelimitationItem
-      //(FFFE,E00D)
-      = const PTag._('ItemDelimitationItem', 0xFFFEE00D, 'Item Delimitation Item',
-          VR.kInvalid, VM.kNoVM, false);
-  static const PTag kSequenceDelimitationItem
-      //(FFFE,E0DD)
-      = const PTag._('SequenceDelimitationItem', 0xFFFEE0DD, 'Sequence Delimitation Item',
-          VR.kInvalid, VM.kNoVM, false);
 
   //**** Special Elements where multiple tag codes map to the same definition
 

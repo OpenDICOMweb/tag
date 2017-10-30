@@ -5868,7 +5868,7 @@ class PDTagDefinition  {
   static const PDTagDefinition k2284 = const PDTagDefinition._(2284, 'SPI-P Release 1',
       0x002900cf, VR.kCS, VM.k1, 'ShutterSelectStatus');
   static const PDTagDefinition k2285 = const PDTagDefinition._(
-      2285, 'SPI-P Release 1', 0x7fe10010, VR.kInvalid, VM.k1, 'PixelData');
+      2285, 'SPI-P Release 1', 0x7fe10010, VR.kUN, VM.k1, 'PixelData');
   static const PDTagDefinition k2286 = const PDTagDefinition._(
       2286, 'SPI-P Release 1;1', 0x000900c0, VR.kLT, VM.k1, 'Unknown');
   static const PDTagDefinition k2287 = const PDTagDefinition._(

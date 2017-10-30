@@ -4194,7 +4194,4 @@ const Map<String, PTag> pTagKeywords = const <String, PTag>{
   'VariableCoefficientsSDDN': PTag.kVariableCoefficientsSDDN,
   'DigitalSignaturesSequence': PTag.kDigitalSignaturesSequence,
   'DataSetTrailingPadding': PTag.kDataSetTrailingPadding,
-  'Item': PTag.kItem,
-  'ItemDelimitationItem': PTag.kItemDelimitationItem,
-  'SequenceDelimitationItem': PTag.kSequenceDelimitationItem,
 };

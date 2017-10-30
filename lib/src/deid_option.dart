@@ -6,7 +6,6 @@
 import 'package:dataset/dataset.dart';
 import 'package:element/element.dart';
 
-
 typedef Element DeIdAdd<V>(Dataset ds, int index, Element<V> e);
 typedef List<Element> DeIdAddAll<V>(Dataset ds, int index, List<Element<V>> e);
 
@@ -28,7 +27,7 @@ typedef List<Element> DeIdDeleteAll(Dataset ds, int index);
 abstract class DeIdOption {
   int get index;
   String get keyword;
-  DeIdMethod get method;
+  Function get method;
 
   List<Element> call(Dataset ds, int index, [Function f]) => method(ds, index, f);
 
@@ -45,20 +44,20 @@ abstract class DeIdOption {
 }
 
 Element delete(Dataset ds, int index) {
-
+  //Urgent
 }
 
 
 class DeIdBasic {
 	final int  index;
 	final String  keyword;
-	final DeIdMethod  method;
+	final Function  method;
 
 	const DeIdBasic(this.index, this.keyword, this.method);
 
 	List<Element> call(Dataset ds, int index, [Function f]) => method(ds, index, f);
 
-	static const DeIdMethod kNoOp = const DeIdBasic(1, 'true', delete);
+	static const Function kNoOp = const DeIdBasic(1, 'true', delete);
 
 	static const List<DeIdBasic> kByIndex = const <DeIdBasic>[];
 

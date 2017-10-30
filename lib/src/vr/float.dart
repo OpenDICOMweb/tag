@@ -32,11 +32,7 @@ class VRFloat extends VR<double> {
 
   /// Returns [true] of [value] is [double].
   @override
-  bool isValidValue(Object value, [Issues issues]) =>  isValidType(value);
-
-  /// Returns [true] of [value] is [double].
-  @override
-  bool isValidType(Object value) => value is double;
+  bool isValidValue(Object value, [Issues issues]) =>  value is double;
 
   /// Returns true if the [Type] of values is [double].
   @override

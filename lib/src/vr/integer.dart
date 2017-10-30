@@ -58,8 +58,7 @@ class VRInt extends VR<int> {
   const VRInt._(int index, int code, String id, int elementSize, int vfLengthSize,
       int maxVFLength, String keyword, this.minValue, this.maxValue, this.fromBytes,
       [bool undefinedLengthAllowed = false])
-      : super(index, code, id, elementSize, vfLengthSize, maxVFLength, keyword,
-            undefinedLengthAllowed: undefinedLengthAllowed);
+      : super(index, code, id, elementSize, vfLengthSize, maxVFLength, keyword);
 
   @override
   bool get isBinary => true;
@@ -71,18 +70,13 @@ class VRInt extends VR<int> {
   @override
   bool isValidValue(int v, [Issues issues]) {
     print('n: $v, min: $minValue, max: $maxValue');
-	  return v >= minValue && v <= maxValue;
+    return v >= minValue && v <= maxValue;
   }
-
-
-  /// Returns [true] of [value] is [double].
-  @override
-  bool isValidType(Object value) => value is int;
 
   /// Returns true if the [Type] of values is [int].
   @override
   bool isValidValuesType(Iterable<int> values, [Issues issues]) =>
-		  values is Iterable<int>;
+      values is Iterable<int>;
 
   // [true] if [this] is one of OB, OL, OW, or UN;
   @override
@@ -146,20 +140,73 @@ class VRInt extends VR<int> {
 
   static const VRInt kUS = const VRInt._(31, 0x5355, 'US', 2, 2, kMaxShortVF,
       'UnsignedShort', 0, Uint16.maxValue, Uint16.fromBytes);
+}
 
-  // **** All VRs below this line are treated as VR.kUN. ****
-  static const VRInt kOBOW = const VRInt._(
-      29, 0x4e55, 'OBOW', 1, 4, kMaxUN, 'OBorOW', 0, Uint8.maxValue, Uint8.fromBytes);
+class VRUnknown extends VR<int> {
+	const VRUnknown._(int index, int code, String id, int elementSize, int vfLengthSize,
+	                  int maxVFLength, String keyword)
+			: super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
-  static const VRInt kUSSS = const VRInt._(
-      29, 0x4e55, 'USSS', 1, 4, kMaxUN, 'USorSS', 0, Uint8.maxValue, Uint8.fromBytes);
+	bool get isUndefinedLengthAllowed => true;
 
-  static const VRInt kUSSSOW = const VRInt._(29, 0x4e55, 'USSSOW', 1, 4, kMaxUN,
-      'USorSSorOW', 0, Uint8.maxValue, Uint8.fromBytes);
+	@deprecated
+	@override
+	bool get isUnknown => true;
 
-  static const VRInt kUSOW = const VRInt._(
-      29, 0x4e55, 'USOW', 1, 4, kMaxUN, 'USorOW', 0, Uint8.maxValue, Uint8.fromBytes);
+	bool _inRange(int value) => value >= 0 && value < 256;
 
-  static const VRInt kUSOW1 = const VRInt._(
-      29, 0x4e55, 'USOW1', 1, 4, kMaxUN, 'USorOW1', 0, Uint8.maxValue, Uint8.fromBytes);
+	/// Returns [true] of [value] is UN.
+	@override
+	bool isValidValue(int value, [Issues issues]) => _inRange(value);
+
+	/// Returns true if the [Type] of values is [List<int>].
+	@override
+	bool isValidValuesType(Iterable<int> values, [Issues issues]) => values is List<int>;
+
+	//index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
+	/// UN - Unknown. The supertype of all VRs.
+	static const VRUnknown kUN =
+	const VRUnknown._(29, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
+}
+
+/// The class of all integer [VR]s.
+class VRIntSpecial extends VR<int> {
+  final List<VR> vrs;
+
+  const VRIntSpecial._(int index, String id, String keyword, this.vrs)
+      : super(index, -1, id, -1, -1, -1, keyword);
+
+  @override
+  bool get isBinary => true;
+
+  @override
+  bool get isInteger => true;
+
+  @override
+  bool isValidValuesType(Iterable<int> values, [Issues issues]) =>  false;
+
+  /// Returns true if the [Type] of values is [int].
+  @override
+  bool isValidValue(int value, [Issues issues]) => false;
+
+  bool isValidVR(VR vr) => vrs.contains(vrs);
+
+  // **** All VRs below this line are special and used for validation only. ****
+  // The constants defined below are in the order of the next line:
+  // index, code, id, elementSize, vfLengthFieldSize, maxVFLength, keyword
+  static const VRIntSpecial kOBOW =
+      const VRIntSpecial._(32, 'OBOW', 'OBorOW', const <VR>[VRInt.kOB, VRInt.kOW]);
+
+  static const VRIntSpecial kUSSS =
+      const VRIntSpecial._(33, 'USSS', 'USorSS', const <VR>[VRInt.kUS, VRInt.kSS]);
+
+  static const VRIntSpecial kUSSSOW = const VRIntSpecial._(
+      34, 'USSSOW', 'USorSSorOW', const <VR>[VRInt.kUS, VRInt.kSS, VRInt.kOW]);
+
+  static const VRIntSpecial kUSOW =
+      const VRIntSpecial._(35, 'USOW', 'USorOW', const <VR>[VRInt.kUS, VRInt.kOW]);
+
+  //TODO: decide if this is needed
+  static const VRIntSpecial kUSOW1 =
+      const VRIntSpecial._(36, 'USOW1', 'USorOW1', const <VR>[VRInt.kUS, VRInt.kOW]);
 }

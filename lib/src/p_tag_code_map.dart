@@ -3840,7 +3840,4 @@ const Map<int, PTag> pTagCodeMap = const <int, PTag>{
   0x7f000040: PTag.kVariableCoefficientsSDDN,
   0xfffafffa: PTag.kDigitalSignaturesSequence,
   0xfffcfffc: PTag.kDataSetTrailingPadding,
-  0xfffee000: PTag.kItem,
-  0xfffee00d: PTag.kItemDelimitationItem,
-  0xfffee0dd: PTag.kSequenceDelimitationItem,
 };

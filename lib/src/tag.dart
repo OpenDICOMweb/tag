@@ -60,7 +60,7 @@ abstract class Tag {
   //     [this.isRetired = false, this.type = EType.kUnknown]
   // Tag.private(this.code, this.vr, this.vm, this.keyword, this.name,
   //     [this.isRetired = false, this.type = EType.kUnknown]);
-  int get index;
+  int get index => code;
   int get code;
   VR get vr;
   //Fix: hack to avoid Type problem
@@ -186,7 +186,7 @@ abstract class Tag {
   // DeIdentification Method
   int get deIdIndex => throw new UnimplementedError();
   String get deIdName => throw new UnimplementedError();
- // DeIdMethod get deIdMethod => throw new UnimplementedError();
+  // DeIdMethod get deIdMethod => throw new UnimplementedError();
 
   int get hashcode => code;
 
@@ -251,11 +251,11 @@ abstract class Tag {
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
-    if(vList == null) nullValueError();
+    if (vList == null) nullValueError();
     if (vr == VR.kUN) return true;
-    final ok = isValidValuesType<V>(vList, issues);
-    print('isValidType: $ok $runtimeType: $vList');
-    if (isNotValidValuesType<V>(vList, issues)) {
+
+    if (vList is! List<V>) {
+      print('isValidType: $runtimeType: $vList');
       invalidValuesTypeError(this, vList);
       return false;
     }
@@ -293,29 +293,6 @@ abstract class Tag {
       }
     return true;
   }
-
-  bool isValidValuesType<V>(Iterable<V> values, [Issues issues]) =>
-      vr.isValidValuesType(values, issues);
-
-  bool isNotValidValuesType<V>(Iterable<V> values, [Issues issues]) =>
-      !isValidValuesType(values, issues);
-
-/*  bool isValidElement(Element e) {
-    if (e == null) return false;
-    return hasValidValues(e.values);
-  }*/
-
-/* Flush when working
-  bool hasValidValues<V>(List<V> values) {
-    assert(values != null);
-    //   if (values == null) return false;
-    if (vr == VR.kUN) return true;
-    if (isNotValidLength(values.length)) return false;
-    for (int i = 0; i < values.length; i++)
-      if (isNotValidValue(values[i])) return false;
-    return true;
-  }
-*/
 
   bool isValidValue<V>(V value, [Issues issues]) => vr.isValidValue(value, issues);
   bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValidValue(value, issues);
@@ -462,14 +439,12 @@ abstract class Tag {
   static Tag lookupByCode(int code, [VR vr = VR.kUN, Object creator]) {
     String msg;
     if (Tag.isPublicCode(code)) {
-      if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
-      msg = 'Unknown Public Code';
+      var tag = Tag.lookupPublicCode(code, vr);
+      return tag ??= new PTag.unknown(code, vr);
     } else {
       if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
-      if (Tag.isPrivateCreatorCode(code) && creator is String)
-        return new PCTag(code, vr, creator);
-      if (Tag.isPrivateDataCode(code) && creator is PCTag)
-        return new PDTag(code, vr, creator);
+      if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
+      if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
       msg = 'Unknown Private Tag Code: creator: $creator';
     }
     return invalidTagCode(code, msg);
@@ -698,4 +673,3 @@ abstract class Tag {
     throw new RangeError(msg);
   }
 }
-

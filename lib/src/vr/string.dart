@@ -52,10 +52,6 @@ abstract class VRString extends VR<String> {
   bool isValidValue(String v, [Issues issues]) =>
       (minValueLength <= v.length) && (v.length <= maxValueLength);
 
-  /// Returns [true] if [values] is [List<String>].
-  @override
-  bool isValidType(Object values) => values is String;
-
   /// Returns true if the [Type] of values is [List<String>].
   @override
   bool isValidValuesType(Iterable vList, [Issues issues]) =>
