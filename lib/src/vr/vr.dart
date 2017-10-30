@@ -15,6 +15,24 @@ import 'package:tag/src/vr/string.dart';
 
 //TODO: Explain VR class structure
 
+const int kVRIndexMin = 0;
+const int kVRMaybeUndefinedIndexMin = 1; // OB
+const int kVRMaybeUndefinedIndexMax = 3; // UN
+
+const int kVRIvrIndexMin = 4;  // OD
+const int kVRIvrIndexMax = 30; // US
+
+const int kVREvrLongIndexMin = 4;   // OD
+const int kVREvrLongIndexMax = 9;   // UT
+const int kVREvrShortIndexMin = 10; // AE
+const int kVREvrShortIndexMax = 30; // US
+
+const int kVRSpecialIndexMin = 31; // OBOW
+const int kVRSpecialIndexMax = 34; // USOW
+
+const int kVRNormalIndexMin = 0;  // SQ
+const int kVRNormalIndexMax = 30; // US
+
 abstract class VR<V> {
   final int index;
   final int code;
@@ -197,18 +215,30 @@ abstract class VR<V> {
   static const VR kUSSSOW = VRIntSpecial.kUSSSOW;
   static const VR kUSOW = VRIntSpecial.kUSOW;
 
+  // Sequence Index
+  static const int kSQIndex = kVRIndexMin;
   // Long, Maybe Undefined Min/Max
-  static const int kMaybeUndefinedMin = VR.kOB.index;
-  static const int kMaybeUndefinedMax = VR.kUN.index;
+  static const int kMaybeUndefinedMin = kVRMaybeUndefinedIndexMin;
+  static const int kMaybeUndefinedMax = kVRMaybeUndefinedIndexMax;
+
+  // IVR Min/Max
+  static const int kIvrMin = kVRIvrIndexMin;
+  static const int kIvrMax = kVRIvrIndexMax;
+
   // Long EVR Min/Max
-  static const int kEvrLongMin = VR.kOD.index;
-  static const int kEvrLongMax = VR.kUT.index;
+  static const int kEvrLongMin = kVREvrLongIndexMin;
+  static const int kEvrLongMax = kVREvrLongIndexMax;
+
   // Short EVR Min/Max
-  static const int kEvrShortMin = VR.kAE.index;
-  static const int kEvrShortMax = VR.kUS.index;
-  static const int kVRIndexMax = VR.kUS.index;
-  static const int kVRSpecialIndexMin = VR.kOBOW.index;
-  static const int kVRSpecialIndexMax = VR.kUSOW.index;
+  static const int kEvrShortMin = kVREvrShortIndexMin;
+  static const int kEvrShortMax = kVREvrShortIndexMax;
+
+  // Normal Index Max
+  static const int kNormalIndexMax =kVRNormalIndexMax;
+
+  // Special Index Min/Max
+  static const int kSpecialIndexMin = kVRSpecialIndexMin;
+  static const int kSpecialIndexMax = kVRSpecialIndexMax;
 
   static const List<VR> vrByIndex = const <VR>[
     // Sequence == 0
@@ -226,7 +256,7 @@ abstract class VR<V> {
   ];
 
   static VR lookupByIndex(int vrIndex) {
-    if (vrIndex < 0 || vrIndex > kVRIndexMax) return null;
+    if (vrIndex < 0 || vrIndex > kVRNormalIndexMax) return null;
     return vrByIndex[vrIndex];
   }
 
