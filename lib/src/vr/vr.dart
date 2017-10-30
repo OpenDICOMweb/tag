@@ -8,7 +8,6 @@ import 'dart:typed_data';
 import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
-
 import 'package:tag/src/issues.dart';
 import 'package:tag/src/vr/float.dart';
 import 'package:tag/src/vr/integer.dart';
@@ -99,7 +98,7 @@ abstract class VR<V> {
   // **** Must be overridden.
   /// Returns a [ParseIssues] object indicating any issues with value.
   /// If there are no issues returns the empty string ('').
-  //Urgent: finish
+  //Urgent: move to Element package
   ParseIssues issues(V value) => null;
 
   // **** Must be overridden.
@@ -198,54 +197,18 @@ abstract class VR<V> {
   static const VR kUSSSOW = VRIntSpecial.kUSSSOW;
   static const VR kUSOW = VRIntSpecial.kUSOW;
 
-  // Sequence is 0
-  static const int kSQindex = 0;
-  // Long, possibly undefined
-  static const int kOBindex = 1;
-  static const int kOWindex = 2;
-  static const int kUNindex = 3;
-  static const int kMaybeUndefinedMin = kOBindex;
-  static const int kMaybeUndefinedMax = kUNindex;
-  // Long EVR
-  static const int kODindex = 4;
-  static const int kOFindex = 5;
-  static const int kOLindex = 6;
-  static const int kUCindex = 7;
-  static const int kURindex = 8;
-  static const int kUTindex = 9;
-  static const int kEvrLongMin = kODindex;
-  static const int kEvrLongMax = kUTindex;
-  // Short EVR
-  static const int kAEindex = 10;
-  static const int kASindex = 11;
-  static const int kATindex = 12;
-  static const int kCSindex = 13;
-  static const int kDAindex = 14;
-  static const int kDSindex = 15;
-  static const int kDTindex = 16;
-  static const int kFDindex = 17;
-  static const int kFLindex = 18;
-  static const int kISindex = 19;
-  static const int kLOindex = 20;
-  static const int kLTindex = 21;
-  static const int kPNindex = 22;
-  static const int kSHindex = 23;
-  static const int kSLindex = 24;
-  static const int kSSindex = 25;
-  static const int kSTindex = 26;
-  static const int kTMindex = 27;
-  static const int kUIindex = 28;
-  static const int kULindex = 29;
-  static const int kUSindex = 30;
-  static const int kOBOWindex = 31;
-  static const int kUSSSindex = 32;
-  static const int kUSSSOWindex = 33;
-  static const int kUSOWindex = 34;
-  static const int kEvrShortMin = kAEindex;
-  static const int kEvrShortMax = kUSindex;
-  static const int kVRIndexMax = kUSindex;
-  static const int kVRSpecialIndexMin = kOBOWindex;
-  static const int kVRSpecialIndexMax = kUSOWindex;
+  // Long, Maybe Undefined Min/Max
+  static const int kMaybeUndefinedMin = VR.kOB.index;
+  static const int kMaybeUndefinedMax = VR.kUN.index;
+  // Long EVR Min/Max
+  static const int kEvrLongMin = VR.kOD.index;
+  static const int kEvrLongMax = VR.kUT.index;
+  // Short EVR Min/Max
+  static const int kEvrShortMin = VR.kAE.index;
+  static const int kEvrShortMax = VR.kUS.index;
+  static const int kVRIndexMax = VR.kUS.index;
+  static const int kVRSpecialIndexMin = VR.kOBOW.index;
+  static const int kVRSpecialIndexMax = VR.kUSOW.index;
 
   static const List<VR> vrByIndex = const <VR>[
     // Sequence == 0
@@ -255,8 +218,9 @@ abstract class VR<V> {
     // EVR Long
     kOD, kOF, kOL, kUC, kUR, kUT,
     // EVR Short
-    kAE, kAS, kAT, kCS, kDA, kDS, kDT, kFD, kFL, kIS,
-    kLO, kLT, kPN, kSH, kSL, kSS, kST, kTM, kUI, kUS,
+    kAE, kAS, kAT, kCS, kDA, kDS, kDT,
+    kFD, kFL, kIS, kLO, kLT, kPN, kSH,
+    kSL, kSS, kST, kTM, kUI, kUL, kUS,
     // EVR Special
     kOBOW, kUSSS, kUSSSOW, kUSOW
   ];

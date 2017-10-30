@@ -146,30 +146,30 @@ class VRInt extends VR<int> {
 }
 
 class VRUnknown extends VR<int> {
-	const VRUnknown._(int index, int code, String id, int elementSize, int vfLengthSize,
-	                  int maxVFLength, String keyword)
-			: super(index, code, id, 1, 4, kMaxLongVF, keyword);
+  const VRUnknown._(int index, int code, String id, int elementSize, int vfLengthSize,
+      int maxVFLength, String keyword)
+      : super(index, code, id, 1, 4, kMaxLongVF, keyword);
 
-	bool get isUndefinedLengthAllowed => true;
+  bool get isUndefinedLengthAllowed => true;
 
-	@deprecated
-	@override
-	bool get isUnknown => true;
+  @deprecated
+  @override
+  bool get isUnknown => true;
 
-	bool _inRange(int value) => value >= 0 && value < 256;
+  bool _inRange(int value) => value >= 0 && value < 256;
 
-	/// Returns [true] of [value] is UN.
-	@override
-	bool isValidValue(int value, [Issues issues]) => _inRange(value);
+  /// Returns [true] of [value] is UN.
+  @override
+  bool isValidValue(int value, [Issues issues]) => _inRange(value);
 
-	/// Returns true if the [Type] of values is [List<int>].
-	@override
-	bool isValidValuesType(Iterable<int> values, [Issues issues]) => values is List<int>;
+  /// Returns true if the [Type] of values is [List<int>].
+  @override
+  bool isValidValuesType(Iterable<int> values, [Issues issues]) => values is List<int>;
 
-	//index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
-	/// UN - Unknown. The supertype of all VRs.
-	static const VRUnknown kUN =
-	const VRUnknown._(3, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
+  //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
+  /// UN - Unknown. The supertype of all VRs.
+  static const VRUnknown kUN =
+      const VRUnknown._(3, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
 }
 
 /// The class of all integer [VR]s.
@@ -186,7 +186,7 @@ class VRIntSpecial extends VR<int> {
   bool get isInteger => true;
 
   @override
-  bool isValidValuesType(Iterable<int> values, [Issues issues]) =>  false;
+  bool isValidValuesType(Iterable<int> values, [Issues issues]) => false;
 
   /// Returns true if the [Type] of values is [int].
   @override
