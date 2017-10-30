@@ -9,29 +9,13 @@ import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
 import 'package:system/system.dart';
 import 'package:tag/src/issues.dart';
+import 'package:tag/src/vr/constants.dart';
 import 'package:tag/src/vr/float.dart';
 import 'package:tag/src/vr/integer.dart';
 import 'package:tag/src/vr/string.dart';
 
 //TODO: Explain VR class structure
 
-const int kVRIndexMin = 0;
-const int kVRMaybeUndefinedIndexMin = 1; // OB
-const int kVRMaybeUndefinedIndexMax = 3; // UN
-
-const int kVRIvrIndexMin = 4;  // OD
-const int kVRIvrIndexMax = 30; // US
-
-const int kVREvrLongIndexMin = 4;   // OD
-const int kVREvrLongIndexMax = 9;   // UT
-const int kVREvrShortIndexMin = 10; // AE
-const int kVREvrShortIndexMax = 30; // US
-
-const int kVRSpecialIndexMin = 31; // OBOW
-const int kVRSpecialIndexMax = 34; // USOW
-
-const int kVRNormalIndexMin = 0;  // SQ
-const int kVRNormalIndexMax = 30; // US
 
 abstract class VR<V> {
   final int index;

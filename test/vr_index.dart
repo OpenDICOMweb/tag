@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:tag/src/vr/vr_index.dart';
+import 'package:tag/src/vr/constants.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 
