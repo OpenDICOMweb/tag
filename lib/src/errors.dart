@@ -4,8 +4,6 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'dart:typed_data';
-
 import 'package:system/core.dart';
 import 'package:tag/tag.dart';
 
@@ -158,27 +156,29 @@ Null invalidVRIndexError(int vrIndex, [String message = '']) {
 	return null;
 }
 
-class InvalidValueFieldLengthError extends Error {
-  final Uint8List vfBytes;
-  final int elementSize;
+/*
+class InvalidVFLengthError extends Error {
+  final int length;
+  final int maxVFLenght;
 
-  InvalidValueFieldLengthError(this.vfBytes, this.elementSize) {
+  InvalidVFLengthError(this.length, this.maxVFLenght) {
     if (log != null) log.error(toString());
   }
 
   @override
-  String toString() => _msg(vfBytes, elementSize);
+  String toString() => _msg(length, maxVFLenght);
 
-  static String _msg(Uint8List vfBytes, int elementSize) =>
-      'InvalidValueFieldLengthError: lengthInBytes(${vfBytes.length}'
-      'elementSize($elementSize)';
+  static String _msg(int length, int maxVFLength) =>
+      'InvalidVFLengthError: lengthInBytes(${length}'
+      'maxVFLength($maxVFLength)';
 }
 
-Null invalidValueFieldLengthError(Uint8List vfBytes, int elementSize) {
-  log.error(InvalidValueFieldLengthError._msg(vfBytes, elementSize));
-  if (throwOnError) throw new InvalidValueFieldLengthError(vfBytes, elementSize);
+Null invalidVFLength(int length, int maxVFLength) {
+  log.error(InvalidVFLengthError._msg(length, maxVFLength));
+  if (throwOnError) throw new InvalidVFLengthError(length, maxVFLength);
   return null;
 }
+*/
 
 class InvalidValuesTypeError<V> extends Error {
   final Tag tag;

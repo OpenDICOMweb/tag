@@ -8,10 +8,13 @@ import 'dart:typed_data';
 import 'package:dataset/dataset.dart';
 import 'package:string/string.dart';
 import 'package:system/core.dart';
+import 'package:tag/src/errors.dart';
 import 'package:tag/src/issues.dart';
+import 'package:tag/src/tag.dart';
 import 'package:tag/src/vr/float.dart';
 import 'package:tag/src/vr/integer.dart';
 import 'package:tag/src/vr/string.dart';
+
 
 //TODO: Explain VR class structure
 
@@ -114,6 +117,19 @@ abstract class VR<V> {
   String toString() => asString;
 
   // **** Static methods
+
+  static bool isValidTag(Tag tag, int vrIndex) {
+	  if (tag.vr == VR.kUN) return true;
+	  if (tag.vrIndex >= VR.kOBOW.index && tag.vrIndex <= VR.kUSOW.index) {
+		  return tag.vr.isValidVR(VR.lookupByIndex(vrIndex));
+	  } else if (tag.vrIndex <= VR.kUS.index) {
+		  if (tag.vrIndex != vrIndex) {
+			  invalidTagError(tag);
+			  return false;
+		  }
+	  }
+	  return true;
+  }
 
   static bool invalid(VR vr, Issues issues, VR correctVR) {
     final msg = 'Invalid VR($vr) Error, correct VR is $correctVR.';
