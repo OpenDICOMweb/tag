@@ -8,7 +8,7 @@ import 'dart:typed_data';
 
 import 'package:number/number.dart';
 import 'package:string/string.dart';
-import 'package:system/system.dart';
+import 'package:system/core.dart';
 import 'package:tag/src/issues.dart';
 import 'package:tag/src/vr/vr.dart';
 
@@ -174,9 +174,9 @@ class VRUnknown extends VR<int> {
 
 /// The class of all integer [VR]s.
 class VRIntSpecial extends VR<int> {
-  final List<VR> vrs;
+  final List<int> vrIndices;
 
-  const VRIntSpecial._(int index, String id, String keyword, this.vrs)
+  const VRIntSpecial._(int index, String id, String keyword, this.vrIndices)
       : super(index, -1, id, -1, -1, -1, keyword);
 
   @override
@@ -193,20 +193,21 @@ class VRIntSpecial extends VR<int> {
   bool isValidValue(int value, [Issues issues]) => false;
 
   @override
-  bool isValidVR(VR vr) => vrs.contains(vr);
+  bool isValidVRIndex(int vrIndex) => vrIndices.contains(vrIndex);
 
   // **** All VRs below this line are special and used for validation only. ****
   // The constants defined below are in the order of the next line:
   // index, code, id, elementSize, vfLengthFieldSize, maxVFLength, keyword
   static const VRIntSpecial kOBOW =
-      const VRIntSpecial._(31, 'OBOW', 'OBorOW', const <VR>[VRInt.kOB, VRInt.kOW]);
+      const VRIntSpecial._(31, 'OBOW', 'OBorOW',
+		                           const <int>[kOBIndex, kOWIndex]);
 
   static const VRIntSpecial kUSSS =
-      const VRIntSpecial._(32, 'USSS', 'USorSS', const <VR>[VRInt.kUS, VRInt.kSS]);
+      const VRIntSpecial._(32, 'USSS', 'USorSS', const <int>[kUSIndex, kSSIndex]);
 
   static const VRIntSpecial kUSSSOW = const VRIntSpecial._(
-      33, 'USSSOW', 'USorSSorOW', const <VR>[VRInt.kUS, VRInt.kSS, VRInt.kOW]);
+      33, 'USSSOW', 'USorSSorOW', const <int>[kUSIndex, kSSIndex, kOWIndex]);
 
   static const VRIntSpecial kUSOW =
-      const VRIntSpecial._(34, 'USOW', 'USorOW', const <VR>[VRInt.kUS, VRInt.kOW]);
+      const VRIntSpecial._(34, 'USOW', 'USorOW', const <int>[kUSIndex, kOWIndex]);
 }

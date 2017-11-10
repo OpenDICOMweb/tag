@@ -221,8 +221,8 @@ abstract class VR<V> {
   static const int kMaybeUndefinedMax = kVRMaybeUndefinedIndexMax;
 
   // IVR Min/Max
-  static const int kIvrMin = kVRIvrIndexMin;
-  static const int kIvrMax = kVRIvrIndexMax;
+  static const int kIvrMin = kVRIvrDefinedIndexMin;
+  static const int kIvrMax = kVRIvrDefinedIndexMax;
 
   // Long EVR Min/Max
   static const int kEvrLongMin = kVREvrLongIndexMin;
