@@ -15109,19 +15109,24 @@ class PTag extends Tag {
           'OverlayComments', 0x60004000, 'Overlay Comments', VR.kLT, VM.k1, true);
   static const PTag kFloatPixelData = const PTag._(
       'FloatPixelData', 0x7FE00008, 'Float Pixel Data', VR.kOF, VM.k1, false);
+
   static const PTag kDoubleFloatPixelData = const PTag._('DoubleFloatPixelData',
       0x7FE00009, 'Double Float Pixel Data', VR.kOD, VM.k1, false);
 
+
+  static const PTag kPixelData =
+  const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOBOW, VM.k1, false);
+
+/*
   static const PTag kPixelDataOB =
       const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOB, VM.k1, false);
-
-  static const PTag kPixelData = kPixelDataOB;
 
   static const PTag kPixelDataOW =
       const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOW, VM.k1, false);
 
   static const PTag kPixelDataUN =
       const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOBOW, VM.k1, false);
+*/
 
   static const PTag kCoefficientsSDVN
       //(7FE0,0020)

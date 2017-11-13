@@ -36,6 +36,9 @@ abstract class VR<V> {
   /// Is the kUndefinedLength value allowed as a Value Field Length.
   bool get undefinedLengthAllowed => false;
 
+  bool get isNormal => true;
+  bool get isSpecial => !isNormal;
+
   bool get isAscii => false;
   bool get isUtf8 => false;
 
@@ -80,6 +83,8 @@ abstract class VR<V> {
   bool get isLengthAlwaysValid => false;
 
   bool isValidVR(VR vr) => vr.index == index;
+
+  bool isValidVRIndex(int i) => i == index;
 
   /// Returns _true_  if [value] is valid for _this_.
   bool isValidValue(V value, [Issues issues]);

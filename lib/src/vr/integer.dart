@@ -152,32 +152,42 @@ class VRUnknown extends VR<int> {
 
   bool get isUndefinedLengthAllowed => true;
 
+  @override
+  bool get isNormal => false;
+
   @deprecated
   @override
   bool get isUnknown => true;
 
-  bool _inRange(int value) => value >= 0 && value < 256;
-
-  /// Returns _true_  of [value] is UN.
-  @override
-  bool isValidValue(int value, [Issues issues]) => _inRange(value);
+  bool _inRange(int value) => value >= 0 && value <= 255;
 
   /// Returns true if the [Type] of values is [List<int>].
   @override
   bool isValidValuesType(Iterable<int> values, [Issues issues]) => values is List<int>;
 
+  /// Returns _true_  if 0 <= [value] <= 255.
+  @override
+  bool isValidValue(int value, [Issues issues]) => _inRange(value);
+
+  @override
+  bool isValidVRIndex(int vrIndex) => true;
+
   //index, code, id, elementSize, vfLengthSize, maxVFLength, keyword
   /// UN - Unknown. The supertype of all VRs.
   static const VRUnknown kUN =
-      const VRUnknown._(3, 0x4e55, 'UN', 1, 4, kMaxUN, 'Unknown');
+      const VRUnknown._(3, 0x4e55, 'UN', 1, 4, kMaxLongVF, 'Unknown');
 }
 
 /// The class of all integer [VR]s.
 class VRIntSpecial extends VR<int> {
   final List<int> vrIndices;
 
-  const VRIntSpecial._(int index, String id, String keyword, this.vrIndices)
-      : super(index, -1, id, -1, -1, -1, keyword);
+  const VRIntSpecial._(int index, String id, int elementSize, int vfLengthSize,
+                    int maxVFLength, String keyword, this.vrIndices)
+      : super(index, -1, id, elementSize, vfLengthSize, maxVFLength, keyword);
+
+  @override
+  bool get isNormal => false;
 
   @override
   bool get isBinary => true;
@@ -197,17 +207,21 @@ class VRIntSpecial extends VR<int> {
 
   // **** All VRs below this line are special and used for validation only. ****
   // The constants defined below are in the order of the next line:
-  // index, code, id, elementSize, vfLengthFieldSize, maxVFLength, keyword
+  // vrIndex, id, name, validVRIndices
+
   static const VRIntSpecial kOBOW =
-      const VRIntSpecial._(31, 'OBOW', 'OBorOW',
-		                           const <int>[kOBIndex, kOWIndex]);
+      const VRIntSpecial._(31, 'OBOW', -1, 4, kMaxLongVF, 'OBorOW',
+		                           const <int>[kOBIndex, kOWIndex, kUNIndex]);
 
   static const VRIntSpecial kUSSS =
-      const VRIntSpecial._(32, 'USSS', 'USorSS', const <int>[kUSIndex, kSSIndex]);
+      const VRIntSpecial._(32, 'USSS', 2, 2, kMaxShortVF, 'USorSS',
+		                           const <int>[kUSIndex, kSSIndex, kUNIndex]);
 
   static const VRIntSpecial kUSSSOW = const VRIntSpecial._(
-      33, 'USSSOW', 'USorSSorOW', const <int>[kUSIndex, kSSIndex, kOWIndex]);
+      33, 'USSSOW', 2, -1, -1, 'USorSSorOW',
+		  const <int>[kUSIndex, kSSIndex, kOWIndex, kUNIndex]);
 
   static const VRIntSpecial kUSOW =
-      const VRIntSpecial._(34, 'USOW', 'USorOW', const <int>[kUSIndex, kOWIndex]);
+      const VRIntSpecial._(34, 'USOW', 2, -1, -1, 'USorOW',
+		                           const <int>[kUSIndex, kOWIndex, kUNIndex]);
 }

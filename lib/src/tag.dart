@@ -63,12 +63,15 @@ abstract class Tag {
   int get index => code;
   int get code;
   VR get vr;
+  bool get hasNormalVR => vr.isNormal;
+  bool get hasSpecialVR => !hasNormalVR;
+
   //Fix: hack to avoid Type problem
   VR get badVR => null;
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
-  VM get vm => VM.k1_n;
 
+  VM get vm => VM.k1_n;
   int get vmMin => vm.min;
   int get vmMax => vm.max;
   int get vmColumns => vm.columns;
