@@ -154,8 +154,8 @@ abstract class VR<V> {
 
   static bool _doError(String msg, Issues issues) {
     log.error(msg);
-    issues.add(msg);
-    if (throwOnError) throw new _InvalidVRError(msg);
+    if (issues != null) issues.add(msg);
+    if (throwOnError) throw new InvalidVRError(msg);
     return false;
   }
 
@@ -327,12 +327,4 @@ class VRSequence extends VR<Dataset> {
   static const VR kSQ = const VRSequence._(0, 0x5153, 'SQ', 1, 4, kMaxLongVF, 'Sequence');
 }
 
-// Urgent: jim to fix
-class _InvalidVRError extends Error {
-  String msg;
 
-  _InvalidVRError(this.msg);
-
-  @override
-  String toString() => msg;
-}

@@ -129,30 +129,32 @@ Null tagKeywordError(String keyword) {
   return null;
 }
 
+//Urgent Jim: Fix
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidVRError extends Error {
   VR vr;
-  String message;
+  String msg;
 
-  InvalidVRError(this.vr, [this.message = '']);
+  InvalidVRError(this.msg, [this.vr]);
 
   @override
-  String toString() => _msg(vr);
+  String toString() => _msg(msg);
 
-  static String _msg(VR vr, [String message = '']) =>
+  //Urgent Jim: Fix
+  static String _msg(String message, [VR vr]) =>
       'Error: Invalid VR (Value Representation) "$vr" - $message';
 }
 
 Null invalidVRError(VR vr, [String message = '']) {
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
+	log.error(InvalidVRError._msg(message, vr));
+	if (throwOnError) throw new InvalidVRError(message);
 	return null;
 }
 
 Null invalidVRIndexError(int vrIndex, [String message = '']) {
 	final vr = VR.lookupByCode(vrIndex);
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
+	log.error(InvalidVRError._msg(message, vr));
+	if (throwOnError) throw new InvalidVRError(message);
 	return null;
 }
 
