@@ -129,33 +129,6 @@ Null tagKeywordError(String keyword) {
   return null;
 }
 
-//TODO: convert this to handle both int and String and remove next two Errors
-class InvalidVRError extends Error {
-  VR vr;
-  String message;
-
-  InvalidVRError(this.vr, [this.message = '']);
-
-  @override
-  String toString() => _msg(vr);
-
-  static String _msg(VR vr, [String message = '']) =>
-      'Error: Invalid VR (Value Representation) "$vr" - $message';
-}
-
-Null invalidVRError(VR vr, [String message = '']) {
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
-	return null;
-}
-
-Null invalidVRIndexError(int vrIndex, [String message = '']) {
-	final vr = VR.lookupByCode(vrIndex);
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
-	return null;
-}
-
 /*
 class InvalidVFLengthError extends Error {
   final int length;
@@ -265,3 +238,5 @@ Null invalidGroupError(int group) {
   if (throwOnError) throw new InvalidGroupError(group);
   return null;
 }
+
+

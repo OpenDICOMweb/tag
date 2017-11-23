@@ -136,29 +136,6 @@ abstract class VR<V> {
 	  return true;
   }
 
-  static bool invalid(VR vr, Issues issues, VR correctVR) {
-    final msg = 'Invalid VR($vr) Error, correct VR is $correctVR.';
-    return _doError(msg, issues);
-  }
-
-  static bool invalidIndex(int index, Issues issues, VR correctVR) {
-    final msg =
-        'Invalid VR index($index = ${vrAlphabeticList[index]}), correct VR is $correctVR.';
-    return _doError(msg, issues);
-  }
-
-  static bool invalidCode(int code, Issues issues, VR correctVR) {
-    final msg = 'Invalid VR code($code = ${vrByCode[code]}), correct VR is $correctVR.';
-    return _doError(msg, issues);
-  }
-
-  static bool _doError(String msg, Issues issues) {
-    log.error(msg);
-    issues.add(msg);
-    if (throwOnError) throw new _InvalidVRError(msg);
-    return false;
-  }
-
   // **** Constant members
 
   // Unknown
@@ -274,7 +251,6 @@ abstract class VR<V> {
     kUT // stop reformat
   ];
 
-//Urgent remove nulls
   static const Map<int, VR> vrByCode = const <int, VR>{
     0x4541: kAE, 0x5341: kAS, 0x5441: kAT, 0x5343: kCS, 0x4144: kDA,
     0x5344: kDS, 0x5444: kDT, 0x4446: kFD, 0x4c46: kFL, 0x5349: kIS,
@@ -327,12 +303,43 @@ class VRSequence extends VR<Dataset> {
   static const VR kSQ = const VRSequence._(0, 0x5153, 'SQ', 1, 4, kMaxLongVF, 'Sequence');
 }
 
-// Urgent: jim to fix
-class _InvalidVRError extends Error {
+
+//TODO: convert this to handle both int and String and remove next two Errors
+class InvalidVRError extends Error {
+  VR vr;
   String msg;
 
-  _InvalidVRError(this.msg);
+  InvalidVRError(this.msg, [this.vr]);
 
   @override
-  String toString() => msg;
+  String toString() => _msg(vr, msg);
+
+  static String _msg(VR vr, [String msg = '']) =>
+      'Error: Invalid VR (Value Representation) "$vr" - $msg';
 }
+
+bool invalidVR(VR vr, Issues issues, VR correctVR) {
+  final msg = InvalidVRError._msg(vr, 'the correct VR is $correctVR');
+  return _doError(msg, issues, correctVR);
+}
+
+bool invalidVRIndex(int index, Issues issues, VR correctVR) {
+  final msg =
+      'Invalid VR index($index = ${VR.vrAlphabeticList[index]}), correct VR is $correctVR.';
+  return _doError(msg, issues, correctVR);
+}
+
+bool invalidVRCode(int code, Issues issues, VR correctVR) {
+  final msg = 'Invalid VR code($code = ${VR.vrByCode[code]}), correct VR is $correctVR.';
+  return _doError(msg, issues, correctVR);
+}
+
+bool _doError(String msg, Issues issues, VR correctVR) {
+  log.error(msg);
+  if (issues != null) issues.add(msg);
+  if (throwOnError) throw new InvalidVRError(msg);
+  return false;
+}
+
+
+
