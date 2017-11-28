@@ -5,12 +5,13 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:number/number.dart';
+import 'package:vr/vr.dart';
+
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:tag/src/vr/vr.dart';
 
-typedef Tag TagMaker<E>(int code, VR<E> vr);
+typedef Tag TagMaker<V, N>(int code, VR<V, N> vr);
 
 abstract class PrivateTag extends Tag {
   @override

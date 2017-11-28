@@ -4,9 +4,11 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
+import 'package:vr/vr.dart';
+
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:tag/src/vr/vr.dart';
+
 
 class PDTagDefinition  {
   final int index;

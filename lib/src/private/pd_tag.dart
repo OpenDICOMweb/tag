@@ -5,11 +5,12 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:number/number.dart';
+import 'package:vr/vr.dart';
+
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:tag/src/vr/vr.dart';
 
 ///TODO add constant Tag for PDTag.kUnknownCreator
 class PDTag extends PrivateTag {

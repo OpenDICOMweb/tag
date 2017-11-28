@@ -14,14 +14,13 @@ import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
 import 'package:tag/src/ie_type.dart';
-import 'package:tag/src/issues.dart';
 import 'package:tag/src/p_tag.dart';
 import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:tag/src/vr/vr.dart';
+import 'package:vr/vr.dart';
 
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
@@ -472,6 +471,19 @@ abstract class Tag {
       return null;
     }*/
     throw new UnimplementedError();
+  }
+
+  static bool isValidVR(Tag tag, int vrIndex) {
+    if (tag.vr == VR.kUN) return true;
+    if (tag.vrIndex >= VR.kOBOW.index && tag.vrIndex <= VR.kUSOW.index) {
+      return isNormalVRIndex(vrIndex);
+    } else if (tag.vrIndex <= VR.kUS.index) {
+      if (tag.vrIndex != vrIndex) {
+        invalidVRIndexForTag(tag, vrIndex);
+        return false;
+      }
+    }
+    return true;
   }
 
   //TODO: Use the 'package:collection/collection.dart' ListEquality

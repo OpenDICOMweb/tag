@@ -5,12 +5,13 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:number/number.dart';
+import 'package:vr/vr.dart';
+
 import 'package:tag/src/private/pc_tag_map.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:tag/src/vr/vr.dart';
 
 //TODO: add constant tag for PCTag.kUnknown
 //TODO: this should be done the same way as KnownPublicTags

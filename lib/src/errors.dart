@@ -6,6 +6,7 @@
 
 import 'package:system/core.dart';
 import 'package:tag/tag.dart';
+import 'package:vr/vr.dart';
 
 class InvalidTagError extends Error {
   Object tag;
@@ -130,30 +131,37 @@ Null tagKeywordError(String keyword) {
 }
 
 //TODO: convert this to handle both int and String and remove next two Errors
-class InvalidVRError extends Error {
+class InvalidVRForTagError extends Error {
+  Tag tag;
   VR vr;
-  String message;
 
-  InvalidVRError(this.vr, [this.message = '']);
+  InvalidVRForTagError(this.tag, this.vr);
 
   @override
-  String toString() => _msg(vr);
+  String toString() => _msg(tag, vr);
 
-  static String _msg(VR vr, [String message = '']) =>
-      'Error: Invalid VR (Value Representation) "$vr" - $message';
+  static String _msg(Tag tag, VR vr) =>
+      'Error: Invalid VR (Value Representation) "$vr" for $tag';
 }
 
-Null invalidVRError(VR vr, [String message = '']) {
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
+Null invalidVRForTag(Tag tag, VR vr) {
+	log.error(InvalidVRForTagError._msg(tag, vr));
+	if (throwOnError) throw new InvalidVRForTagError(tag, vr);
 	return null;
 }
 
-Null invalidVRIndexError(int vrIndex, [String message = '']) {
-	final vr = VR.lookupByCode(vrIndex);
-	log.error(InvalidVRError._msg(vr, message));
-	if (throwOnError) throw new InvalidVRError(vr);
+Null invalidVRIndexForTag(Tag tag, int vrIndex) {
+	final vr = VR.lookupByIndex(vrIndex);
+	log.error(InvalidVRForTagError._msg(tag, vr));
+	if (throwOnError) throw new InvalidVRForTagError(tag, vr);
 	return null;
+}
+
+Null invalidVRCodeForTag(Tag tag, int vrCode) {
+  final vr = VR.lookupByCode(vrCode);
+  log.error(InvalidVRForTagError._msg(tag, vr));
+  if (throwOnError) throw new InvalidVRForTagError(tag, vr);
+  return null;
 }
 
 /*

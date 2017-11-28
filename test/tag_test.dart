@@ -7,6 +7,7 @@
 import 'package:system/server.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
+import 'package:vr/vr.dart';
 
 List<int> tags = const [
   kSpecificCharacterSet,

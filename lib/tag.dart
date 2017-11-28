@@ -11,7 +11,6 @@ export 'package:tag/src/elt.dart';
 export 'package:tag/src/errors.dart';
 export 'package:tag/src/group.dart';
 export 'package:tag/src/ie_type.dart';
-export 'package:tag/src/issues.dart';
 export 'package:tag/src/p_tag.dart';
 export 'package:tag/src/p_tag_code_map.dart';
 export 'package:tag/src/p_tag_codes.dart';
@@ -28,6 +27,5 @@ export 'package:tag/src/tag.dart';
 export 'package:tag/src/tag_map.dart';
 export 'package:tag/src/term.dart';
 export 'package:tag/src/vm.dart';
-export 'package:tag/vr.dart';
 
 

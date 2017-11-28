@@ -43,10 +43,7 @@ abstract class DeIdOption {
   String toString() => '$runtimeType($keyword)';
 }
 
-Element delete(Dataset ds, int index) {
-  //Urgent
-}
-
+Element delete(Dataset ds, int index) => ds.delete(index);
 
 class DeIdBasic {
 	final int  index;

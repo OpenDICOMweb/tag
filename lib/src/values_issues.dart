@@ -5,7 +5,7 @@
 // See the AUTHORS file for other contributors.
 
 
-import 'package:string/string.dart';
+import 'package:system/core.dart';
 import 'package:tag/src/tag.dart';
 
 class Issues<V> {
