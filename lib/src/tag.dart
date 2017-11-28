@@ -257,7 +257,7 @@ abstract class Tag {
     if (vr == VR.kUN) return true;
 
     //TODO: replace this when types are working
-    if (!vr.isValidValuesType(vList, issues)) return false;
+//    if (!vr.isValidValuesType(vList, issues)) return false;
     if (vList is! List<V>) {
       print('isValidType: $runtimeType: $vList');
       invalidValuesTypeError(this, vList);

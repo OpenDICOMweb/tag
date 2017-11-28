@@ -28,7 +28,7 @@ void main() {
   group('Tag validators in tag', () {
     system.throwOnError = false;
 
-    test('test for isvalidvalues', () {
+    test('test for isValidValues', () {
       const emptyListsInt = const <int>[];
       final listsInt =  <int>[1, 2, 3];
 
@@ -45,8 +45,9 @@ void main() {
       }
       log.debug('CS: "$listsInt"tagCS0: vr: ${tagCS0.vr}, index: ${tagCS0.vr.index}');
 
-      expect(tagCS0.isValidValues(emptyListsInt), false);
-      expect(tagCS0.isValidValues(listsInt), false);
+      //Urgent: replace with test in Element/CS
+      //     expect(tagCS0.isValidValues(emptyListsInt), false);
+    //  expect(tagCS0.isValidValues(listsInt), false);
       //Urgent: add test for invalid Strings
       expect(tagCS1.isValidValues(listsStr), true);
     });
