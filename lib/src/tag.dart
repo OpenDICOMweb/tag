@@ -299,8 +299,10 @@ abstract class Tag {
     return true;
   }
 
-  bool isValidValue<V>(V value, [Issues issues]) => vr.isValidValue(value, issues);
-  bool isNotValidValue<V>(V value, [Issues issues]) => vr.isNotValidValue(value, issues);
+  bool isValidValue<V>(V value, [Issues issues]) =>
+      vr.isValidValue(value, issues);
+  bool isNotValidValue<V>(V value, [Issues issues]) =>
+      vr.isNotValidValue(value, issues);
 
   /// Returns a [list<E>] of valid values for this [Tag], or _null_  if
   /// and of the [String]s in [sList] are not parsable.
@@ -320,7 +322,8 @@ abstract class Tag {
 
   // If a VR has a long Value Field, then it has [VM.k1],
   // and its length is always valid.
-  String lengthIssue<V>(Iterable<V> vList) => (vr.hasShortVF && isNotValidLength(vList))
+  String lengthIssue<V>(Iterable<V> vList) => (vr.hasShortVF &&
+          isNotValidLength(vList))
       ? 'Invalid Length: min($minValues) <= value($vList.length) <= max($maxValues)'
       : null;
 
@@ -331,7 +334,8 @@ abstract class Tag {
     return issues;
   }
 
-  List<V> checkValues<V>(List<V> values) => (isValidValues(values)) ? values : null;
+  List<V> checkValues<V>(List<V> values) =>
+      (isValidValues(values)) ? values : null;
 
   // Placeholder until VR is integrated into TagBase
   V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
@@ -346,6 +350,21 @@ abstract class Tag {
     if (length == 0) return true;
     return length >= minValues && length <= maxValues && (length % width) == 0;
   }
+
+  bool isValidVFLength(int vfl, int maxVFLength, int sizeInBytes,
+      [Issues issues]) {
+    assert(vfl >= 0 && vfl <= maxVFLength);
+    if (vr.isLengthAlwaysValid == true) return true;
+    return vfl >= (minValues * sizeInBytes) &&
+        vfl <= (maxValues * sizeInBytes) &&
+        (vfl % width) == 0;
+  }
+
+/* Flush when sure this is less accurate then above.
+  bool isValidVFLength(int lengthInBytes) =>
+      (lengthInBytes >= minVFLength && lengthInBytes <= vr.maxVFLength);
+*/
+
 
   int getMax() {
     if (vmMax != -1) return vmMax;
@@ -371,11 +390,9 @@ abstract class Tag {
   String lengthError(int length) =>
       'Invalid Length: min($minValues) <= length($length) <= max($maxValues)';
 
-  bool isValidVFLength(int lengthInBytes) =>
-      (lengthInBytes >= minVFLength && lengthInBytes <= vr.maxVFLength);
 
-  Uint8List checkVFLength(Uint8List bytes) =>
-      (isValidVFLength(bytes.length)) ? bytes : null;
+  Uint8List checkVFLength(Uint8List bytes, int maxVFLength, int sizeInBytes) =>
+      (isValidVFLength(bytes.length, maxVFLength, sizeInBytes)) ? bytes : null;
 
   //Fix or Flush
   //Uint8List checkBytes(Uint8List bytes) => vr.checkBytes(bytes);
@@ -447,7 +464,8 @@ abstract class Tag {
       var tag = Tag.lookupPublicCode(code, vr);
       return tag ??= new PTag.unknown(code, vr);
     } else {
-      if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
+      if (Tag.isPrivateGroupLengthCode(code))
+        return new PrivateTagGroupLength(code, vr);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
       msg = 'Unknown Private Tag Code: creator: $creator';
@@ -487,6 +505,12 @@ abstract class Tag {
     return true;
   }
 
+  //TODO: move these to Fast Tag
+ // static bool isValidTagCode(int index) => _isValidTagIndex(index, kVR);
+ // static bool isValidTagCode(int code) => _isValidTagCode(code, kVR);
+ // static bool isValidTagKeyword(String keyword) =>
+ //     _isValidTagKeyword(keyword, kVR);
+
   //TODO: Use the 'package:collection/collection.dart' ListEquality
   //TODO:  decide if this ahould be here
   /// Compares the elements of two [List]s and returns _true_  if all
@@ -517,7 +541,8 @@ abstract class Tag {
   }
 
   static Tag lookupPrivateCreatorCode(int code, VR vr, String token) {
-    if (Tag.isPrivateGroupLengthCode(code)) return new PrivateTagGroupLength(code, vr);
+    if (Tag.isPrivateGroupLengthCode(code))
+      return new PrivateTagGroupLength(code, vr);
     if (isPrivateCreatorCode(code)) return new PCTag(code, vr, token);
     throw new InvalidTagCodeError(code);
   }
@@ -572,7 +597,8 @@ abstract class Tag {
       Group.isPublic(Group.fromTag(code)) && Elt.fromTag(code) == 0;
 
   static bool isPublicGroupLengthKeyword(String keyword) =>
-      keyword == 'PublicGroupLengthKeyword' || isPublicGroupLengthKeywordCode(keyword);
+      keyword == 'PublicGroupLengthKeyword' ||
+      isPublicGroupLengthKeywordCode(keyword);
 
   //TODO: test - needs to handle 'oxGGGGEEEE' and 'GGGGEEEE'
   static bool isPublicGroupLengthKeywordCode(String keywordCode) {
@@ -595,7 +621,8 @@ abstract class Tag {
   }
 
   static bool isPrivateDataCode(int code) =>
-      Group.isPrivate(Group.fromTag(code)) && Elt.isPrivateData(Elt.fromTag(code));
+      Group.isPrivate(Group.fromTag(code)) &&
+      Elt.isPrivateData(Elt.fromTag(code));
 
   static int privateCreatorBase(int code) => Elt.pcBase(Elt.fromTag(code));
 
@@ -628,13 +655,16 @@ abstract class Tag {
 
   /// Returns a valid [PDTagKnown], or _null_ .
   static int toPrivateData(int group, int pcIndex, int pdIndex) {
-    if (Group.isPrivate(group) && _isPCIndex(pcIndex) && _isPDIndex(pcIndex, pdIndex))
+    if (Group.isPrivate(group) &&
+        _isPCIndex(pcIndex) &&
+        _isPDIndex(pcIndex, pdIndex))
       return _toPrivateData(group, pcIndex, pcIndex);
     return null;
   }
 
   /// Returns a [PCTag], without checking arguments.
-  static int _toPrivateCreator(int group, int pcIndex) => (group << 16) + pcIndex;
+  static int _toPrivateCreator(int group, int pcIndex) =>
+      (group << 16) + pcIndex;
 
   /// Returns a [PDTagKnown], without checking arguments.
   static int _toPrivateData(int group, int pcIndex, int pdIndex) =>
@@ -649,7 +679,8 @@ abstract class Tag {
   //static bool _isSimplePDIndex(int pde) => 0x1000 >= pde && pde <= 0xFFFF;
 
   /// Return _true_  if [pdi] is a valid Private Data Index.
-  static bool _isPDIndex(int pci, int pdi) => _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
+  static bool _isPDIndex(int pci, int pdi) =>
+      _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
 
   /// Returns the offset base for a Private Data Element with the
   /// Private Creator [pcIndex].
