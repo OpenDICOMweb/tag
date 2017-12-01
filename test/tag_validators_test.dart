@@ -56,7 +56,7 @@ void main() {
       expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues + 1)), false);
       expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues)), true);
       log.debug('tagCS: maxValues(${tagCS1.maxValues}, '
-          '${hex16(tagCS1.maxValues)}');
+          '${hex32(tagCS1.maxValues)}');
       expect(tagCS1.isValidLength(new List<String>( tagCS1.maxValues - 1)), true);
       expect(tagCS1.isValidLength(new List<String> (tagCS1.minValues - 1)), false);
       expect(tagCS1.isValidLength(new List<String> (tagCS1.minValues)), true);
