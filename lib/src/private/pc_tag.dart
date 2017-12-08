@@ -73,7 +73,7 @@ class PCTag extends PrivateTag {
       'base($baseHex), limit($limitHex), actualVR($vr)';
 
   @override
-  String toString() => '$runtimeType($name) $vr $vm';
+  String toString() => '$runtimeType($name) $dcm $vr $vm';
 
   static PCTag maker(int code, VR vr, [Object name]) =>
       new PCTag(code, vr, name);

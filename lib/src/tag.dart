@@ -9,7 +9,6 @@ import 'dart:typed_data';
 
 import 'package:dataset/dataset.dart';
 import 'package:system/core.dart';
-
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -468,8 +467,10 @@ abstract class Tag {
         return new PrivateTagGroupLength(code, vr);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
-      msg = 'Unknown Private Tag Code: creator: $creator';
+
     }
+    print('lookupTag: ${Tag.toDcm(code)} $vr, $creator');
+    msg = 'Unknown Private Tag Code: creator: $creator';
     return invalidTagCode(code, msg);
   }
 
