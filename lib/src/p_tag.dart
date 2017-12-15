@@ -4,18 +4,17 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:vr/vr.dart';
-
 import 'package:system/system.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
 import 'package:tag/src/group.dart';
-import 'package:tag/src/p_tag_codes.dart';
 import 'package:tag/src/p_tag_code_map.dart';
+import 'package:tag/src/p_tag_codes.dart';
 import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
+import 'package:vr/vr.dart';
 
 //TODO: is hashCode needed?
 class PTag extends Tag {
@@ -6698,8 +6697,7 @@ class PTag extends Tag {
   static const PTag kGrayLookupTableData
       //(0028,1200)
       = const PTag._('GrayLookupTableData', 0x00281200, 'Gray Lookup Table Data',
-		                     VR.kUSSSOW,
-          VM.k1_n, true);
+          VR.kUSSSOW, VM.k1_n, true);
   static const PTag kRedPaletteColorLookupTableData
       //(0028,1201)
       = const PTag._('RedPaletteColorLookupTableData', 0x00281201,
@@ -6842,8 +6840,8 @@ class PTag extends Tag {
           VM.k1, false);
   static const PTag kLUTDescriptor
       //(0028,3002)
-      = const PTag._('LUTDescriptor', 0x00283002, 'LUT Descriptor', VR.kUSSS, VM.k3,
-		                     false);
+      =
+      const PTag._('LUTDescriptor', 0x00283002, 'LUT Descriptor', VR.kUSSS, VM.k3, false);
   static const PTag kLUTExplanation
       //(0028,3003)
       =
@@ -10756,42 +10754,86 @@ class PTag extends Tag {
       //(0072,0056)
       = const PTag._('SelectorAttributePrivateCreator', 0x00720056,
           'Selector Attribute Private Creator', VR.kLO, VM.k1, false);
+  static const PTag kSelectorAEValue
+      //(0072,005E)
+      = const PTag._(
+          'SelectorAEValue', 0x0072005E, 'Selector AE Value', VR.kAE, VM.k1_n, false);
+  static const PTag kSelectorASValue
+      //(0072,005F)
+      = const PTag._(
+          'SelectorASValue', 0x0072005F, 'Selector AS Value', VR.kAS, VM.k1_n, false);
   static const PTag kSelectorATValue
       //(0072,0060)
       = const PTag._(
           'SelectorATValue', 0x00720060, 'Selector AT Value', VR.kAT, VM.k1_n, false);
+  static const PTag kSelectorDAValue
+      //(0072,0061)
+      = const PTag._(
+          'SelectorDAValue', 0x00720061, 'Selector DA Value', VR.kDA, VM.k1_n, false);
   static const PTag kSelectorCSValue
       //(0072,0062)
       = const PTag._(
           'SelectorCSValue', 0x00720062, 'Selector CS Value', VR.kCS, VM.k1_n, false);
+  static const PTag kSelectorDTValue
+      //(0072,0063)
+      = const PTag._(
+          'SelectorDTValue', 0x00720063, 'Selector DT Value', VR.kDT, VM.k1_n, false);
   static const PTag kSelectorISValue
       //(0072,0064)
       = const PTag._(
           'SelectorISValue', 0x00720064, 'Selector IS Value', VR.kIS, VM.k1_n, false);
+  static const PTag kSelectorOBValue
+      //(0072,0065)
+      = const PTag._(
+          'SelectorOBValue', 0x00720065, 'Selector OB Value', VR.kOB, VM.k1_n, false);
   static const PTag kSelectorLOValue
       //(0072,0066)
       = const PTag._(
           'SelectorLOValue', 0x00720066, 'Selector LO Value', VR.kLO, VM.k1_n, false);
+  static const PTag kSelectorOFValue
+      //(0072,0067)
+      = const PTag._(
+          'SelectorOFValue', 0x00720067, 'Selector OF Value', VR.kOF, VM.k1_n, false);
   static const PTag kSelectorLTValue
       //(0072,0068)
       = const PTag._(
           'SelectorLTValue', 0x00720068, 'Selector LT Value', VR.kLT, VM.k1, false);
+  static const PTag kSelectorOWValue
+      //(0072,0069)
+      = const PTag._(
+          'SelectorOWValue', 0x00720069, 'Selector OW Value', VR.kOW, VM.k1_n, false);
   static const PTag kSelectorPNValue
       //(0072,006A)
       = const PTag._(
           'SelectorPNValue', 0x0072006A, 'Selector PN Value', VR.kPN, VM.k1_n, false);
+  static const PTag kSelectorTMValue
+      //(0072,006B)
+      = const PTag._(
+          'SelectorTMValue', 0x00720069, 'Selector TM Value', VR.kTM, VM.k1_n, false);
   static const PTag kSelectorSHValue
       //(0072,006C)
       = const PTag._(
           'SelectorSHValue', 0x0072006C, 'Selector SH Value', VR.kSH, VM.k1_n, false);
+  static const PTag kSelectorUNValue
+      //(0072,006D)
+      = const PTag._(
+          'SelectorUNValue', 0x0072006D, 'Selector UN Value', VR.kUN, VM.k1_n, false);
   static const PTag kSelectorSTValue
       //(0072,006E)
       = const PTag._(
           'SelectorSTValue', 0x0072006E, 'Selector ST Value', VR.kST, VM.k1, false);
+  static const PTag kSelectorUCValue
+      //(0072,006F)
+      = const PTag._(
+          'SelectorUCValue', 0x0072006F, 'Selector UC Value', VR.kUC, VM.k1_n, false);
   static const PTag kSelectorUTValue
       //(0072,0070)
       = const PTag._(
           'SelectorUTValue', 0x00720070, 'Selector UT Value', VR.kUT, VM.k1, false);
+  static const PTag kSelectorURValue
+      //(0072,0071)
+      = const PTag._(
+          'SelectorURValue', 0x00720071, 'Selector UR Value', VR.kUR, VM.k1_n, false);
   static const PTag kSelectorDSValue
       //(0072,0072)
       = const PTag._(
@@ -10804,6 +10846,10 @@ class PTag extends Tag {
       //(0072,0074)
       = const PTag._(
           'SelectorFDValue', 0x00720074, 'Selector FD Value', VR.kFD, VM.k1_n, false);
+  static const PTag kSelectorOLValue
+      //(0072,0075)
+      = const PTag._(
+          'SelectorOLValue', 0x00720075, 'Selector OL Value', VR.kOL, VM.k1_n, false);
   static const PTag kSelectorFLValue
       //(0072,0076)
       = const PTag._(
@@ -10824,6 +10870,10 @@ class PTag extends Tag {
       //(0072,007E)
       = const PTag._(
           'SelectorSSValue', 0x0072007E, 'Selector SS Value', VR.kSS, VM.k1_n, false);
+  static const PTag kSelectorUIValue
+      //(0072,007F)
+      = const PTag._(
+          'SelectorUIValue', 0x0072007F, 'Selector UI Value', VR.kUI, VM.k1_n, false);
   static const PTag kSelectorCodeSequenceValue
       //(0072,0080)
       = const PTag._('SelectorCodeSequenceValue', 0x00720080,
@@ -14945,8 +14995,8 @@ class PTag extends Tag {
           'Waveform Sample Interpretation', VR.kCS, VM.k1, false);
   static const PTag kWaveformPaddingValue
       //(5400,100A)
-      = const PTag._('WaveformPaddingValue', 0x5400100A, 'Waveform Padding Value', VR.kOBOW,
-          VM.k1, false);
+      = const PTag._('WaveformPaddingValue', 0x5400100A, 'Waveform Padding Value',
+          VR.kOBOW, VM.k1, false);
   static const PTag kWaveformData
       //(5400,1010)
       = const PTag._('WaveformData', 0x54001010, 'Waveform Data', VR.kOBOW, VM.k1, false);
@@ -15114,9 +15164,8 @@ class PTag extends Tag {
   static const PTag kDoubleFloatPixelData = const PTag._('DoubleFloatPixelData',
       0x7FE00009, 'Double Float Pixel Data', VR.kOD, VM.k1, false);
 
-
   static const PTag kPixelData =
-  const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOBOW, VM.k1, false);
+      const PTag._('PixelData', 0x7FE00010, 'Pixel Data', VR.kOBOW, VM.k1, false);
 
 /*
   static const PTag kPixelDataOB =
@@ -15448,21 +15497,21 @@ class PTagUnknown extends PTag {
 
 /// A [Tag] with a known key, but invalid [VR].
 class PTagInvalidVR extends Tag {
-	PTag tag;
-	@override
-	VR badVR;
-	PTagInvalidVR(this.tag, VR badVR) : super();
+  PTag tag;
+  @override
+  VR badVR;
+  PTagInvalidVR(this.tag, VR badVR) : super();
 
-	@override
-	int get code => tag.code;
-	@override
-	int get index => tag.index;
-	@override
-	VR get vr => tag.vr;
+  @override
+  int get code => tag.code;
+  @override
+  int get index => tag.index;
+  @override
+  VR get vr => tag.vr;
 
-	@override
-	bool get isKnown => false;
+  @override
+  bool get isKnown => false;
 
-	@override
-	String toString() => '*Invalid VR($badVR)* $tag';
+  @override
+  String toString() => '*Invalid VR($badVR)* $tag';
 }

@@ -227,8 +227,7 @@ class InvalidValuesLengthError<V> extends Error {
 
 }
 
-Null invalidValuesLengthError<V>(int index, Iterable<V> values, [Issues issues]) {
-	final tag = Tag.lookup(index);
+Null invalidValuesLengthError<V>(Tag tag, Iterable<V> values, [Issues issues]) {
   final msg = InvalidValuesLengthError._msg(tag, values);
   log.error(msg);
   if (issues != null) issues.add(msg);

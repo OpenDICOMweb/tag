@@ -265,7 +265,7 @@ abstract class Tag {
     }
     if (vList.isEmpty) return true;
     if (isNotValidLength(vList, issues)) {
-      invalidValuesLengthError(code, vList);
+      invalidValuesLengthError(this, vList);
       return false;
     }
     if (vList is List<V>) {
