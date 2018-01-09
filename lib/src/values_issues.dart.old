@@ -44,9 +44,9 @@ class Issues<V> {
     final min = tag.minValues;
     if (length < min)
       return 'Invalid length($length) too short - minimun($min)\n';
-    final max = tag.maxValues;
-    if (length > max)
-      return '${name}Invalid length($length) too long - maximum($max)\n';
+//    final max = tag.maxValues;
+//    if (length > max)
+      return '${name}Invalid length($length) too long - maximum(???)\n';
     return '';
   }
 

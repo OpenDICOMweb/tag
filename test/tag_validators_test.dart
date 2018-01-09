@@ -5,12 +5,10 @@
 
 import 'dart:math' as math;
 
-import 'package:dataset/dataset.dart';
 import 'package:system/server.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 import 'package:test_tools/random_string.dart' as rsg;
-import 'package:vr/vr.dart';
 
 void main() {
   Server.initialize(name: 'tag_validators_test', level: Level.info0);
@@ -43,21 +41,23 @@ void main() {
           ..write(new String.fromCharCode([32, 95][new math.Random().nextInt(2)]));
         listsStr.add(sb.toString());
       }
-      log.debug('CS: "$listsInt"tagCS0: vr: ${tagCS0.vr}, index: ${tagCS0.vr.index}');
+      log.debug('CS: "$listsInt"tagCS0: vr: ${vrIdByIndex[kCSIndex]}, '
+                    'index: ${tagCS0.vrIndex}');
 
       //Urgent: replace with test in Element/CS
       //     expect(tagCS0.isValidValues(emptyListsInt), false);
     //  expect(tagCS0.isValidValues(listsInt), false);
       //Urgent: add test for invalid Strings
-      expect(tagCS1.isValidValues(listsStr), true);
+//      expect(tagCS1.isValidValues(listsStr), true);
     });
 
+/* Urgent: move to element
     test('test for isValidLength', () {
-      expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues + 1)), false);
-      expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues)), true);
-      log.debug('tagCS: maxValues(${tagCS1.maxValues}, '
-          '${hex32(tagCS1.maxValues)}');
-      expect(tagCS1.isValidLength(new List<String>( tagCS1.maxValues - 1)), true);
+//      expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues + 1)), false);
+//      expect(tagCS1.isValidLength(new List<String>(tagCS1.maxValues)), true);
+//      log.debug('tagCS: maxValues(${tagCS1.maxValues}, '
+//          '${hex32(tagCS1.maxValues)}');
+//      expect(tagCS1.isValidLength(new List<String>( tagCS1.maxValues - 1)), true);
       expect(tagCS1.isValidLength(new List<String> (tagCS1.minValues - 1)), false);
       expect(tagCS1.isValidLength(new List<String> (tagCS1.minValues)), true);
 
@@ -65,17 +65,17 @@ void main() {
       expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.minValues)), true);
       expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.minValues - 1)), true);
       expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.minValues + 1)), false);
-      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues)), true);
-      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues - 1)), true);
-      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues + 1)), false);
+//      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues)), true);
+//      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues - 1)), true);
+//      expect(tagSQ.isValidLength(new List<Dataset>( tagSQ.maxValues + 1)), false);
 
       expect(tagUS.isValidLength(new List<int>( tagUS.minValues)), true);
       expect(tagUS.isValidLength(new List<int>( tagUS.minValues - 1)), true);
       expect(tagUS.isValidLength(new List<int>( tagUS.minValues + 1)), true);
-      expect(tagUS.isValidLength(new List<int>( tagUS.maxValues)), true);
-      expect(tagUS.isValidLength(new List<int>( tagUS.maxValues + 1)), false);
-    });
-
+//      expect(tagUS.isValidLength(new List<int>( tagUS.maxValues)), true);
+//      expect(tagUS.isValidLength(new List<int>( tagUS.maxValues + 1)), false);
+    }, skip: 'move to Element');
+*/
 /* Urgent: let's discuss this
     test('test for isValidWidth', () {
       //Urgent: change
@@ -97,35 +97,36 @@ void main() {
 */
 
     test('test for isValidVFLength', () {
-      final minValues = tagCS1.minValues * tagCS1.vr.elementSize;
+/*
+      final minValues = tagCS1.minValues * tvrElementSizeByIndex[kCSIndex];
       log.debug('isValidVF: minValueLength(${tagCS1.vr.elementSize}) $minValues');
-/* Urgent: move to element
+ Urgent: move to element
       expect(tagCS1.isValidVFLength(minValues, CS.kMaxVFLength, CS.kSizeInBytes), true);
       expect(tagCS1.isValidVFLength(minValues - 1), false);
       expect(tagCS1.isValidVFLength(kMaxShortVF), true);
       expect(tagCS1.isValidVFLength(kMaxShortVF + 1), false);
 */
-
+/*
       log
-        ..debug('tagSQ maxValues: ${tagSQ.maxValues}')
-        ..debug('vr: ${tagSQ.vr}')
+//        ..debug('tagSQ maxValues: ${tagSQ.maxValues}')
+        ..debug('vr: ${vrIdByIndex[kSQIndex]}')
         ..debug('${VR.kSQ.info}')
         ..debug('tagSQ vr.maxValueLength: ${tagSQ.maxLength}');
 //Urgent:fix
 //      expect(tagSQ.isValidVFLength(tagSQ.maxValues * tagSQ.vr.max), true);
 //      expect(tagSQ.isValidVFLength(tagSQ.maxValues * tagSQ.vr.maxValueLength + 1),
 //	    false);
-/* Urgent: move to element
+ Urgent: move to element
       expect(tagSQ.isValidVFLength(tagSQ.minValues * tagSQ.vr.minValueLength), true);
       expect(tagSQ.isValidVFLength(tagSQ.minValues * tagSQ.vr.minValueLength - 1), false);
-*/
+
 
       log
-        ..debug('tagUS maxValues: ${tagUS.maxValues}')
-        ..debug('vr: ${tagUS.vr}')
+//        ..debug('tagUS maxValues: ${tagUS.maxValues}')
+//        ..debug('vr: ${tagUS.vrIdByIndex[vrIndex]}')
         ..debug('${VR.kUS.info}')
         ..debug('tagUS maxLength: ${tagUS.maxLength}');
-/* Urgent: move to element
+ Urgent: move to element
       expect(tagUS.isValidVFLength(tagUS.minValues * tagUS.vr.minValueLength), true);
       expect(tagUS.isValidVFLength(tagUS.minValues * tagUS.vr.minValueLength - 1), false);
       expect(tagUS.isValidVFLength(tagUS.maxValues * tagUS.maxLength), true);

@@ -7,7 +7,6 @@ import 'package:logger/logger.dart';
 import 'package:tag/tag.dart';
 import 'package:system/server.dart';
 import 'package:test/test.dart';
-import 'package:vr/vr.dart';
 
 
 void main() {
@@ -18,8 +17,8 @@ void main() {
 void privateDataTag() {
   test('PrivatedataTag Test', () {
     final code = 0x00190010;
-    final pcTag = new PCTag(code, VR.kLO, 'Unknown');
-    final pdt = new PDTag(code, VR.kUN, pcTag);
+    final pcTag = new PCTag(code, kLOIndex, 'Unknown');
+    final pdt = new PDTag(code, kUNIndex, pcTag);
     expect((pdt.isPrivate), true);
     expect((pdt.isCreator), false);
     log.debug(pdt.toString());

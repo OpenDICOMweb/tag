@@ -6,7 +6,6 @@
 
 import 'package:system/core.dart';
 import 'package:tag/tag.dart';
-import 'package:vr/vr.dart';
 
 class InvalidTagError extends Error {
   Object tag;
@@ -65,16 +64,16 @@ Object _doTagError(int index, Issues issues, [String msg = 'Invalid Tag Type']) 
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidTagKeyError<K> extends Error {
   K key;
-  VR vr;
+  int vrIndex;
   String creator;
 
-  InvalidTagKeyError(this.key, [this.vr, this.creator]);
+  InvalidTagKeyError(this.key, [this.vrIndex, this.creator]);
 
   @override
-  String toString() => _msg(key, vr, creator);
+  String toString() => _msg(key, vrIndex, creator);
 
-  static String _msg<K>(K key, [VR vr, String creator]) =>
-      'InvalidTagKeyError: "$_value" $vr creator:"$creator"';
+  static String _msg<K>(K key, [int vrIndex, String creator]) =>
+      'InvalidTagKeyError: "$_value" $vrIndex creator:"$creator"';
 
   static String _value(Object key) {
     if (key == null) return 'null';
@@ -84,8 +83,8 @@ class InvalidTagKeyError<K> extends Error {
   }
 }
 
-Null invalidTagKey<K>(K key, [VR vr, String creator]) {
-  log.error(InvalidTagKeyError._msg(key, vr, creator));
+Null invalidTagKey<K>(K key, [int vrIndex, String creator]) {
+  log.error(InvalidTagKeyError._msg(key, vrIndex, creator));
   if (throwOnError) throw new InvalidTagKeyError(key);
   return null;
 }
@@ -133,34 +132,36 @@ Null tagKeywordError(String keyword) {
 //TODO: convert this to handle both int and String and remove next two Errors
 class InvalidVRForTagError extends Error {
   Tag tag;
-  VR vr;
+  int vrIndex;
 
-  InvalidVRForTagError(this.tag, this.vr);
+  InvalidVRForTagError(this.tag, this.vrIndex);
 
   @override
-  String toString() => _msg(tag, vr);
+  String toString() => _msg(tag, vrIndex);
 
-  static String _msg(Tag tag, VR vr) =>
-      'Error: Invalid VR (Value Representation) "$vr" for $tag';
+  static String _msg(Tag tag, int vrIndex) {
+    final vr = vrIdFromIndex(vrIndex);
+    return 'Error: Invalid VR (Value Representation) "$vr" for $tag';
+  }
 }
 
-Null invalidVRForTag(Tag tag, VR vr) {
-	log.error(InvalidVRForTagError._msg(tag, vr));
-	if (throwOnError) throw new InvalidVRForTagError(tag, vr);
+Null invalidVRForTag(Tag tag, int vrIndex) {
+	log.error(InvalidVRForTagError._msg(tag, vrIndex));
+	if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
 	return null;
 }
 
 Null invalidVRIndexForTag(Tag tag, int vrIndex) {
-	final vr = VR.lookupByIndex(vrIndex);
-	log.error(InvalidVRForTagError._msg(tag, vr));
-	if (throwOnError) throw new InvalidVRForTagError(tag, vr);
+//	final vr = VR.lookupByIndex(vrIndex);
+	log.error(InvalidVRForTagError._msg(tag, vrIndex));
+	if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
 	return null;
 }
 
 Null invalidVRCodeForTag(Tag tag, int vrCode) {
-  final vr = VR.lookupByCode(vrCode);
-  log.error(InvalidVRForTagError._msg(tag, vr));
-  if (throwOnError) throw new InvalidVRForTagError(tag, vr);
+  final vrIndex = vrIndexFromCode(vrCode);
+  log.error(InvalidVRForTagError._msg(tag, vrIndex));
+  if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
   return null;
 }
 

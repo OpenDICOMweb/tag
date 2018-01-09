@@ -5,25 +5,26 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:number/number.dart';
-import 'package:vr/vr.dart';
+//import 'package:vr/vr.dart';
+import 'package:system/core.dart';
 
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
 
-typedef Tag TagMaker<V, N>(int code, VR<V, N> vr);
+typedef Tag TagMaker(int code, int vrIndex);
 
 abstract class PrivateTag extends Tag {
   @override
   final int code;
   @override
-  final VR vr;
+  final int vrIndex;
   @override
   final VM vm;
 
-  const PrivateTag(this.code, [this.vr = VR.kUN, this.vm = VM.k1_n]) : super();
+  const PrivateTag(this.code, [this.vrIndex = kUNIndex, this.vm = VM.k1_n]) : super();
 
-  PrivateTag._(this.code, [this.vr = VR.kUN, this.vm = VM.k1_n]);
+  PrivateTag._(this.code, [this.vrIndex = kUNIndex, this.vm = VM.k1_n]);
 
   @override
   bool get isPrivate => true;
@@ -47,12 +48,13 @@ abstract class PrivateTag extends Tag {
   String get asString => toString();
 
   @override
-  String get info => '$runtimeType$dcm $groupHex, "$name", $eltHex $vr, $vm';
+  String get info => '$runtimeType$dcm $groupHex, "$name", $eltHex '
+      '${vrIdByIndex[vrIndex]}, $vm';
 
   @override
   String toString() => '$runtimeType$dcm subgroup($subgroup)';
 
-/*  static PrivateTag maker(int code, VR vr, String name) =>
+/*  static PrivateTag maker(int code, int vrIndex, String name) =>
       new PrivateTag._(code, vr);*/
 }
 
@@ -61,10 +63,10 @@ abstract class PrivateTag extends Tag {
 class PrivateTagGroupLength extends PrivateTag {
   static const int kUnknownIndex = -1;
 
-  PrivateTagGroupLength(int code, VR vr) : super(code, vr);
+  PrivateTagGroupLength(int code, int vrIndex) : super(code, vrIndex);
 
   @override
-  VR get vr => VR.kUL;
+  int get vrIndex => kULIndex;
 
   @override
   VM get vm => VM.k1;
@@ -76,7 +78,7 @@ class PrivateTagGroupLength extends PrivateTag {
 
 /*
   //Flush at V0.9.0 if not used.
-  static PrivateTagGroupLength maker(int code, VR vr, [_]) =>
+  static PrivateTagGroupLength maker(int code, int vrIndex, [_]) =>
       new PrivateTagGroupLength(code, vr);
 */
 
@@ -89,13 +91,13 @@ class PrivateTagGroupLength extends PrivateTag {
 class PrivateTagIllegal extends PrivateTag {
   static const int kUnknownIndex = -1;
 
-  PrivateTagIllegal(int code, VR vr) : super(code, vr);
+  PrivateTagIllegal(int code, int vrIndex) : super(code, vrIndex);
 
   @override
   String get name => 'Private Illegal Tag';
 
 /* Flush if not needed
-  static PrivateTagIllegal maker(int code, VR vr, String name) =>
+  static PrivateTagIllegal maker(int code, int vrIndex, String name) =>
       new PrivateTagIllegal(code, vr);
 */
 

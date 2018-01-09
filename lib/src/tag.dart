@@ -5,7 +5,6 @@
 // See the AUTHORS file for other contributors.
 
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:dataset/dataset.dart';
 import 'package:system/core.dart';
@@ -61,9 +60,9 @@ abstract class Tag {
   //     [this.isRetired = false, this.type = EType.kUnknown]);
   int get index => code;
   int get code;
-  VR get vr;
-  bool get hasNormalVR => vr.isNormal;
-  bool get hasSpecialVR => !hasNormalVR;
+  int get vrIndex;
+  bool get hasNormalVR => isNormalVRIndex(vrIndex);
+  bool get hasSpecialVR => isSpecialVRIndex(vrIndex);
 
   //Fix: hack to avoid Type problem
   VR get badVR => null;
@@ -75,6 +74,7 @@ abstract class Tag {
   int get vmMax => vm.max;
   int get vmColumns => vm.columns;
 
+/*
   /// The maximum number of values allowed for _this_ .
   int get maxValues {
     if (vmMax != -1) return vmMax;
@@ -82,6 +82,7 @@ abstract class Tag {
     assert(n % vmColumns == 0);
     return n;
   }
+*/
 
   bool get isRetired => true;
   EType get type => EType.k3;
@@ -115,27 +116,27 @@ abstract class Tag {
 
   // **** VR Getters
 
-  int get vrIndex => vr.index;
-  int get vrCode => vr.code;
+//  int get vrIndex => vr.index;
+  int get vrCode => vrCodeByIndex[vrIndex];
 
   @deprecated
   int get sizeInBytes => elementSize;
 
-  int get elementSize => vr.elementSize;
+  int get elementSize => vrElementSizeByIndex[vrIndex];
 
   @deprecated
   bool get isShort => hasShortVF;
 
-  bool get hasShortVF => vr.hasShortVF;
+  bool get hasShortVF => isEvrShortVRIndex(vrIndex);
 
-  bool get hasLongVF => vr.hasLongVF;
+  bool get hasLongVF => isEvrLongVRIndex(vrIndex);
 
   /// Returns the length of a DICOM Element header field.
   /// Used for encoding DICOM media types
   int get dcmHeaderLength => (hasShortVF) ? 8 : 12;
 
-  bool get isAscii => vr.isAscii;
-  bool get isUtf8 => vr.isUtf8;
+//  bool get isAscii => vr.isAscii;
+//  bool get isUtf8 => vr.isUtf8;
 
   // **** VM Getters
 
@@ -145,7 +146,7 @@ abstract class Tag {
 //  int get _vfLimit => (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
 
   /// The minimum length of the Value Field.
-  int get minVFLength => vm.min * vr.minValueLength;
+//  int get minVFLength => vm.min * vr.minValueLength;
 
 /*
   /// The maximum length of the Value Field for this [Tag].
@@ -166,8 +167,8 @@ abstract class Tag {
   /// Returns the maximum number of values allowed for this [Tag].
   int get maxLength {
     if (vm.max == -1) {
-      final max = (vr.hasShortVF) ? kMaxShortVF : kMaxLongVF;
-      return max ~/ vr.elementSize;
+      final max = (hasShortVF) ? kMaxShortVF : kMaxLongVF;
+      return max ~/ elementSize;
     }
     return vm.max;
   }
@@ -234,14 +235,14 @@ abstract class Tag {
 
   String get info {
     final retired = (isRetired) ? '- Retired' : '';
-    return '$runtimeType$dcm $vr $vm $keyword $retired';
+    return '$runtimeType$dcm ${vrIdByIndex[vrIndex]} $vm $keyword $retired';
   }
 
   /// Returns _true_  is _this_  is a valid [Tag].
   /// Valid [Tag]s are those defined in PS3.6 and Private [Tag]s that
   /// conform to the DICOM Standard.
   bool get isValid => false;
-
+/*
   /// Returns True if [vList].length, i.e. is valid for this [Tag].
   ///
   /// _Note_: A length of zero is always valid.
@@ -254,7 +255,7 @@ abstract class Tag {
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
     if (vList == null) nullValueError();
-    if (vr == VR.kUN) return true;
+    if (vrIndex == kUNIndex) return true;
 
     //TODO: replace this when types are working
 //    if (!vr.isValidValuesType(vList, issues)) return false;
@@ -298,10 +299,12 @@ abstract class Tag {
     return true;
   }
 
+
   bool isValidValue<V>(V value, [Issues issues]) =>
       vr.isValidValue(value, issues);
   bool isNotValidValue<V>(V value, [Issues issues]) =>
       vr.isNotValidValue(value, issues);
+
 
   /// Returns a [list<E>] of valid values for this [Tag], or _null_  if
   /// and of the [String]s in [sList] are not parsable.
@@ -359,10 +362,10 @@ abstract class Tag {
         (vfl % width) == 0;
   }
 
-/* Flush when sure this is less accurate then above.
+ Flush when sure this is less accurate then above.
   bool isValidVFLength(int lengthInBytes) =>
       (lengthInBytes >= minVFLength && lengthInBytes <= vr.maxVFLength);
-*/
+
 
 
   int getMax() {
@@ -397,7 +400,7 @@ abstract class Tag {
   //Uint8List checkBytes(Uint8List bytes) => vr.checkBytes(bytes);
 
   V parse<V>(String s) => vr.parse(s);
-
+*/
   /// Converts a DICOM [keyword] to the equivalent DICOM name.
   ///
   /// Given a keyword in camelCase, returns a [String] with a
@@ -431,50 +434,50 @@ abstract class Tag {
   @override
   String toString() {
     final retired = (isRetired == false) ? '' : ', (Retired)';
-    return '$runtimeType: $dcm $keyword, $vr, $vm$retired';
+    return '$runtimeType: $dcm $keyword, ${vrIdByIndex[vrIndex]}, $vm$retired';
   }
 
   //Fix: make this a real index
   static int codeToIndex(int x) => x;
   static int keywordToIndex(String kw) => pTagKeywords[kw].code;
 
-  static Tag lookup<K>(K key, [VR vr = VR.kUN, String creator]) {
-    if (key is int) return lookupByCode(key, vr, creator);
-    if (key is String) return lookupByKeyword(key, vr, creator);
-    return invalidTagKey<K>(key, vr, creator);
+  static Tag lookup<K>(K key, [int vrIndex = kUNIndex, String creator]) {
+    if (key is int) return lookupByCode(key, vrIndex, creator);
+    if (key is String) return lookupByKeyword(key, vrIndex, creator);
+    return invalidTagKey<K>(key, vrIndex, creator);
   }
 
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag fromCode<T>(int code, VR vr, [T creator]) {
-    if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vr);
+  static Tag fromCode<T>(int code, int vrIndex, [T creator]) {
+    if (Tag.isPublicCode(code)) return Tag.lookupPublicCode(code, vrIndex);
     if (Tag.isPrivateCreatorCode(code) && creator is String)
-      return new PCTag(code, vr, creator);
+      return new PCTag(code, vrIndex, creator);
     if (Tag.isPrivateDataCode(code) && creator is PCTag)
-      return new PDTag(code, vr, creator);
+      return new PDTag(code, vrIndex, creator);
     // This should never happen
     return invalidTagCode(code);
   }
 
   //TODO: redoc
   /// Returns an appropriate [Tag] based on the arguments.
-  static Tag lookupByCode(int code, [VR vr = VR.kUN, Object creator]) {
+  static Tag lookupByCode(int code, [int vrIndex = kUNIndex, Object creator]) {
     String msg;
     if (Tag.isPublicCode(code)) {
-      var tag = Tag.lookupPublicCode(code, vr);
-      return tag ??= new PTag.unknown(code, vr);
+      var tag = Tag.lookupPublicCode(code, vrIndex);
+      return tag ??= new PTag.unknown(code, vrIndex);
     } else {
       if (Tag.isPrivateGroupLengthCode(code))
-        return new PrivateTagGroupLength(code, vr);
-      if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vr, creator);
-      if (Tag.isPrivateDataCode(code)) return new PDTag(code, vr, creator);
+        return new PrivateTagGroupLength(code, vrIndex);
+      if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vrIndex, creator);
+      if (Tag.isPrivateDataCode(code)) return new PDTag(code, vrIndex, creator);
 
     }
-    print('lookupTag: ${Tag.toDcm(code)} $vr, $creator');
+    print('lookupTag: ${Tag.toDcm(code)} $vrIndex, $creator');
     msg = 'Unknown Private Tag Code: creator: $creator';
     return invalidTagCode(code, msg);
   }
 
-  static Tag lookupByKeyword(String keyword, [VR vr = VR.kUN, Object creator]) {
+  static Tag lookupByKeyword(String keyword, [int vrIndex = kUNIndex, Object creator]) {
 /*    Tag tag = Tag.lookupKeyword(keyword, vr);
     if (tag != null) return tag;
     tag = Tag.lookupPrivateCreatorKeyword(keyword, vr) {
@@ -494,8 +497,8 @@ abstract class Tag {
   }
 
   static bool isValidVR(Tag tag, int vrIndex) {
-    if (tag.vr == VR.kUN) return true;
-    if (tag.vrIndex >= VR.kOBOW.index && tag.vrIndex <= VR.kUSOW.index) {
+    if (tag.vrIndex == kUNIndex) return true;
+    if (tag.vrIndex >= kOBOWIndex && tag.vrIndex <= kUSOWIndex) {
       return isNormalVRIndex(vrIndex);
     } else if (tag.vrIndex <= VR.kUS.index) {
       if (tag.vrIndex != vrIndex) {
@@ -526,30 +529,30 @@ abstract class Tag {
   }
 
   //TODO: needed or used?
-  static Tag lookupPublicCode(int code, VR vr) {
-    final tag = PTag.lookupByCode(code, vr);
+  static Tag lookupPublicCode(int code, int vrIndex) {
+    final tag = PTag.lookupByCode(code, vrIndex);
     if (tag != null) return tag;
     if (Tag.isPublicGroupLengthCode(code)) return new PTagGroupLength(code);
-    return new PTagUnknown(code, vr);
+    return new PTagUnknown(code, vrIndex);
   }
 
-  static Tag lookupPublicKeyword(String keyword, VR vr) {
-    final tag = PTag.lookupByKeyword(keyword, vr);
+  static Tag lookupPublicKeyword(String keyword, int vrIndex) {
+    final tag = PTag.lookupByKeyword(keyword, vrIndex);
     if (tag != null) return tag;
     if (Tag.isPublicGroupLengthKeyword(keyword))
       return new PTagGroupLength.keyword(keyword);
-    return new PTagUnknown.keyword(keyword, vr);
+    return new PTagUnknown.keyword(keyword, vrIndex);
   }
 
-  static Tag lookupPrivateCreatorCode(int code, VR vr, String token) {
+  static Tag lookupPrivateCreatorCode(int code, int vrIndex, String token) {
     if (Tag.isPrivateGroupLengthCode(code))
-      return new PrivateTagGroupLength(code, vr);
-    if (isPrivateCreatorCode(code)) return new PCTag(code, vr, token);
+      return new PrivateTagGroupLength(code, vrIndex);
+    if (isPrivateCreatorCode(code)) return new PCTag(code, vrIndex, token);
     throw new InvalidTagCodeError(code);
   }
 
 /*  static PDTagKnown lookupPrivateDataCode(
-      int code, VR vr, PCTag creator) =>
+      int code, int vrIndex, PCTag creator) =>
       (creator is PCTagKnown) ? creator.lookupData(code)
           : new PDTagUnknown(code, vr, creator);
   */

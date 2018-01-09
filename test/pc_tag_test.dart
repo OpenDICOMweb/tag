@@ -8,13 +8,12 @@ import 'package:logger/logger.dart';
 import 'package:tag/tag.dart';
 import 'package:system/server.dart';
 import 'package:test/test.dart';
-import 'package:vr/vr.dart';
 
 void main() {
   Server.initialize(name: 'pc_tag_test', level: Level.info0);
 
   test('PrivateCreatorTag ACUSON Test', () {
-    final pTag = new PCTag(0x00090010, VR.kUN, 'ACUSON');
+    final pTag = new PCTag(0x00090010, kUNIndex, 'ACUSON');
     print('pTag: $pTag');
     expect(pTag is PCTagKnown, true);
     log.debug(pTag.info);
@@ -24,7 +23,7 @@ void main() {
   });
 
   test('PrivateCreatorTag.unknown Test', () {
-    final pTag = new PCTag(0x00090010, VR.kUN, 'foo');
+    final pTag = new PCTag(0x00090010, kUNIndex, 'foo');
     log.debug('${pTag.info}\n${pTag.name}: ${pTag.dataTags}');
   });
 

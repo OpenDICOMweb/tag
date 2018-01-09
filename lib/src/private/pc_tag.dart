@@ -5,7 +5,7 @@
 // See the AUTHORS file for other contributors.
 
 import 'package:number/number.dart';
-import 'package:vr/vr.dart';
+import 'package:system/core.dart';
 
 import 'package:tag/src/private/pc_tag_map.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
@@ -16,25 +16,25 @@ import 'package:tag/src/vm.dart';
 //TODO: add constant tag for PCTag.kUnknown
 //TODO: this should be done the same way as KnownPublicTags
 class PCTag extends PrivateTag {
-  final VR actualVR;
+  final int actualVRIndex;
   @override
   final String name;
 
-  factory PCTag(int code, VR actualVR, String name) {
+  factory PCTag(int code, int actualVRIndex, String name) {
     final def = PCTagDefinition.lookup(name);
     return (def != null)
-        ? new PCTagKnown(code, VR.kLO, name, def)
-        : new PCTagUnknown(code, VR.kLO, name);
+        ? new PCTagKnown(code, kLOIndex, name, def)
+        : new PCTagUnknown(code, kLOIndex, name);
   }
 
-  const PCTag._(int code, this.actualVR, this.name) : super(code, VR.kLO);
+  const PCTag._(int code, this.actualVRIndex, this.name) : super(code, kLOIndex);
 
   Map<int, PDTagDefinition> get dataTags => const <int, PDTagDefinition>{};
 
   @override
   VM get vm => VM.k1;
 
-  VR get expectedVR => VR.kLO;
+  int get expectedVR => kLOIndex;
   // fix: when creators have expected codes
   // int get expectedGroup => definition.group;
 
@@ -53,7 +53,7 @@ class PCTag extends PrivateTag {
   String get limitHex => Uint8.hex(limit);
 
   @override
-  bool get isValid => Tag.isPrivateCreatorCode(code) && vr == VR.kLO;
+  bool get isValid => Tag.isPrivateCreatorCode(code) && vrIndex == kLOIndex;
 
   bool isValidDataCode(int code) {
     final ng = (code >> 16);
@@ -70,23 +70,23 @@ class PCTag extends PrivateTag {
   @override
   String get info =>
       '$runtimeType["$name"]$dcm $groupHex, subgroup($subgroupHex), '
-      'base($baseHex), limit($limitHex), actualVR($vr)';
+      'base($baseHex), limit($limitHex), actualVR($vrIndex)';
 
   @override
-  String toString() => '$runtimeType($name) $dcm $vr $vm';
+  String toString() => '$runtimeType($name) $dcm ${vrIdByIndex[vrIndex]} $vm';
 
-  static PCTag maker(int code, VR vr, [Object name]) =>
-      new PCTag(code, vr, name);
+  static PCTag maker(int code, int vrIndex, [Object name]) =>
+      new PCTag(code, vrIndex, name);
 
   static const PCTag kUnknown =
-  const PCTag._(0x0, VR.kLO, 'Unknown Private Creator Tag');
+  const PCTag._(0x0, kLOIndex, 'Unknown Private Creator Tag');
 }
 
 class PCTagKnown extends PCTag {
   PCTagDefinition definition;
 
-  PCTagKnown(int code, VR vr, String name, this.definition)
-      : super._(code, vr, name);
+  PCTagKnown(int code, int vrIndex, String name, this.definition)
+      : super._(code, vrIndex, name);
 
   @override
   Map<int, PDTagDefinition> get dataTags => definition.dataTags;
@@ -104,7 +104,7 @@ class PCTagKnown extends PCTag {
   @override
   String get info =>
       '$runtimeType["$name"]$dcm $groupHex, subgroup($subgroupHex), '
-      'base($baseHex), limit($limitHex), $vr, $vm, '
+      'base($baseHex), limit($limitHex), ${vrIdByIndex[vrIndex]}, $vm, '
       'dataTags: ${_fmtDataTagMap(definition.dataTags)}';
 }
 
@@ -120,11 +120,11 @@ String _fmtDataTagMap(Map<int, PDTagDefinition> dataTags) {
 
 class PCTagUnknown extends PCTag {
 
- const PCTagUnknown(int code, VR actualVR, String name)
-      : super._(code, actualVR, name);
+ const PCTagUnknown(int code, int actualVRIndex, String name)
+      : super._(code, actualVRIndex, name);
 
  static const PCTagUnknown kUnknownCreator =
-    const PCTagUnknown(0x00, VR.kLO, 'Unknown Creator');
+    const PCTagUnknown(0x00, kLOIndex, 'Unknown Creator');
 }
 
 class PCTagDefinition {
