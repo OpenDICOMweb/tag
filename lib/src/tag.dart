@@ -19,6 +19,7 @@ import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/vm.dart';
+import 'package:vr/vr_old.dart';
 
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
@@ -68,6 +69,7 @@ abstract class Tag {
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
 
+  VR get vr => VR.lookupByIndex(vrIndex);
   VM get vm => VM.k1_n;
   int get vmMin => vm.min;
   int get vmMax => vm.max;
@@ -266,19 +268,19 @@ abstract class Tag {
       return false;
     }
     if (vList is List<V>) {
-      return _isValidValuesList(vList, issues);
+      return _isValidValuesList(vr, vList, issues);
     } else if (vList is Iterable<V>) {
-      return _isValidValuesIterable(vList, issues);
+      return _isValidValuesIterable(vr, vList, issues);
     } else {
       invalidTagValuesError<V>(this, vList);
     }
     return false;
   }
 
-  bool _isValidValuesList<V>(List<V> vList, [Issues issues]) {
+  bool _isValidValuesList<V>(VR vr, List<V> vList, [Issues issues]) {
     for (var i = 0; i < vList.length; i++) {
       final v = vList[i];
-      if (isNotValidValue<V>(v, issues)) {
+      if (vr.isNotValidValue(v, issues)) {
         invalidTagValuesError<V>(this, vList);
         return false;
       }
@@ -286,9 +288,9 @@ abstract class Tag {
     return true;
   }
 
-  bool _isValidValuesIterable<V>(Iterable<V> vList, [Issues issues]) {
+  bool _isValidValuesIterable<V>(VR vr, Iterable<V> vList, [Issues issues]) {
     for (var v in vList)
-      if (isNotValidValue<V>(v, issues)) {
+      if (vr.isNotValidValue(v, issues)) {
         invalidTagValuesError<V>(this, vList);
         return false;
       }
