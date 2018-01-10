@@ -14,7 +14,6 @@ import 'package:tag/src/p_tag_codes.dart';
 import 'package:tag/src/p_tag_keywords.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
-//import 'package:vr/vr.dart';
 
 //TODO: is hashCode needed?
 class PTag extends Tag {
@@ -15499,6 +15498,7 @@ class PTagUnknown extends PTag {
 /// A [Tag] with a known key, but invalid [vrIndex].
 class PTagInvalidVR extends Tag {
   PTag tag;
+  @override
   int badVRIndex;
   PTagInvalidVR(this.tag, int badVRIndex) : super();
 
@@ -15513,5 +15513,5 @@ class PTagInvalidVR extends Tag {
   bool get isKnown => false;
 
   @override
-  String toString() => '*Invalid VR($badVR)* $tag';
+  String toString() => '*Invalid VR($badVRIndex)* $tag';
 }

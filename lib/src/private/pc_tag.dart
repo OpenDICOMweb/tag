@@ -4,9 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:number/number.dart';
 import 'package:system/core.dart';
-
 import 'package:tag/src/private/pc_tag_map.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
@@ -46,11 +44,11 @@ class PCTag extends PrivateTag {
 
   int get base => elt << 8;
 
-  String get baseHex => Uint8.hex(base);
+  String get baseHex => hex32(base);
 
   int get limit => base + 0xFF;
 
-  String get limitHex => Uint8.hex(limit);
+  String get limitHex => hex32(limit);
 
   @override
   bool get isValid => Tag.isPrivateCreatorCode(code) && vrIndex == kLOIndex;

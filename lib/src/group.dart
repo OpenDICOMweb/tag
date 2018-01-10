@@ -4,8 +4,6 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:number/number.dart';
-
 /// Methods to use with a DICOM Group, a 16-bit integer.
 ///
 /// The [Group] methods expect their argument to be a 16-bit group number.
@@ -20,9 +18,6 @@ class Group {
 
   /// Returns the most significant 16 bits of the tag.code.
   static int fromTag(int tagCode) => tagCode >> shiftCount;
-
-  /// Returns the tag Group number as a hex [String].
-  static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
   /// Returns _true_  if [g] is Public Group (even), or a valid Private Group.
   static bool isValid(int g) => g.isEven || isPrivate(g);

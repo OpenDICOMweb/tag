@@ -13,27 +13,15 @@ dependencies:
   dataset:
     path: C:/odw/sdk/dataset
     version: ^0.6.5
-  date_time:
-    path: C:/odw/sdk/date_time
-    version: ^0.6.5
-#  number:
-#    path: C:/odw/sdk/number
-#    version: ^0.6.5
-#  string:
-#    path: C:/odw/sdk/string
-#    version: ^0.6.5
   system:
     path: C:/odw/sdk/system
     version: ^0.6.5
-  uid:
-    path: C:/odw/sdk/uid
-    version: ^0.6.5
-#  vr:
-#    path: C:/odw/sdk/vr
-#    version: ^0.6.5
 
 dev_dependencies:
   test: ^0.12.0
   test_tools:
     path: C:/odw/sdk/test_tools
+    version: ^0.6.5
+  timer:
+    path: C:/odw/sdk/timer
     version: ^0.6.5

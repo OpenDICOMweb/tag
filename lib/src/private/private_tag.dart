@@ -4,10 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:number/number.dart';
-//import 'package:vr/vr.dart';
 import 'package:system/core.dart';
-
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/tag.dart';
 import 'package:tag/src/vm.dart';
@@ -43,7 +40,7 @@ abstract class PrivateTag extends Tag {
   @override
   EType get type => EType.k3;
 
-  String get subgroupHex => Uint8.hex(subgroup);
+  String get subgroupHex => hex8(subgroup);
 
   String get asString => toString();
 

@@ -4,8 +4,6 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:number/number.dart';
-
 //TODO: are all of these needed.  This would be faster if some were private.
 
 /// Methods to use with a DICOM Elt (aka element), a 16-bit integer.
@@ -16,9 +14,6 @@ class Elt {
 
   /// Returns the least significant 16 bits of the [tagCode].
   static int fromTag(int tagCode) => tagCode & kElementMask;
-
-  /// Returns the [Elt] [int] as a hex [String].
-  static String hex(int g, [String prefix = '0x']) => Int.hex(g, 4, prefix);
 
   /// Returns _true_ if [v] fits in 16-bits.
   static bool isValid(int v) => (0 <= v && v <= 0xFFFF) ? true : false;

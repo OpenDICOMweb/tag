@@ -19,7 +19,6 @@ import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:vr/vr.dart';
 
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
@@ -65,7 +64,7 @@ abstract class Tag {
   bool get hasSpecialVR => isSpecialVRIndex(vrIndex);
 
   //Fix: hack to avoid Type problem
-  VR get badVR => null;
+  int get badVRIndex => null;
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
 
@@ -99,20 +98,17 @@ abstract class Tag {
   /// Returns a [String] for the [code] in DICOM format, i.e. (gggg,eeee).
   String get dcm => '${Tag.toDcm(code)}';
 
-  /// Returns a [String] for the [code] in hexadecimal format, i.e. '0xggggeeee.
-  String get hex => hex32(code);
-
   /// Returns the [group] number for _this_  [Tag].
   int get group => code >> 16;
 
   /// Returns the [group] number for _this_  in hexadecimal format.
-  String get groupHex => Group.hex(group);
+  String get groupHex => hex16(group);
 
   /// Returns the DICOM element [Elt] number for _this_  [Tag].
   int get elt => code & kElementMask;
 
   /// Returns the DICOM element [Elt] number for _this_  in hexadecimal format.
-  String get eltHex => Elt.hex(elt);
+  String get eltHex => hex16(elt);
 
   // **** VR Getters
 
@@ -165,7 +161,7 @@ abstract class Tag {
   //TODO: make this work for PrivateTags
 
   /// Returns the maximum number of values allowed for this [Tag].
-  int get maxLength {
+  int get maxValues {
     if (vm.max == -1) {
       final max = (hasShortVF) ? kMaxShortVF : kMaxLongVF;
       return max ~/ elementSize;
@@ -173,7 +169,7 @@ abstract class Tag {
     return vm.max;
   }
 
-  int get width => vm.columns;
+  int get columns => vm.columns;
 
   // **** Element Type (1, 1c, 2, ...)
   //Urgent: add EType to tag
@@ -242,7 +238,7 @@ abstract class Tag {
   /// Valid [Tag]s are those defined in PS3.6 and Private [Tag]s that
   /// conform to the DICOM Standard.
   bool get isValid => false;
-/*
+
   /// Returns True if [vList].length, i.e. is valid for this [Tag].
   ///
   /// _Note_: A length of zero is always valid.
@@ -250,7 +246,7 @@ abstract class Tag {
   /// [min]: The minimum number of values.
   /// [max]: The maximum number of values. If -1 then max length of
   ///     Value Field; otherwise, must be greater than or equal to [min].
-  /// [width]: The [width] of the matrix of values. If [width == 0,
+  /// [width]: The [columns] of the matrix of values. If [columns == 0,
   /// then singleton; otherwise must be greater than 0;
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
@@ -299,13 +295,7 @@ abstract class Tag {
     return true;
   }
 
-
-  bool isValidValue<V>(V value, [Issues issues]) =>
-      vr.isValidValue(value, issues);
-  bool isNotValidValue<V>(V value, [Issues issues]) =>
-      vr.isNotValidValue(value, issues);
-
-
+/*
   /// Returns a [list<E>] of valid values for this [Tag], or _null_  if
   /// and of the [String]s in [sList] are not parsable.
   List<V> parseValues<V>(List<String> sList, [Issues issues]) {
@@ -341,33 +331,62 @@ abstract class Tag {
 
   // Placeholder until VR is integrated into TagBase
   V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
+*/
+
+  bool get isLengthAlwaysValid =>
+      vrIndex == kOBIndex ||
+      vrIndex == kODIndex ||
+      vrIndex == kOFIndex ||
+      vrIndex == kOLIndex ||
+      vrIndex == kOWIndex ||
+      vrIndex == kOBIndex;
 
   /// Returns _true_  if [vList].length is a valid number of values for _this_ .
   /// _Note_: If a VR has a long (32-bit) Value Field, then it has [VM.k1],
   /// and its length is always valid.
   bool isValidLength<V>(Iterable<V> vList, [Issues issues]) {
     assert(vList != null);
-    if (vr.isLengthAlwaysValid == true) return true;
+    if (isLengthAlwaysValid == true) return true;
     final length = vList.length;
     if (length == 0) return true;
-    return length >= minValues && length <= maxValues && (length % width) == 0;
+    return length >= minValues && length <= maxValues && (length % columns) == 0;
   }
 
-  bool isValidVFLength(int vfl, int maxVFLength, int sizeInBytes,
-      [Issues issues]) {
+  bool isNotValidLength<V>(Iterable<V> vList, [Issues issues]) =>
+      !isValidLength(vList, issues);
+
+  bool get isVFLengthAlwaysValid =>
+      vrIndex == kSQIndex ||
+      vrIndex == kOBIndex ||
+      vrIndex == kODIndex ||
+      vrIndex == kOFIndex ||
+      vrIndex == kOLIndex ||
+      vrIndex == kOWIndex ||
+      vrIndex == kOBIndex ||
+      vrIndex == kOBIndex ||
+      vrIndex == kUCIndex ||
+      vrIndex == kURIndex ||
+      vrIndex == kUTIndex;
+
+  bool isValidVFLength(int vfl, int maxVFLength, int sizeInBytes, [Issues issues]) {
     assert(vfl >= 0 && vfl <= maxVFLength);
-    if (vr.isLengthAlwaysValid == true) return true;
+    if (isVFLengthAlwaysValid == true) return true;
     return vfl >= (minValues * sizeInBytes) &&
         vfl <= (maxValues * sizeInBytes) &&
-        (vfl % width) == 0;
+        (vfl % columns) == 0;
   }
 
- Flush when sure this is less accurate then above.
+  bool isValidColumns<V>(List<V> vList, [Issues issues]) =>
+      columns == 0 || (vList.length % columns) == 0;
+
+
+/*
+ //Flush when sure this is less accurate then above.
   bool isValidVFLength(int lengthInBytes) =>
       (lengthInBytes >= minVFLength && lengthInBytes <= vr.maxVFLength);
+*/
 
-
-
+/*
   int getMax() {
     if (vmMax != -1) return vmMax;
     final excess = vr.maxLength % vmColumns;
@@ -376,8 +395,6 @@ abstract class Tag {
     return actual;
   }
 
-  bool isValidWidth<V>(List<V> vList, [Issues issues]) =>
-      width == 0 || (vList.length % width) == 0;
 
   bool isNotValidLength<V>(Iterable<V> vList, [Issues issues]) =>
       !isValidLength(vList, issues);
@@ -470,7 +487,6 @@ abstract class Tag {
         return new PrivateTagGroupLength(code, vrIndex);
       if (Tag.isPrivateCreatorCode(code)) return new PCTag(code, vrIndex, creator);
       if (Tag.isPrivateDataCode(code)) return new PDTag(code, vrIndex, creator);
-
     }
     print('lookupTag: ${Tag.toDcm(code)} $vrIndex, $creator');
     msg = 'Unknown Private Tag Code: creator: $creator';
@@ -500,7 +516,7 @@ abstract class Tag {
     if (tag.vrIndex == kUNIndex) return true;
     if (tag.vrIndex >= kOBOWIndex && tag.vrIndex <= kUSOWIndex) {
       return isNormalVRIndex(vrIndex);
-    } else if (tag.vrIndex <= VR.kUS.index) {
+    } else if (tag.vrIndex <= kUSIndex) {
       if (tag.vrIndex != vrIndex) {
         invalidVRIndexForTag(tag, vrIndex);
         return false;
@@ -510,10 +526,10 @@ abstract class Tag {
   }
 
   //TODO: move these to Fast Tag
- // static bool isValidTagCode(int index) => _isValidTagIndex(index, kVR);
- // static bool isValidTagCode(int code) => _isValidTagCode(code, kVR);
- // static bool isValidTagKeyword(String keyword) =>
- //     _isValidTagKeyword(keyword, kVR);
+  // static bool isValidTagCode(int index) => _isValidTagIndex(index, kVR);
+  // static bool isValidTagCode(int code) => _isValidTagCode(code, kVR);
+  // static bool isValidTagKeyword(String keyword) =>
+  //     _isValidTagKeyword(keyword, kVR);
 
   //TODO: Use the 'package:collection/collection.dart' ListEquality
   //TODO:  decide if this ahould be here
@@ -601,8 +617,7 @@ abstract class Tag {
       Group.isPublic(Group.fromTag(code)) && Elt.fromTag(code) == 0;
 
   static bool isPublicGroupLengthKeyword(String keyword) =>
-      keyword == 'PublicGroupLengthKeyword' ||
-      isPublicGroupLengthKeywordCode(keyword);
+      keyword == 'PublicGroupLengthKeyword' || isPublicGroupLengthKeywordCode(keyword);
 
   //TODO: test - needs to handle 'oxGGGGEEEE' and 'GGGGEEEE'
   static bool isPublicGroupLengthKeywordCode(String keywordCode) {
@@ -625,8 +640,7 @@ abstract class Tag {
   }
 
   static bool isPrivateDataCode(int code) =>
-      Group.isPrivate(Group.fromTag(code)) &&
-      Elt.isPrivateData(Elt.fromTag(code));
+      Group.isPrivate(Group.fromTag(code)) && Elt.isPrivateData(Elt.fromTag(code));
 
   static int privateCreatorBase(int code) => Elt.pcBase(Elt.fromTag(code));
 
@@ -659,16 +673,13 @@ abstract class Tag {
 
   /// Returns a valid [PDTagKnown], or _null_ .
   static int toPrivateData(int group, int pcIndex, int pdIndex) {
-    if (Group.isPrivate(group) &&
-        _isPCIndex(pcIndex) &&
-        _isPDIndex(pcIndex, pdIndex))
+    if (Group.isPrivate(group) && _isPCIndex(pcIndex) && _isPDIndex(pcIndex, pdIndex))
       return _toPrivateData(group, pcIndex, pcIndex);
     return null;
   }
 
   /// Returns a [PCTag], without checking arguments.
-  static int _toPrivateCreator(int group, int pcIndex) =>
-      (group << 16) + pcIndex;
+  static int _toPrivateCreator(int group, int pcIndex) => (group << 16) + pcIndex;
 
   /// Returns a [PDTagKnown], without checking arguments.
   static int _toPrivateData(int group, int pcIndex, int pdIndex) =>
@@ -683,8 +694,7 @@ abstract class Tag {
   //static bool _isSimplePDIndex(int pde) => 0x1000 >= pde && pde <= 0xFFFF;
 
   /// Return _true_  if [pdi] is a valid Private Data Index.
-  static bool _isPDIndex(int pci, int pdi) =>
-      _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
+  static bool _isPDIndex(int pci, int pdi) => _pdBase(pci) <= pdi && pdi <= _pdLimit(pci);
 
   /// Returns the offset base for a Private Data Element with the
   /// Private Creator [pcIndex].
@@ -708,8 +718,8 @@ abstract class Tag {
   /// Returns [code] in DICOM format '(gggg,eeee)'.
   static String toDcm(int code) {
     if (code == null) return '"null"';
-    return '(${Group.hex(Group.fromTag(code), '')},'
-        '${Elt.hex(Elt.fromTag(code), '')})';
+    return '(${hex16(Group.fromTag(code))},'
+        '${hex16(Elt.fromTag(code))})';
   }
 
   /// Returns a [List] of DICOM tag codes in '(gggg,eeee)' format

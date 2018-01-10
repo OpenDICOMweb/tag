@@ -14,12 +14,12 @@ void main() {
   Server.initialize(name: 'tag_validators_test', level: Level.info0);
 
   final tagCS0 = PTag.kSpecificCharacterSet;
-  final tagCS1 = PTag.kImageType;
+//  final tagCS1 = PTag.kImageType;
   //   new Tag.public('Image​Type', 0x00080008, 'Image Type', VR.kCS, VM.k2_n);
-  final tagSQ = PTag.kLanguageCodeSequence;
+//  final tagSQ = PTag.kLanguageCodeSequence;
   //new Tag.public('LanguageCodeSequence', 0x00080005,
   //    'Language Code Sequence', VR.kSQ, VM.k1, false);
-  final tagUS = PTag.kNumberOfZeroFills;
+ // final tagUS = PTag.kNumberOfZeroFills;
   //new Tag.public('NumberOfZeroFills', 0x00189066,
   //   'Number of Zero Fills', VR.kUS, VM.k1_2, false);
 
