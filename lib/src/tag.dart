@@ -8,6 +8,7 @@ import 'dart:convert';
 
 import 'package:dataset/dataset.dart';
 import 'package:system/core.dart';
+
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -376,7 +377,7 @@ abstract class Tag {
     final msg = 'Invalid Value Field length: '
         'min($minValues) <= $vfLength <= max($maxValues)';
     if (issues != null) issues.add(msg);
-    if (throwOnError) return invalidVFLengthError(this, vfLength);
+    if (throwOnError) return invalidVFLength(vfLength, vr.maxVFLength);
     return false;
   }
 
