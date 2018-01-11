@@ -61,7 +61,6 @@ abstract class Tag {
   int get index => code;
   int get code;
   int get vrIndex;
-  VR  get vr => VR.lookupByIndex(vrIndex);
   bool get hasNormalVR => isNormalVRIndex(vrIndex);
   bool get hasSpecialVR => isSpecialVRIndex(vrIndex);
 
@@ -69,6 +68,8 @@ abstract class Tag {
   int get badVRIndex => null;
   String get keyword => 'UnknownTag';
   String get name => 'Unknown Tag';
+
+  VR get vr => VR.lookupByIndex(vrIndex);
   VM get vm => VM.k1_n;
   int get vmMin => vm.min;
   int get vmMax => vm.max;
@@ -83,6 +84,7 @@ abstract class Tag {
     return n;
   }
 */
+
   bool get isRetired => true;
   EType get type => EType.k3;
 
@@ -251,7 +253,7 @@ abstract class Tag {
   //TODO: should be modified when EType info is available.
   bool isValidValues<V>(Iterable<V> vList, [Issues issues]) {
     if (vList == null) nullValueError();
-    if (vrIndex == kUNIndex || vList.isEmpty) return true;
+    if (vrIndex == kUNIndex) return true;
 
     //TODO: replace this when types are working
 //    if (!vr.isValidValuesType(vList, issues)) return false;
@@ -260,8 +262,8 @@ abstract class Tag {
       invalidValuesTypeError(this, vList);
       return false;
     }
-
-    if (isNotValidValuesLength(vList, issues)) {
+    if (vList.isEmpty) return true;
+    if (isNotValidLength(vList, issues)) {
       invalidValuesLengthError(this, vList);
       return false;
     }
@@ -341,64 +343,44 @@ abstract class Tag {
       vrIndex == kOWIndex ||
       vrIndex == kOBIndex;
 
-  /// Returns _true_  if [vList].length is a valid number of values for _this_.
-  ///
-  /// _Note_: If a VR has a long (32-bit) Value Field, then by definition its
-  /// Value Multiplicity is [VM.k1], and its length is always valid.
-  bool isValidValuesLength<V>(Iterable<V> vList, [Issues issues]) {
+  /// Returns _true_  if [vList].length is a valid number of values for _this_ .
+  /// _Note_: If a VR has a long (32-bit) Value Field, then it has [VM.k1],
+  /// and its length is always valid.
+  bool isValidLength<V>(Iterable<V> vList, [Issues issues]) {
     assert(vList != null);
-    return (isValidLength(vList.length))
-           ? true
-           : invalidValuesLengthError(this, vList, issues);
+    if (isLengthAlwaysValid == true) return true;
+    final length = vList.length;
+    if (length == 0) return true;
+    return length >= minValues && length <= maxValues && (length % columns) == 0;
   }
 
-  bool isNotValidValuesLength<V>(Iterable<V> vList, [Issues issues]) =>
-      !isValidValuesLength(vList, issues);
+  bool isNotValidLength<V>(Iterable<V> vList, [Issues issues]) =>
+      !isValidLength(vList, issues);
 
-  bool isValidLength(int length) {
-    assert(length != null);
-    if (isLengthAlwaysValid == true || length == 0) return true;
-    return (length >= minValues && length <= maxValues && (length % columns) == 0) &&
-           length <= vr.maxLength;
-  }
-
-  bool isNotValidLength(int length) => !isValidLength(length);
-
-  /// Returns _true_  if [vfLength] is a valid Value Field length for _this_ [Tag].
-  bool isValidVFLength(int vfLength, [Issues issues]) {
-    assert(vfLength >= 0 && vfLength <= vr.maxVFLength);
-    if (isVFLengthAlwaysValid(vrIndex)) return true;
-    final ok = vfLength >= (minValues * vr.elementSize) &&
-               vfLength <= (maxValues * vr.elementSize) &&
-               (vfLength % columns) == 0;
-    if (ok) return true;
-
-    final msg = 'Invalid Value Field length: '
-        'min($minValues) <= $vfLength <= max($maxValues)';
-    if (issues != null) issues.add(msg);
-    if (throwOnError) return invalidVFLengthError(this, vfLength);
-    return false;
-  }
-
-  bool isNotValidVFLength(int vfLength, [Issues issues]) =>
-      !isValidVFLength(vfLength, issues);
-
-  /* Flush when working
-  bool get isVFLengthAlwaysValid => isVFLengthValid();
+  bool get isVFLengthAlwaysValid =>
       vrIndex == kSQIndex ||
-      vrIndex == kUNIndex ||
       vrIndex == kOBIndex ||
-      vrIndex == kOWIndex ||
-      vrIndex == kOLIndex ||
       vrIndex == kODIndex ||
       vrIndex == kOFIndex ||
+      vrIndex == kOLIndex ||
+      vrIndex == kOWIndex ||
+      vrIndex == kOBIndex ||
+      vrIndex == kOBIndex ||
       vrIndex == kUCIndex ||
       vrIndex == kURIndex ||
       vrIndex == kUTIndex;
-*/
+
+  bool isValidVFLength(int vfl, int maxVFLength, int sizeInBytes, [Issues issues]) {
+    assert(vfl >= 0 && vfl <= maxVFLength);
+    if (isVFLengthAlwaysValid == true) return true;
+    return vfl >= (minValues * sizeInBytes) &&
+        vfl <= (maxValues * sizeInBytes) &&
+        (vfl % columns) == 0;
+  }
 
   bool isValidColumns<V>(List<V> vList, [Issues issues]) =>
       columns == 0 || (vList.length % columns) == 0;
+
 
 /*
  //Flush when sure this is less accurate then above.
