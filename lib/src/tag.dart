@@ -6,9 +6,7 @@
 
 import 'dart:convert';
 
-import 'package:dataset/dataset.dart';
 import 'package:system/core.dart';
-
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -340,7 +338,8 @@ abstract class Tag {
       vrIndex == kOFIndex ||
       vrIndex == kOLIndex ||
       vrIndex == kOWIndex ||
-      vrIndex == kOBIndex;
+      vrIndex == kOBIndex ||
+      vrIndex == kOBOWIndex;
 
   /// Returns _true_  if [vList].length is a valid number of values for _this_.
   ///
@@ -348,9 +347,9 @@ abstract class Tag {
   /// Value Multiplicity is [VM.k1], and its length is always valid.
   bool isValidValuesLength<V>(Iterable<V> vList, [Issues issues]) {
     assert(vList != null);
-    return (isValidLength(vList.length))
-           ? true
-           : invalidValuesLengthError(this, vList, issues);
+    if (isValidLength(vList.length)) return true;
+    invalidValuesLengthError(this, vList, issues);
+    return false;
   }
 
   bool isNotValidValuesLength<V>(Iterable<V> vList, [Issues issues]) =>

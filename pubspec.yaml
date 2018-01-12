@@ -10,9 +10,6 @@ environment:
   sdk: '>=1.24.2 <2.1.0'
 
 dependencies:
-  dataset:
-    path: C:/odw/sdk/dataset
-    version: ^0.6.5
   system:
     path: C:/odw/sdk/system
     version: ^0.6.5
@@ -25,6 +22,4 @@ dev_dependencies:
   test_tools:
     path: C:/odw/sdk/test_tools
     version: ^0.6.5
-  timer:
-    path: C:/odw/sdk/timer
-    version: ^0.6.5
+

@@ -8,7 +8,7 @@ import 'dart:math' as math;
 import 'package:system/server.dart';
 import 'package:tag/tag.dart';
 import 'package:test/test.dart';
-import 'package:test_tools/random_string.dart' as rsg;
+import 'package:test_tools/tools.dart' as rsg;
 
 void main() {
   Server.initialize(name: 'tag_validators_test', level: Level.info0);

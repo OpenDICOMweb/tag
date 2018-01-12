@@ -3,9 +3,8 @@
 // that can be found in the LICENSE file.
 // See the AUTHORS file for other contributors.
 
-import 'package:logger/logger.dart';
-import 'package:tag/tag.dart';
 import 'package:system/server.dart';
+import 'package:tag/tag.dart';
 import 'package:test/test.dart';
 
 
