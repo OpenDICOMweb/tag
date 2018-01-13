@@ -4,7 +4,7 @@
 // Original author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:system/core.dart';
+import 'package:core/core.dart';
 import 'package:tag/tag.dart';
 
 class InvalidTagError extends Error {
@@ -146,16 +146,16 @@ class InvalidVRForTagError extends Error {
 }
 
 Null invalidVRForTag(Tag tag, int vrIndex) {
-	log.error(InvalidVRForTagError._msg(tag, vrIndex));
-	if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
-	return null;
+  log.error(InvalidVRForTagError._msg(tag, vrIndex));
+  if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
+  return null;
 }
 
 Null invalidVRIndexForTag(Tag tag, int vrIndex) {
 //	final vr = VR.lookupByIndex(vrIndex);
-	log.error(InvalidVRForTagError._msg(tag, vrIndex));
-	if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
-	return null;
+  log.error(InvalidVRForTagError._msg(tag, vrIndex));
+  if (throwOnError) throw new InvalidVRForTagError(tag, vrIndex);
+  return null;
 }
 
 Null invalidVRCodeForTag(Tag tag, int vrCode) {

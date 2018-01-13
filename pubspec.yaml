@@ -10,8 +10,8 @@ environment:
   sdk: '>=1.24.2 <2.1.0'
 
 dependencies:
-  system:
-    path: C:/odw/sdk/system
+  core:
+    path: C:/acr/odw/sdk/core
     version: ^0.6.5
   vr:
     path: C:/odw/sdk/vr

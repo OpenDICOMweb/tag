@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:system/core.dart';
+import 'package:core/core.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';

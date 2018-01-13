@@ -6,7 +6,7 @@
 
 import 'dart:convert';
 
-import 'package:system/core.dart';
+import 'package:core/core.dart';
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';

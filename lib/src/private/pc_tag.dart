@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'package:system/core.dart';
+import 'package:core/core.dart';
 import 'package:tag/src/private/pc_tag_map.dart';
 import 'package:tag/src/private/pd_tag_definitions.dart';
 import 'package:tag/src/private/private_tag.dart';
