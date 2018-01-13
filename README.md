@@ -6,7 +6,7 @@ A library for Dart developers. It is awesome.
 
 A simple usage example:
 
-    import 'package:base/base.dart';
+    import 'package:core/core.dart';
 
     main() {
       var awesome = new Awesome();

@@ -4,7 +4,7 @@
 // Author: Jim Philbin <jfphilbin@gmail.edu> -
 // See the AUTHORS file for other contributors.
 
-import 'pd_tag_definitions.dart';
+import 'package:tag/src/private/pd_tag_definitions.dart';
 
 bool isWKCreator(String id) => pcTagDefinitions[id] != null;
 

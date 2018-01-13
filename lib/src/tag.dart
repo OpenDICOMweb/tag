@@ -7,6 +7,7 @@
 import 'dart:convert';
 
 import 'package:core/core.dart';
+
 import 'package:tag/src/e_type.dart';
 import 'package:tag/src/elt.dart';
 import 'package:tag/src/errors.dart';
@@ -18,7 +19,6 @@ import 'package:tag/src/private/pc_tag.dart';
 import 'package:tag/src/private/pd_tag.dart';
 import 'package:tag/src/private/private_tag.dart';
 import 'package:tag/src/vm.dart';
-import 'package:vr/vr_old.dart';
 
 const int kGroupMask = 0xFFFF0000;
 const int kElementMask = 0x0000FFFF;
@@ -60,7 +60,7 @@ abstract class Tag {
   int get index => code;
   int get code;
   int get vrIndex;
-  VR  get vr => VR.lookupByIndex(vrIndex);
+  VR get vr => vrByIndex[vrIndex];
   bool get hasNormalVR => isNormalVRIndex(vrIndex);
   bool get hasSpecialVR => isSpecialVRIndex(vrIndex);
 
@@ -252,40 +252,10 @@ abstract class Tag {
     if (vList == null) nullValueError();
     if (vrIndex == kUNIndex || vList.isEmpty) return true;
 
-    //TODO: replace this when types are working
-//    if (!vr.isValidValuesType(vList, issues)) return false;
-    if (vList is! List<V>) {
-      print('isValidType: $runtimeType: $vList');
-      invalidValuesTypeError(this, vList);
-      return false;
-    }
-
     if (isNotValidValuesLength(vList, issues)) {
       invalidValuesLengthError(this, vList);
       return false;
     }
-    if (vList is List<V>) {
-      return _isValidValuesList(vr, vList, issues);
-    } else if (vList is Iterable<V>) {
-      return _isValidValuesIterable(vr, vList, issues);
-    } else {
-      invalidTagValuesError<V>(this, vList);
-    }
-    return false;
-  }
-
-  bool _isValidValuesList<V>(VR vr, List<V> vList, [Issues issues]) {
-    for (var i = 0; i < vList.length; i++) {
-      final v = vList[i];
-      if (vr.isNotValidValue(v, issues)) {
-        invalidTagValuesError<V>(this, vList);
-        return false;
-      }
-    }
-    return true;
-  }
-
-  bool _isValidValuesIterable<V>(VR vr, Iterable<V> vList, [Issues issues]) {
     for (var v in vList)
       if (vr.isNotValidValue(v, issues)) {
         invalidTagValuesError<V>(this, vList);
@@ -293,44 +263,6 @@ abstract class Tag {
       }
     return true;
   }
-
-/*
-  /// Returns a [list<E>] of valid values for this [Tag], or _null_  if
-  /// and of the [String]s in [sList] are not parsable.
-  List<V> parseValues<V>(List<String> sList, [Issues issues]) {
-    //print('parseList: $sList');
-    if (isNotValidLength(sList, issues)) return null;
-    final values = new List<V>(sList.length);
-    for (var i = 0; i < values.length; i++) {
-      //log.debug('sList[$i]: ${sList[i]}');
-      final V v = vr.parse(sList[i]);
-      //log.debug('v: $v');
-      if (v == null) return null;
-      values[i] = v;
-    }
-    return values;
-  }
-
-  // If a VR has a long Value Field, then it has [VM.k1],
-  // and its length is always valid.
-  String lengthIssue<V>(Iterable<V> vList) => (vr.hasShortVF &&
-          isNotValidLength(vList))
-      ? 'Invalid Length: min($minValues) <= value($vList.length) <= max($maxValues)'
-      : null;
-
-  //TODO: make this work with [ParseIssues]
-  Issues issues<V>(Tag tag, Iterable<V> values) {
-    final issues = new Issues('Tag: $tag');
-    isValidValues(values, issues);
-    return issues;
-  }
-
-  List<V> checkValues<V>(List<V> values) =>
-      (isValidValues(values)) ? values : null;
-
-  // Placeholder until VR is integrated into TagBase
-  V checkValue<V>(V value) => vr.isValidValue(value) ? value : null;
-*/
 
   bool get isLengthAlwaysValid =>
       vrIndex == kOBIndex ||
@@ -359,19 +291,18 @@ abstract class Tag {
     assert(length != null);
     if (isLengthAlwaysValid == true || length == 0) return true;
     return (length >= minValues && length <= maxValues && (length % columns) == 0) &&
-           length <= vr.maxLength;
+        length <= vr.maxVFLength;
   }
 
   bool isNotValidLength(int length) => !isValidLength(length);
 
+  //TODO: unit test
   /// Returns _true_  if [vfLength] is a valid Value Field length for _this_ [Tag].
   bool isValidVFLength(int vfLength, [Issues issues]) {
     assert(vfLength >= 0 && vfLength <= vr.maxVFLength);
     if (isVFLengthAlwaysValid(vrIndex)) return true;
-    final ok = vfLength >= (minValues * vr.elementSize) &&
-               vfLength <= (maxValues * vr.elementSize) &&
-               (vfLength % columns) == 0;
-    if (ok) return true;
+    if (vr.isValidVFLength(vfLength, minValues, maxValues) && (vfLength % columns) == 0)
+      return true;
 
     final msg = 'Invalid Value Field length: '
         'min($minValues) <= $vfLength <= max($maxValues)';

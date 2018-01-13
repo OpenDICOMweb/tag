@@ -20,7 +20,7 @@ class ValuesIssues<E> {
     return this;
   }
 
-  bool get isValidLength => tag.isValidLength<E>(values);
+  bool get isValidLength => tag.isValidLength(values.length);
 
   List<ParseIssues> get issues => _vIssues ??= <ParseIssues>[];
 
